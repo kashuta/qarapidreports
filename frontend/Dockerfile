@@ -1,4 +1,5 @@
-FROM node:18.15
+# Build stage
+FROM node:18.15-alpine as build
 
 WORKDIR /app/frontend
 
@@ -8,6 +9,19 @@ RUN npm ci
 
 COPY . .
 
+RUN npm run build
+
+# Runtime stage
+FROM node:18.15-alpine
+
+WORKDIR /app/frontend
+
+# Install 'serve' to serve the production build
+RUN npm install -g serve
+
+# Copy the production build from the build stage
+COPY --from=build /app/frontend/build /app/frontend/build
+
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["serve", "-s", "build", "-l", "3000"]

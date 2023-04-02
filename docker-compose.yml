@@ -3,6 +3,7 @@ version: '3.9'
 services:
   backend:
     build: ./backend
+    image: kashuta/backend:0.1
     volumes:
       - ./backend:/app/backend
     depends_on:
@@ -10,6 +11,7 @@ services:
 
   frontend:
     build: ./frontend
+    image: kashuta/frontend:0.1
     volumes:
       - ./frontend:/app/frontend
 
