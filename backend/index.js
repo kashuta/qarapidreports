@@ -25,3 +25,15 @@ app(cookieParser());
 //Routes
 app.use('/api', require('./routes'));
 
+//Error handling
+app.use((err, req, res, next) => {
+    res.status(422).send({ error: err.message });
+});
+
+//Server
+
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
+    console.log(`Server is listening on port ${port}`);
+});
+
