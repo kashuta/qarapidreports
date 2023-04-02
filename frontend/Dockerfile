@@ -1,7 +1,7 @@
 # Build stage
 FROM node:18.15-alpine as build
 
-WORKDIR /app/frontend
+WORKDIR /frontend
 
 COPY package*.json package-lock.json* ./
 
@@ -14,13 +14,13 @@ RUN npm run build
 # Runtime stage
 FROM node:18.15-alpine
 
-WORKDIR /app/frontend
+WORKDIR /frontend
 
 # Install 'serve' to serve the production build
 RUN npm install -g serve
 
 # Copy the production build from the build stage
-COPY --from=build /app/frontend/build /app/frontend/build
+COPY --from=build /frontend/build /frontend/build
 
 EXPOSE 3000
 
