@@ -14,7 +14,7 @@ services:
       - ./frontend:/app/frontend
 
   db:
-    image: postgres:14 # Use the desired PostgreSQL version
+    image: postgres:14
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
