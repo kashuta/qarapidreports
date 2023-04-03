@@ -47,19 +47,18 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v2
 
-      - name: Install SSH Client and sshpass
-        run: sudo apt-get install -y ssh-client sshpass
+      - name: Install SSH Client
+        run: sudo apt-get install -y ssh-client
 
       - name: Set up SSH key
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > id_rsa
-          chmod 600 id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > id_rsa_no_passphrase
+          chmod 600 id_rsa_no_passphrase
 
       - name: Copy files to remote server
         run: |
-          sshpass -p "${{ secrets.SSH_KEY_PASSWORD }}" ssh -o StrictHostKeyChecking=no -i id_rsa -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }} "echo 'SSH connection test successful'"
-          sshpass -p "${{ secrets.SSH_KEY_PASSWORD }}" scp -v -o StrictHostKeyChecking=no -i id_rsa -r -P ${{ secrets.SSH_PORT }} docker-compose.yml ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }}:/var/www/qarapidreports
+          scp -o StrictHostKeyChecking=no -i id_rsa_no_passphrase -r -P ${{ secrets.SSH_PORT }} docker-compose.yml ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }}:/var/www/qarapidreports
 
       - name: Deploy to remote server
         run: |
-          sshpass -p "${{ secrets.SSH_KEY_PASSWORD }}" ssh -v -o StrictHostKeyChecking=no -i id_rsa -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }} "cd /var/www/qarapidreports && docker-compose pull && docker-compose down && docker-compose up -d"
+          ssh -o StrictHostKeyChecking=no -i id_rsa_no_passphrase -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }} "cd /var/www/qarapidreports && docker-compose pull && docker-compose down && docker-compose up -d"
