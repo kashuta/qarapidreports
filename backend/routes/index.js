@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-router.post(/signup/, (req, res) => {
+router.get(/signup/, (req, res) => {
   res.json({ message: 'signup' });
 });
 

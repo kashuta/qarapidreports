@@ -3,7 +3,7 @@ FROM node:18.15-alpine as build
 
 WORKDIR /backend
 
-COPY ./backend/package*.json ./backend/package-lock.json* ./
+COPY package*.json package-lock.json* ./
 
 RUN npm install
 
@@ -21,4 +21,4 @@ COPY --from=build /backend/ /backend/
 
 EXPOSE 3001
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "start:prod"]
