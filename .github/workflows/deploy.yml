@@ -47,8 +47,8 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v2
 
-      - name: Install SSH Client
-        run: sudo apt-get install -y ssh-client
+      - name: Install SSH Client and sshpass
+        run: sudo apt-get install -y ssh-client sshpass
 
       - name: Set up SSH key
         run: |
@@ -57,5 +57,5 @@ jobs:
 
       - name: Deploy to remote server
         run: |
-          scp -i id_rsa -r -P ${{ secrets.SSH_PORT }} docker-compose.yml ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }}:/path/to/destination
-          ssh -i id_rsa -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }} "cd /path/to/destination && docker-compose pull && docker-compose down && docker-compose up -d"
+          sshpass -p "${{ secrets.SSH_KEY_PASSWORD }}" scp -o StrictHostKeyChecking=no -i id_rsa -r -P ${{ secrets.SSH_PORT }} docker-compose.yml ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }}:/var/www/qarapidreports
+          sshpass -p "${{ secrets.SSH_KEY_PASSWORD }}" ssh -o StrictHostKeyChecking=no -i id_rsa -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }} "cd /var/www/qarapidreports && docker-compose pull && docker-compose down && docker-compose up -d"
