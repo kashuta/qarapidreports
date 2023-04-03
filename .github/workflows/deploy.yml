@@ -55,7 +55,7 @@ jobs:
 
       - name: Add remote server to known_hosts
         run: |
-          echo "${{ secrets.DROPLET_HOST }} $(ssh-keyscan -H ${secrets.DROPLET_HOST})" >> ~/.ssh/known_hosts
+          echo "${{ secrets.DROPLET_HOST }} $(ssh-keyscan -H ${{ secrets.DROPLET_HOST }})" >> ~/.ssh/known_hosts
 
       - name: Copy files to remote server
         run: |
