@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v2.4.2
+        uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1.6.0
@@ -23,14 +23,14 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push backend Docker image
-        uses: docker/build-push-action@v2.7.0
+        uses: docker/build-push-action@v3
         with:
           context: ./backend
           file: ./backend/Dockerfile
           push: true
           tags: kashuta/backend:0.1
       - name: Build and push frontend Docker image
-        uses: docker/build-push-action@v2.7.0
+        uses: docker/build-push-action@v3
         with:
           context: ./frontend
           file: ./frontend/Dockerfile
@@ -43,20 +43,24 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v2.4.2
+        uses: actions/checkout@v3
 
-      - name: Install SSH Client
-        run: sudo apt-get install -y ssh-client
+      - name: Install SSH Client and sshpass
+        run: sudo apt-get install -y ssh-client sshpass
 
       - name: Set up SSH key
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > id_rsa
-          chmod 600 id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > id_rsa_no_passphrase
+          chmod 600 id_rsa_no_passphrase
+
+      - name: Add remote server to known_hosts
+        run: |
+          echo "${{ secrets.DROPLET_HOST }} $(ssh-keyscan -H ${secrets.DROPLET_HOST})" >> ~/.ssh/known_hosts
 
       - name: Copy files to remote server
         run: |
-          scp -i id_rsa -o StrictHostKeyChecking=no -r -P ${{ secrets.SSH_PORT }} docker-compose.yml ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }}:/var/www/qarapidreports
+          scp -i id_rsa_no_passphrase -r -P ${{ secrets.SSH_PORT }} docker-compose.yml ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }}:/var/www/qarapidreports
 
       - name: Deploy to remote server
         run: |
-          ssh -i id_rsa -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }} "cd /var/www/qarapidreports && docker-compose pull && docker-compose down && docker-compose up -d"
+          ssh -i id_rsa_no_passphrase -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }} "cd /var/www/qarapidreports && docker-compose pull && docker-compose down && docker-compose up -d"
