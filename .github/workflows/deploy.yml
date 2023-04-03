@@ -57,6 +57,7 @@ jobs:
 
       - name: Copy files to remote server
         run: |
+          sshpass -p "${{ secrets.SSH_KEY_PASSWORD }}" ssh -o StrictHostKeyChecking=no -i id_rsa -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }} "echo 'SSH connection test successful'"
           sshpass -p "${{ secrets.SSH_KEY_PASSWORD }}" scp -v -o StrictHostKeyChecking=no -i id_rsa -r -P ${{ secrets.SSH_PORT }} docker-compose.yml ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }}:/var/www/qarapidreports
 
       - name: Deploy to remote server
