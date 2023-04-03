@@ -55,7 +55,10 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > id_rsa
           chmod 600 id_rsa
 
-      - name: Deploy to remote server
+      - name: Copy files to remote server
         run: |
           sshpass -p "${{ secrets.SSH_KEY_PASSWORD }}" scp -v -o StrictHostKeyChecking=no -i id_rsa -r -P ${{ secrets.SSH_PORT }} docker-compose.yml ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }}:/var/www/qarapidreports
+
+      - name: Deploy to remote server
+        run: |
           sshpass -p "${{ secrets.SSH_KEY_PASSWORD }}" ssh -v -o StrictHostKeyChecking=no -i id_rsa -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }} "cd /var/www/qarapidreports && docker-compose pull && docker-compose down && docker-compose up -d"
