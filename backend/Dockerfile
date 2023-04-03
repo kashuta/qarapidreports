@@ -1,7 +1,7 @@
 # Build stage
 FROM node:18.15-alpine as build
 
-WORKDIR /backend
+WORKDIR /app
 
 COPY package*.json package-lock.json* ./
 
@@ -12,12 +12,12 @@ COPY . .
 # Runtime stage
 FROM node:18.15-alpine
 
-WORKDIR /backend
+WORKDIR /app
 
 # Copy only the production dependencies and the built application from the build stage
-COPY --from=build /backend/node_modules /backend/node_modules
-COPY --from=build /backend/package*.json /backend/
-COPY --from=build /backend/ /backend/
+COPY --from=build /app/node_modules /app/node_modules
+COPY --from=build /app/package*.json /app/
+COPY --from=build /app/ /app/
 
 EXPOSE 3001
 
