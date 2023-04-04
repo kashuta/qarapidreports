@@ -24,19 +24,21 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push backend Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v2
         with:
           context: ./backend
-          file: ./backend/Dockerfile
+          dockerfile: ./backend/Dockerfile
           push: true
-          tags: kashuta/backend:0.1
+          tags: kashuta/backend:${{ github.ref == 'refs/heads/main' && 'latest' || 'dev' }}
+
       - name: Build and push frontend Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v2
         with:
           context: ./frontend
-          file: ./frontend/Dockerfile
+          dockerfile: ./frontend/Dockerfile
           push: true
-          tags: kashuta/frontend:0.1
+          tags: kashuta/frontend:${{ github.ref == 'refs/heads/main' && 'latest' || 'dev' }}
+
 
   deploy-develop:
     runs-on: ubuntu-latest
