@@ -8,18 +8,14 @@ const ErrorHandler = require('../exceptions/errorHandler');
  * @param {function} next - The next middleware function to call.
  * @returns {void} - Returns the next middleware function.
  */
-module.exports = function(err, req, res, next) {
-    console.log(err, 'err');
-    if (err instanceof ErrorHandler) {
-        ErrorHandler.handleError(err, res);
-    } else {
-        console.log(err, 'err');
-        ErrorHandler.handleError(
-            new ErrorHandler(500, 'INTERNAL_SERVER_ERROR', err.message, err.name, err.stack),
-            res,
-        );
-    }
-    console.log(res, 'res');
-    next();
+module.exports = function (err, req, res, next) {
+  if (err instanceof ErrorHandler) {
+    ErrorHandler.handleError(err, res);
+  } else {
+    ErrorHandler.handleError(
+      new ErrorHandler(500, 'INTERNAL_SERVER_ERROR', err.message, err.name, err.stack),
+      res,
+    );
+  }
+  next();
 };
-

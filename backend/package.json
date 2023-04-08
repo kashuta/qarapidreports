@@ -9,7 +9,9 @@
     "start:prod": "NODE_ENV=production nodemon index.js",
     "lint": "eslint --ext .js --ext .jsx .",
     "lint:fix": "eslint --ext .js --ext .jsx . --fix",
-    "tests": "jest --watch"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [],
   "author": "",
