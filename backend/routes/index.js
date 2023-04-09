@@ -17,4 +17,13 @@ router.get('/test', (req, res, next) => {
   }
 });
 
+router.post('/login', async (req, res, next) => {
+  try {
+    // Handle login logic here
+    res.send('login');
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;
