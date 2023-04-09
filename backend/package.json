@@ -11,7 +11,10 @@
     "lint:fix": "eslint --ext .js --ext .jsx . --fix",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "prepare": "husky install",
+    "prettier": "prettier --write '../**/*.js'"
+
   },
   "keywords": [],
   "author": "",
@@ -35,7 +38,9 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.3",
     "nodemon": "^2.0.22",
+    "prettier": "^2.8.7",
     "sequelize-cli": "^6.6.0"
   }
 }
