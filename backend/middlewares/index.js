@@ -3,5 +3,5 @@ const handleErrorsMiddleware = require('./handleErrorsMiddlware.js');
 
 module.exports = {
   authMiddleware,
-  handleErrorsMiddleware,
+  handleErrorsMiddleware
 };

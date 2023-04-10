@@ -7,10 +7,10 @@ class TokenService {
   }
 
   /**
-     * Generate access and refresh tokens
-     * @param payload - data to be stored in the token
-     * @returns {Promise<{accessToken: (*), refreshToken: (*)}>}
-     */
+   * Generate access and refresh tokens
+   * @param payload - data to be stored in the token
+   * @returns {Promise<{accessToken: (*), refreshToken: (*)}>}
+   */
   async generateTokens(payload) {
     const accessToken = await jwt.sign(payload, this.access_secret, { expiresIn: '1d' });
     const refreshToken = await jwt.sign(payload, this.refresh_secret, { expiresIn: '30d' });
@@ -18,10 +18,10 @@ class TokenService {
   }
 
   /**
-     * Verify access token
-     * @param token - access token
-     * @returns {Promise<*>}
-     */
+   * Verify access token
+   * @param token - access token
+   * @returns {Promise<*>}
+   */
   async verifyAccessToken(token) {
     try {
       return await jwt.verify(token, this.access_secret);

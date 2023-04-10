@@ -1,22 +1,14 @@
 module.exports = {
   env: {
-    browser: true,
     commonjs: true,
     es2021: true,
-    node: true,
+    node: true
   },
-  extends: [
-    'plugin:react/recommended',
-    'airbnb',
-  ],
-  overrides: [
-  ],
+  extends: ['eslint:recommended', 'airbnb-base'],
   parserOptions: {
-    ecmaVersion: 'latest',
+    ecmaVersion: 'latest'
   },
-  plugins: [
-    'react',
-  ],
   rules: {
-  },
+    // Add custom rules here
+  }
 };
