@@ -1,4 +1,7 @@
-require('dotenv').config();
+const dotenv = require('dotenv');
+const path = require('path');
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
+dotenv.config({ path: path.resolve(process.cwd(), envFile) });
 
 module.exports = {
   development: {
@@ -6,7 +9,7 @@ module.exports = {
     password: process.env.DB_PASS,
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT,
+    dialect: "postgres",
   },
   test: {
     username: process.env.DB_TEST_USER,
