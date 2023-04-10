@@ -25,14 +25,16 @@ class ErrorHandler extends Error {
    * @returns {void}
    */
   static handleError(err, res) {
-    const { statusCode, code, name, stack } = err;
+    const {
+      statusCode, code, name, stack,
+    } = err;
     const errorMessage = BACKEND_ERRORS[code]?.message || err.message || 'Internal Server Error';
     res.status(statusCode).json({
       status: 'error',
       statusCode,
       code,
       name,
-      message: errorMessage
+      message: errorMessage,
     });
 
     console.error(`${name}: ${errorMessage}\n${stack}`);

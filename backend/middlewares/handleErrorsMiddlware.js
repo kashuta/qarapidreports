@@ -14,7 +14,7 @@ module.exports = function (err, req, res, next) {
   } else {
     ErrorHandler.handleError(
       new ErrorHandler(500, 'INTERNAL_SERVER_ERROR', err.message, err.name, err.stack),
-      res
+      res,
     );
   }
   next();
