@@ -10,15 +10,22 @@ import { setUserAction } from '../Redux/user.action';
 // import { useNavigate } from 'react-router-dom';
 
 function SignInForm() {
+  // const [selectedFile, setSelectedFile] = useState(null);
   const [form, setForm] = useState({
     name: '',
     surname: '',
     email: '',
     password: '',
     role: '',
+    // photo: selectedFile,
   });
   //   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  // const handleFileSelect = (event) => {
+  //   const file = event.target.files[0];
+  //   setSelectedFile(file);
+  // };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -43,6 +50,7 @@ function SignInForm() {
       }}
     >
       <TextField
+        required
         label="First Name"
         name="name"
         variant="outlined"
@@ -54,6 +62,7 @@ function SignInForm() {
         }}
       />
       <TextField
+        required
         label="Last Name"
         name="surname"
         variant="outlined"
@@ -65,6 +74,7 @@ function SignInForm() {
         }}
       />
       <TextField
+        required
         label="Email"
         name="email"
         variant="outlined"
@@ -76,6 +86,7 @@ function SignInForm() {
         }}
       />
       <TextField
+        required
         label="Password"
         name="password"
         type="password"
@@ -88,6 +99,7 @@ function SignInForm() {
         }}
       />
       <Select
+        required
         labelId="demo-simple-select-label"
         id="demo-simple-select"
         name="role"
@@ -103,7 +115,7 @@ function SignInForm() {
         <MenuItem value="Manager">Manager</MenuItem>
         <MenuItem value="Inspector">Inspector</MenuItem>
       </Select>
-      <Button
+      {/* <Button
         variant="contained"
         component="label"
         sx={{
@@ -111,9 +123,21 @@ function SignInForm() {
           width: '100%',
         }}
       >
-        Upload Your Photo
-        <input hidden accept="image/*" multiple type="file" />
-      </Button>
+        Upload Your Photo:
+        <input
+          hidden
+          accept="image/*"
+          multiple
+          type="file"
+          name="photo"
+          // value={selectedFile}
+          // onChange={(event) => {
+          //   setForm({ ...form, photo: event.target.files[0] });
+          // }}
+          onChange={handleFileSelect}
+        />
+        {selectedFile && <span>{selectedFile.name}</span>}
+      </Button> */}
       <Button
         onClick={handleSubmit}
         variant="contained"
