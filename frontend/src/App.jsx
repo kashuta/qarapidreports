@@ -8,7 +8,7 @@ import InspectorMain from './components/InspectorMain/InspectorMain';
 
 function App() {
   return (
-    <Container maxWidth="sm">
+    <Container>
       <Navbar />
       <Routes>
         <Route path="/inspector" element={<InspectorMain />} />
