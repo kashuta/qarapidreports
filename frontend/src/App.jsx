@@ -3,7 +3,6 @@ import Container from '@mui/material/Container';
 import { Route, Routes } from 'react-router-dom';
 import SignInForm from './components/Auth/SignInForm';
 import Navbar from './components/Navbar/Navbar';
-import Container from '@mui/material/Container';
 import './App.css';
 import InspectorMain from './components/InspectorMain/InspectorMain';
 
