@@ -24,13 +24,15 @@ function SignInForm() {
   return (
     <Box
       component="form"
-      display="flex"
-      justifyContent="center"
-      flexDirection="column"
-      //   onSubmit={handleSubmit}
       sx={{
-        width: 400,
-      }}>
+        width: '40%',
+        margin: 20,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+      }}
+    >
       <TextField
         label="Email"
         name="email"
@@ -39,6 +41,7 @@ function SignInForm() {
         value={form.email}
         sx={{
           marginBottom: '1rem',
+          width: '100%',
         }}
       />
       <TextField
@@ -50,15 +53,17 @@ function SignInForm() {
         value={form.password}
         sx={{
           marginBottom: '1rem',
+          width: '100%',
         }}
       />
       <Button
         variant="contained"
         type="submit"
         sx={{
-          height: 60,
-        }}>
-        Submit
+          width: '100%',
+        }}
+      >
+        Login
       </Button>
     </Box>
   );
