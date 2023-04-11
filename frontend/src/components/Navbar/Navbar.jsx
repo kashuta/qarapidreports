@@ -1,6 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import * as React from 'react';
-import { useSelector } from 'react-redux';
+
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,6 +12,7 @@ import Menu from '@mui/material/Menu';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
+import { setUserAction } from '../Redux/user.action';
 // import Button from '@mui/material/Button';
 // import IconButton from '@mui/material/IconButton';
 // import MenuIcon from '@mui/icons-material/Menu';
@@ -17,12 +20,19 @@ import MenuItem from '@mui/material/MenuItem';
 export default function Navbar() {
   // const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // const handleOpenNavMenu = (event) => {
   //   setAnchorElNav(event.currentTarget);
   // };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
+  };
+
+  const handleSignout = () => {
+    dispatch(setUserAction(null));
+    navigate('/');
   };
 
   // const handleCloseNavMenu = () => {
@@ -32,21 +42,26 @@ export default function Navbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  const InspSettings = ['Profile', 'Logout', 'Home'];
-  const ManageSettings = ['Profile', 'Dasboard', 'Logout', 'Home'];
+
+  const manSettings = ['Profile', 'Dashboard', 'Main'];
+  const inspSettings = ['Profile', 'Main'];
+
   const user = useSelector((state) => state.UserReducer.user);
   console.log(user);
+
   return (
-    <Box>
-      <AppBar position="static">
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar
+        position="static"
+        sx={{
+          width: '100%',
+        }}>
         <Toolbar
           sx={{
-            height: 70,
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
-          }}
-        >
+          }}>
           <img
             alt="pcm-logo"
             src="https://www.pcm.eu/sites/default/files/logo_pcm.png"
@@ -68,7 +83,7 @@ export default function Navbar() {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Ava" src={user.img} />
+                  <Avatar alt="Ava" src={user.photo} />
                 </IconButton>
               </Tooltip>
               <Menu
@@ -85,20 +100,26 @@ export default function Navbar() {
                   horizontal: 'right',
                 }}
                 open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
+                onClose={handleCloseUserMenu}>
                 {user.role === 'Manager'
-                  && ManageSettings.map((setting) => (
+                  && manSettings.map((setting) => (
                     <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">{setting}</Typography>
+                      <NavLink to={setting} style={{ textDecoration: 'none' }}>
+                        {setting}
+                      </NavLink>
                     </MenuItem>
                   ))}
                 {user.role === 'Inspector'
-                  && InspSettings.map((setting) => (
+                  && inspSettings.map((setting) => (
                     <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">{setting}</Typography>
+                      <NavLink to={setting} style={{ textDecoration: 'none' }}>
+                        {setting}
+                      </NavLink>
                     </MenuItem>
                   ))}
+                <MenuItem onClick={handleSignout}>
+                  <Typography color="red">Logout</Typography>
+                </MenuItem>
               </Menu>
             </Box>
           )}

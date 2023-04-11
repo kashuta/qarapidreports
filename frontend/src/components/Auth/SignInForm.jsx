@@ -1,29 +1,37 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from 'react';
 import {
-  Button, MenuItem, Select, TextField,
+  Button, InputLabel, MenuItem, Select, TextField,
 } from '@mui/material';
 import { Box } from '@mui/system';
 
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { setUserAction } from '../Redux/user.action';
-// import { useNavigate } from 'react-router-dom';
 
 function SignInForm() {
+  // const [selectedFile, setSelectedFile] = useState(null);
   const [form, setForm] = useState({
     name: '',
     surname: '',
     email: '',
     password: '',
     role: '',
+    // photo: selectedFile,
   });
-  //   const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  // const handleFileSelect = (event) => {
+  //   const file = event.target.files[0];
+  //   setSelectedFile(file);
+  // };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     dispatch(setUserAction(form));
+    navigate('/inspector');
   };
 
   const handleInput = (event) => {
@@ -35,14 +43,16 @@ function SignInForm() {
       component="form"
       sx={{
         width: '40%',
-        margin: 20,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
+        marginLeft: 35,
+        marginTop: 10,
       }}
     >
       <TextField
+        required
         label="First Name"
         name="name"
         variant="outlined"
@@ -54,6 +64,7 @@ function SignInForm() {
         }}
       />
       <TextField
+        required
         label="Last Name"
         name="surname"
         variant="outlined"
@@ -65,6 +76,7 @@ function SignInForm() {
         }}
       />
       <TextField
+        required
         label="Email"
         name="email"
         variant="outlined"
@@ -76,6 +88,7 @@ function SignInForm() {
         }}
       />
       <TextField
+        required
         label="Password"
         name="password"
         type="password"
@@ -87,12 +100,15 @@ function SignInForm() {
           width: '100%',
         }}
       />
+      <InputLabel id="demo-simple-select-label" required>
+        Choose your role
+      </InputLabel>
       <Select
+        required
         labelId="demo-simple-select-label"
         id="demo-simple-select"
         name="role"
         value={form.role}
-        label="Role"
         onChange={handleInput}
         sx={{
           marginBottom: '1rem',
@@ -103,7 +119,7 @@ function SignInForm() {
         <MenuItem value="Manager">Manager</MenuItem>
         <MenuItem value="Inspector">Inspector</MenuItem>
       </Select>
-      <Button
+      {/* <Button
         variant="contained"
         component="label"
         sx={{
@@ -111,9 +127,21 @@ function SignInForm() {
           width: '100%',
         }}
       >
-        Upload Your Photo
-        <input hidden accept="image/*" multiple type="file" />
-      </Button>
+        Upload Your Photo:
+        <input
+          hidden
+          accept="image/*"
+          multiple
+          type="file"
+          name="photo"
+          // value={selectedFile}
+          // onChange={(event) => {
+          //   setForm({ ...form, photo: event.target.files[0] });
+          // }}
+          onChange={handleFileSelect}
+        />
+        {selectedFile && <span>{selectedFile.name}</span>}
+      </Button> */}
       <Button
         onClick={handleSubmit}
         variant="contained"
