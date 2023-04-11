@@ -16,7 +16,7 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({
-    origin: true, credentials: true,
+	origin: true, credentials: true,
 }));
 app.use(express.json());
 
@@ -27,5 +27,5 @@ app.use('/api', require('./routes'));
 
 const port = process.env.PORT || 5001;
 app.listen(port, () => {
-    console.log(`Server is listening on PORT ${port}`);
+	console.log(`Server is listening on PORT ${port}`);
 });
