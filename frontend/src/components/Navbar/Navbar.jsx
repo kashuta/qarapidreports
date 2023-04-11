@@ -10,15 +10,15 @@ import { Avatar } from '@mui/material';
 // import MenuIcon from '@mui/icons-material/Menu';
 
 export default function Navbar() {
-  const user = { name: 'Kostya', img: 'frontend/public/images/kostya.jpg' };
-  console.log(user.img);
+  const user = { name: 'Kostya', img: '/public/images/kostya.jpg' };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
         position="static"
         sx={{
           height: 70,
-        }}>
+        }}
+      >
         <Toolbar>
           <img
             alt="pcm-logo"
@@ -37,7 +37,16 @@ export default function Navbar() {
             News
           </Typography>
           <Button color="inherit">Login</Button> */}
-          {user && <Avatar src="/public/images/kostya.jpg" alt="avatar" />}
+          {user && (
+            <>
+              <h3>
+                Hello:
+                {' '}
+                {user.name}
+              </h3>
+              <Avatar src={user.img} alt="avatar" />
+            </>
+          )}
         </Toolbar>
       </AppBar>
     </Box>
