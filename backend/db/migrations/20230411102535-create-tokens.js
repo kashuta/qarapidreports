@@ -1,24 +1,22 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Roles', {
+    await queryInterface.createTable('Tokens', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      admin: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
+      refreshToken: {
+        type: Sequelize.TEXT,
       },
-      manager: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-      },
-      inspector: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
+      userId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
       },
       createdAt: {
         allowNull: false,
@@ -31,6 +29,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Roles');
+    await queryInterface.dropTable('Tokens');
   },
 };

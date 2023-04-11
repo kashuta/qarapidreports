@@ -11,21 +11,6 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
       },
-      surname: {
-        type: Sequelize.STRING,
-      },
-      email: {
-        type: Sequelize.STRING,
-      },
-      password: {
-        type: Sequelize.TEXT,
-      },
-      isActivated: {
-        type: Sequelize.BOOLEAN,
-      },
-      activationLink: {
-        type: Sequelize.TEXT,
-      },
       roleId: {
         type: Sequelize.INTEGER,
         references: {

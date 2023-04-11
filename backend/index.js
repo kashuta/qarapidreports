@@ -8,8 +8,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const morgan = require('morgan');
-// const { sequelize } = require('./db/models');
-// const { handleErrorsMiddleware, authMiddleware } = require('./middlewares');
+const { sequelize } = require('./db/models');
+const { handleErrorsMiddleware, authMiddleware } = require('./middlewares');
 const router = require('./routes/index');
 
 const app = express();
@@ -30,7 +30,7 @@ app.use(express.json());
 if (envFile === '.env.development') {
 	const swaggerUi = require('swagger-ui-express');
 	const swaggerJSDoc = require('swagger-jsdoc');
-	// const swaggerOptions = require('./utils/swagger/swaggerOptions');
+	const swaggerOptions = require('./utils/swagger/swaggerOptions');
 
 	const swaggerSpec = swaggerJSDoc(swaggerOptions);
 	app.use(process.env.SWAGGER_API_DOC, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
