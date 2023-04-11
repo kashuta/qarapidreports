@@ -1,15 +1,15 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Tokens', {
+    await queryInterface.createTable('EmailVerificationTokens', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      refreshToken: {
-        type: Sequelize.TEXT,
+      token: {
+        type: Sequelize.STRING,
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -17,6 +17,10 @@ module.exports = {
           model: 'Users',
           key: 'id',
         },
+      },
+      expiresAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
       },
       createdAt: {
         allowNull: false,
@@ -29,6 +33,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Tokens');
+    await queryInterface.dropTable('EmailVerificationTokens');
   },
 };

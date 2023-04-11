@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   Roles.init({
     admin: DataTypes.BOOLEAN,
+    manager: DataTypes.BOOLEAN,
+    inspector: DataTypes.BOOLEAN,
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
   }, {
     sequelize,
     modelName: 'Roles',

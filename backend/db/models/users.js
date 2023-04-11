@@ -14,14 +14,19 @@ module.exports = (sequelize, DataTypes) => {
       this.hasOne(models.Roles, {
         foreignKey: 'roleId',
       });
-      this.belongsTo(models.Tokens, {
+      this.belongsTo(models.EmailVerificationToken, {
         foreignKey: 'userId',
       });
     }
   }
   Users.init({
-    name: DataTypes.STRING,
+    userName: DataTypes.STRING,
+    email: DataTypes.STRING,
+    password: DataTypes.TEXT,
+    isActive: DataTypes.BOOLEAN,
     roleId: DataTypes.INTEGER,
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
   }, {
     sequelize,
     modelName: 'Users',

@@ -11,6 +11,12 @@ module.exports = {
       admin: {
         type: Sequelize.BOOLEAN,
       },
+      inspector: {
+        type: Sequelize.BOOLEAN,
+      },
+      manager: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

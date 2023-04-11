@@ -3,7 +3,7 @@ const {
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Tokens extends Model {
+  class EmailVerificationToken extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,17 +11,20 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasOne(models.Roles, {
-        foreignKey: 'roleId',
+      this.hasOne(models.Users, {
+        foreignKey: 'userId',
       });
     }
   }
-  Tokens.init({
-    refreshToken: DataTypes.TEXT,
+  EmailVerificationToken.init({
     userId: DataTypes.INTEGER,
+    token: DataTypes.STRING,
+    expiresAt: DataTypes.DATE,
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
   }, {
     sequelize,
-    modelName: 'Tokens',
+    modelName: 'EmailVerificationToken',
   });
-  return Tokens;
+  return EmailVerificationToken;
 };
