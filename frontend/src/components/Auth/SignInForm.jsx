@@ -1,13 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from 'react';
 import {
-  Button, MenuItem, Select, TextField,
+  Button, InputLabel, MenuItem, Select, TextField,
 } from '@mui/material';
 import { Box } from '@mui/system';
 
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { setUserAction } from '../Redux/user.action';
-// import { useNavigate } from 'react-router-dom';
 
 function SignInForm() {
   // const [selectedFile, setSelectedFile] = useState(null);
@@ -19,7 +19,7 @@ function SignInForm() {
     role: '',
     // photo: selectedFile,
   });
-  //   const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // const handleFileSelect = (event) => {
@@ -31,6 +31,7 @@ function SignInForm() {
     event.preventDefault();
 
     dispatch(setUserAction(form));
+    navigate('/inspector');
   };
 
   const handleInput = (event) => {
@@ -42,11 +43,12 @@ function SignInForm() {
       component="form"
       sx={{
         width: '40%',
-        margin: 20,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
+        marginLeft: 35,
+        marginTop: 10,
       }}
     >
       <TextField
@@ -98,13 +100,15 @@ function SignInForm() {
           width: '100%',
         }}
       />
+      <InputLabel id="demo-simple-select-label" required>
+        Choose your role
+      </InputLabel>
       <Select
         required
         labelId="demo-simple-select-label"
         id="demo-simple-select"
         name="role"
         value={form.role}
-        label="Role"
         onChange={handleInput}
         sx={{
           marginBottom: '1rem',
