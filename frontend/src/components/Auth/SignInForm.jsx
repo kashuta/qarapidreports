@@ -30,7 +30,8 @@ function SignInForm() {
       //   onSubmit={handleSubmit}
       sx={{
         width: 400,
-      }}>
+      }}
+    >
       <TextField
         label="Email"
         name="email"
@@ -57,7 +58,8 @@ function SignInForm() {
         type="submit"
         sx={{
           height: 60,
-        }}>
+        }}
+      >
         Submit
       </Button>
     </Box>
