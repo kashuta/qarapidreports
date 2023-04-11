@@ -10,5 +10,7 @@ module.exports = {
   },
   rules: {
     // Add custom rules here
+    'no-console': 0,
+    'global-require': 0,
   },
 };

@@ -1,3 +1,5 @@
+/* eslint-disable */
+/* eslint-disable import/no-extraneous-dependencies */
 const dotenv = require('dotenv');
 
 const express = require('express');
@@ -5,7 +7,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const morgan = require('morgan');
-const { sequelize } = require('./db/models');
 const { handleErrorsMiddleware, authMiddleware } = require('./middlewares');
 const router = require('./routes/index');
 
