@@ -7,10 +7,12 @@ import { Box } from '@mui/system';
 
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setUserAction } from '../Redux/user.action';
+import { setUserAction } from '../../Redux/user.action';
+import WebcamCapture from '../WebCam/WebCam';
 
 function SignInForm() {
   // const [selectedFile, setSelectedFile] = useState(null);
+  // const user = useSelector((state) => state.UserReducer.user);
   const [form, setForm] = useState({
     name: '',
     surname: '',
@@ -31,7 +33,8 @@ function SignInForm() {
     event.preventDefault();
 
     dispatch(setUserAction(form));
-    navigate('/inspector');
+
+    navigate('/');
   };
 
   const handleInput = (event) => {
@@ -49,8 +52,8 @@ function SignInForm() {
         flexDirection: 'column',
         marginLeft: 35,
         marginTop: 10,
-      }}
-    >
+      }}>
+      <WebcamCapture />
       <TextField
         required
         label="First Name"
@@ -113,8 +116,7 @@ function SignInForm() {
         sx={{
           marginBottom: '1rem',
           width: '100%',
-        }}
-      >
+        }}>
         <MenuItem value="Admin">Admin</MenuItem>
         <MenuItem value="Manager">Manager</MenuItem>
         <MenuItem value="Inspector">Inspector</MenuItem>
@@ -148,8 +150,7 @@ function SignInForm() {
         type="submit"
         sx={{
           width: '100%',
-        }}
-      >
+        }}>
         Login
       </Button>
     </Box>

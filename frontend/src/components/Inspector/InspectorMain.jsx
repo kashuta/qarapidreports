@@ -6,7 +6,7 @@ import { Container } from '@mui/material';
 
 function InspectorMain() {
   return (
-    <Container>
+    <Container maxWidth="xl">
       <Box
         sx={{
           display: 'flex',
