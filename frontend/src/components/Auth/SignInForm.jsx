@@ -1,21 +1,41 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { Button, TextField } from '@mui/material';
-import { Box } from '@mui/system';
 import React, { useState } from 'react';
-// import { useDispatch } from 'react-redux';
-// import { useNavigate } from 'react-router-dom';
-// import { setUserAction } from '../../redux/user.action';
+import {
+  Button, InputLabel, MenuItem, Select, TextField,
+} from '@mui/material';
+import { Box } from '@mui/system';
+
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { setUserAction } from '../../Redux/user.action';
+import WebcamCapture from '../WebCam/WebCam';
 
 function SignInForm() {
-  const [form, setForm] = useState({ email: '', password: '' });
-  //   const navigate = useNavigate();
-  //   const dispatch = useDispatch();
+  // const [selectedFile, setSelectedFile] = useState(null);
+  // const user = useSelector((state) => state.UserReducer.user);
+  const [form, setForm] = useState({
+    name: '',
+    surname: '',
+    email: '',
+    password: '',
+    role: '',
+    // photo: selectedFile,
+  });
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  //   const handleSubmit = (event) => {
-  //     event.preventDefault();
-  //     const url = 'http://localhost:3000/api/auth/login';
-  //     dispatch(setUserAction(form, url, navigate));
-  //   };
+  // const handleFileSelect = (event) => {
+  //   const file = event.target.files[0];
+  //   setSelectedFile(file);
+  // };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    dispatch(setUserAction(form));
+
+    navigate('/');
+  };
 
   const handleInput = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
@@ -24,15 +44,42 @@ function SignInForm() {
   return (
     <Box
       component="form"
-      display="flex"
-      justifyContent="center"
-      flexDirection="column"
-      //   onSubmit={handleSubmit}
       sx={{
-        width: 400,
-      }}
-    >
+        width: '40%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        marginLeft: 35,
+        marginTop: 10,
+      }}>
+      <WebcamCapture />
       <TextField
+        required
+        label="First Name"
+        name="name"
+        variant="outlined"
+        onChange={handleInput}
+        value={form.name}
+        sx={{
+          marginBottom: '1rem',
+          width: '100%',
+        }}
+      />
+      <TextField
+        required
+        label="Last Name"
+        name="surname"
+        variant="outlined"
+        onChange={handleInput}
+        value={form.surname}
+        sx={{
+          marginBottom: '1rem',
+          width: '100%',
+        }}
+      />
+      <TextField
+        required
         label="Email"
         name="email"
         variant="outlined"
@@ -40,9 +87,11 @@ function SignInForm() {
         value={form.email}
         sx={{
           marginBottom: '1rem',
+          width: '100%',
         }}
       />
       <TextField
+        required
         label="Password"
         name="password"
         type="password"
@@ -51,16 +100,58 @@ function SignInForm() {
         value={form.password}
         sx={{
           marginBottom: '1rem',
+          width: '100%',
         }}
       />
+      <InputLabel id="demo-simple-select-label" required>
+        Choose your role
+      </InputLabel>
+      <Select
+        required
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        name="role"
+        value={form.role}
+        onChange={handleInput}
+        sx={{
+          marginBottom: '1rem',
+          width: '100%',
+        }}>
+        <MenuItem value="Admin">Admin</MenuItem>
+        <MenuItem value="Manager">Manager</MenuItem>
+        <MenuItem value="Inspector">Inspector</MenuItem>
+      </Select>
+      {/* <Button
+        variant="contained"
+        component="label"
+        sx={{
+          marginBottom: '1rem',
+          width: '100%',
+        }}
+      >
+        Upload Your Photo:
+        <input
+          hidden
+          accept="image/*"
+          multiple
+          type="file"
+          name="photo"
+          // value={selectedFile}
+          // onChange={(event) => {
+          //   setForm({ ...form, photo: event.target.files[0] });
+          // }}
+          onChange={handleFileSelect}
+        />
+        {selectedFile && <span>{selectedFile.name}</span>}
+      </Button> */}
       <Button
+        onClick={handleSubmit}
         variant="contained"
         type="submit"
         sx={{
-          height: 60,
-        }}
-      >
-        Submit
+          width: '100%',
+        }}>
+        Login
       </Button>
     </Box>
   );
