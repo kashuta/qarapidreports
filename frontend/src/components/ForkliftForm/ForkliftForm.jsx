@@ -417,6 +417,16 @@ function ForkliftForm({ location }) {
             </Table>
           </TableContainer>
         </Box>
+        <Box mb={5} fullWidth>
+          <h2 className="form-h2">C.&ensp;Guide</h2>
+          <div className="form-image">
+            <div className="img-container">
+              <div className="img-wrapper">
+                <img src="../img/forklift.jpg" alt="guide" />
+              </div>
+            </div>
+          </div>
+        </Box>
         <Box mb={5}>
           <Button color="primary" variant="contained" type="submit">
             Submit
