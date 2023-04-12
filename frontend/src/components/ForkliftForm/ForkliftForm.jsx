@@ -4,7 +4,7 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
@@ -31,6 +31,7 @@ import {
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import './ForkliftForm.css';
+import DialogForm from '../Forms/DialogForm';
 
 const engineOffChecklist = [
   {
@@ -187,6 +188,9 @@ const validationSchema = yup.object({
 });
 
 function ForkliftForm({ location }) {
+  const [open, setOpen] = useState(false);
+  const [statusBtn, setStatusBtn] = useState('');
+
   const formik = useFormik({
     initialValues: {
       ...engineOffValues,
@@ -205,6 +209,43 @@ function ForkliftForm({ location }) {
       alert(JSON.stringify(values, null, 2));
     },
   });
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setStatusBtn(event.currentTarget.value);
+    formik.validateForm().then((errors) => {
+      if (Object.keys(errors).length) {
+        formik.setErrors(errors);
+        const touchedFields = Object.keys(errors).reduce((touched, key) => {
+          touched[key] = true;
+          return touched;
+        }, {});
+        formik.setTouched(touchedFields);
+      } else {
+        setOpen(true);
+      }
+    });
+  };
+
+  const handleConfirm = () => {
+    setOpen(false);
+    formik.handleSubmit();
+  };
+
+  const handleConfirmClear = () => {
+    setOpen(false);
+    formik.handleReset();
+  };
+
+  const handleConfirmSave = () => {
+    setOpen(false);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  console.log('render');
 
   return (
     <Container>
@@ -427,12 +468,19 @@ function ForkliftForm({ location }) {
             </div>
           </div>
         </Box>
-        <Box mb={5}>
-          <Button color="primary" variant="contained" type="submit">
-            Submit
+        <Box m={3} display="flex" justifyContent="center">
+          <Button sx={{ height: 80, width: 220, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="primary" value="submit">
+            <h2>Submit</h2>
+          </Button>
+          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="warning" value="save">
+            <h2>Save</h2>
+          </Button>
+          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="error" value="clear">
+            <h2>Clear</h2>
           </Button>
         </Box>
       </form>
+      <DialogForm open={open} statusBtn={statusBtn} handleClose={handleClose} handleConfirm={handleConfirm} handleConfirmSave={handleConfirmSave} handleConfirmClear={handleConfirmClear} />
     </Container>
   );
 }
