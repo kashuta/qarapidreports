@@ -1,30 +1,33 @@
-const {
-  Model,
-} = require('sequelize');
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class EmailVerificationToken extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       // define association here
-      this.hasOne(models.Users, {
+      this.belongsTo(models.Users, {
         foreignKey: 'userId',
       });
     }
   }
-  EmailVerificationToken.init({
-    userId: DataTypes.INTEGER,
-    token: DataTypes.STRING,
-    expiresAt: DataTypes.DATE,
-    createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE,
-  }, {
-    sequelize,
-    modelName: 'EmailVerificationToken',
-  });
+  EmailVerificationToken.init(
+    {
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
+      },
+      token: DataTypes.STRING,
+      expiresAt: DataTypes.DATE,
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+    },
+    {
+      sequelize,
+      modelName: 'EmailVerificationToken',
+    }
+  );
   return EmailVerificationToken;
 };
