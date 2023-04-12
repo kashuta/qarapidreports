@@ -25,6 +25,7 @@ app.use(
   }),
 );
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 // add swagger api doc
 if (envFile === '.env.development') {

@@ -8,10 +8,8 @@ import { Box } from '@mui/system';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setUserAction } from '../../Redux/user.action';
-import WebcamCapture from '../WebCam/WebCam';
 
 function SignInForm() {
-  // const [selectedFile, setSelectedFile] = useState(null);
   // const user = useSelector((state) => state.UserReducer.user);
   const [form, setForm] = useState({
     name: '',
@@ -19,15 +17,10 @@ function SignInForm() {
     email: '',
     password: '',
     role: '',
-    // photo: selectedFile,
   });
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  // const handleFileSelect = (event) => {
-  //   const file = event.target.files[0];
-  //   setSelectedFile(file);
-  // };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -53,7 +46,6 @@ function SignInForm() {
         marginLeft: 35,
         marginTop: 10,
       }}>
-      <WebcamCapture />
       <TextField
         required
         label="First Name"

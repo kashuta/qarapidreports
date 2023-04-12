@@ -6,13 +6,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-// import { Avatar, Button } from '@mui/material';
+import { Avatar, Button } from '@mui/material';
 // import Typography from '@mui/material/Typography';
 // import Menu from '@mui/material/Menu';
 // import Tooltip from '@mui/material/Tooltip';
 // import IconButton from '@mui/material/IconButton';
 // import MenuItem from '@mui/material/MenuItem';
-import { Button } from '@mui/material';
 import { setUserAction } from '../../Redux/user.action';
 import InspectorNav from './InspectorNav';
 import ManagerNav from './ManagerNav';
@@ -23,6 +22,8 @@ import AdminNav from './AdminNav';
 
 export default function Navbar() {
   const user = useSelector((state) => state.UserReducer.user);
+  const avatar = useSelector((state) => state.FileReducer.avatar);
+  console.log('>>>>>>', avatar, '<<<<<<<<<');
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -52,7 +53,12 @@ export default function Navbar() {
           {user?.role === 'Inspector' && <InspectorNav />}
           {user?.role === 'Manager' && <ManagerNav />}
           {user?.role === 'Admin' && <AdminNav />}
-          {user && <Button onClick={handleSignout} color="inherit">Logout</Button>}
+          {user && (
+            <Button onClick={handleSignout} color="inherit">
+              Logout
+            </Button>
+          )}
+          {/* {avatar && <Avatar alt="ava" src={} />} */}
         </Toolbar>
       </AppBar>
     </Box>

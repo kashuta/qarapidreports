@@ -22,7 +22,6 @@ function WebcamCapture() {
     const imageSrc = webcamRef.current.getScreenshot();
     setImage(imageSrc);
   });
-  console.log(image, '<<<<<image');
   return (
     <div className="webcam-container">
       <div className="webcam-img">
