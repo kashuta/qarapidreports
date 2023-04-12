@@ -1,4 +1,6 @@
 const router = require('express').Router();
+const { body } = require('express-validator');
+const userController = require('../controllers/userController');
 
 /**
  * @swagger
@@ -22,31 +24,19 @@ const router = require('express').Router();
  *       500:
  *         description: Internal server error
  */
-router.get('/signup', async (req, res, next) => {
-  try {
-    // Handle signup logic here
-    console.log('/////////////////');
-    res.send('signup');
-  } catch (err) {
-    next(err);
-  }
-});
 
-router.get('/test', (req, res, next) => {
-  try {
-    throw new Error('Test error');
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.post('/login', async (req, res, next) => {
-  try {
-    // Handle login logic here
-    res.send('login');
-  } catch (err) {
-    next(err);
-  }
-});
+// auth route
+router.post(
+  '/registration',
+  body('email').isEmail().withMessage('Email is not valid'),
+  body('password')
+    .isLength({ min: 6 })
+    .withMessage('Password must be at least 6 characters long'),
+  userController.registration,
+);
+// router.post('/login', userController.login);
+// router.post('/logout', userController.logout);
+// router.get('/activate/:link', userController.activate);
+// router.get('/refresh', userController.refresh);
 
 module.exports = router;

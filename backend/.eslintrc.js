@@ -12,5 +12,9 @@ module.exports = {
     // Add custom rules here
     'no-console': 0,
     'global-require': 0,
+    'import/no-extraneous-dependencies': 0,
+    'class-methods-use-this': 0,
+    'max-len': 0,
+    'consistent-return': 0,
   },
 };

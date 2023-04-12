@@ -1,0 +1,93 @@
+const bcrypt = require('bcrypt');
+const uuid = require('uuid');
+const { Users, Roles } = require('../db/models');
+const mailService = require('./mail-service');
+const tokenService = require('./token-service');
+// const ApiError = require('../exceptions/api-errors');
+// добавление рандомной строки с помощью бикрипт !!!!!!
+class UserService {
+  async registration(userName, email, password, role = 'manager') {
+    try {
+      const [roleFind, createdRole] = await Roles.findOrCreate({ where: { name: role } });
+      const [newUser, createdUser] = await Users.findOrCreate({
+        where: { email },
+        defaults: {
+          userName,
+          email,
+          password: await bcrypt.hash(password, 7),
+          roleId: roleFind.dataValues.id,
+        },
+      });
+      if (!createdUser) {
+        // throw ApiError.badRequestError('User already exists');
+        throw new Error('User already exists');
+      }
+      const activationLink = uuid.v4();
+      const userFront = {
+        id: newUser.id,
+        userName: newUser.userName,
+        email: newUser.email,
+        isActive: newUser.isActive,
+      };
+      await mailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`);
+      const tokens = await tokenService.generateTokens({ ...userFront });
+      await tokenService.saveToken(newUser, tokens.refreshToken);
+      return { ...tokens, user: userFront };
+    } catch (err) {
+      console.log(err);
+      // throw err; error: emais doesnt send; errorHandler
+    }
+  }
+
+  // async activate(activationLink) {
+  //   const user = await Users.findOne({ where: { activationLink } });
+  //   const userFront = {
+  //     id: user.id,
+  //     email: user.email,
+  //     isActivated: user.isActivated,
+  //   };
+  //   if (!user) {
+  //     // throw ApiError.badRequestError('User not found');
+  //   }
+  //   if (user.isActivated) {
+  //     // throw ApiError.badRequestError('User already activated');
+  //   }
+  //   user.isActivated = true;
+  //   await user.save();
+  //   const tokens = await tokenService.generateTokens({ ...userFront });
+  //   await tokenService.saveToken(user, tokens.refreshToken);
+  //   return { ...tokens, userFront };
+  // }
+
+  // async login(email, password) {
+  //   console.log(email, password);
+  //   const user = await User.findOne({ where: { email } });
+  //   if (!user) {
+  //     // throw ApiError.badRequestError('User not found');
+  //   }
+  //   if (!user.isActivated) {
+  //     // throw ApiError.badRequestError('User not activated, please check your email');
+  //   }
+  //   const isValid = await bcrypt.compare(password, user.password);
+  //   if (!isValid) {
+  //     // throw ApiError.badRequestError('Invalid password');
+  //   }
+  //   const userFront = {
+  //     id: user.id,
+  //     userName: user.userName,
+  //     email: user.email,
+  //     photo: user.photo,
+  //     isActivated: user.isActivated,
+  //   };
+  //   const tokens = await tokenService.generateTokens({ ...userFront });
+  //   await tokenService.saveToken(user, tokens.refreshToken);
+  //   return { ...tokens, userFront };
+  // }
+
+  // async logout(refreshToken) {
+  //   const token = await tokenService.removeToken(refreshToken);
+  //   return token;
+  // }
+}
+
+module.exports = new UserService();
