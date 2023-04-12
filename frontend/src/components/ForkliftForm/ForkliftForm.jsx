@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-array-index-key */
@@ -76,27 +77,6 @@ const engineOffChecklist = [
   },
 ];
 
-const engineOffValues = {};
-for (const item of engineOffChecklist) {
-  engineOffValues[item.item] = {
-    condition: 'ok',
-    actionsNeeded: '',
-  };
-}
-
-const engineOffValidation = {};
-for (const item of engineOffChecklist) {
-  engineOffValidation[item.item] = yup.object({
-    condition: yup.string(),
-    actionsNeeded: yup
-      .string()
-      .when('condition', {
-        is: 'nok',
-        then: (schema) => schema.required('Please, fill this field'),
-      }),
-  });
-}
-
 const engineOnChecklist = [
   {
     item: 'Accelerator or Direction Control Pedal',
@@ -136,8 +116,51 @@ const engineOnChecklist = [
   },
 ];
 
+const engineOffValues = {};
+for (const item of engineOffChecklist) {
+  engineOffValues[item.item] = {
+    condition: 'ok',
+    actionsNeeded: '',
+  };
+}
+
+const engineOffValidation = {};
+for (const item of engineOffChecklist) {
+  engineOffValidation[item.item] = yup.object({
+    condition: yup.string(),
+    actionsNeeded: yup
+      .string()
+      .when('condition', {
+        is: 'nok',
+        then: (schema) => schema.required('Please, fill this field'),
+      }),
+  });
+}
+
+const engineOnValues = {};
+for (const item of engineOnChecklist) {
+  engineOnValues[item.item] = {
+    condition: 'ok',
+    actionsNeeded: '',
+  };
+}
+
+const engineOnValidation = {};
+for (const item of engineOnChecklist) {
+  engineOnValidation[item.item] = yup.object({
+    condition: yup.string(),
+    actionsNeeded: yup
+      .string()
+      .when('condition', {
+        is: 'nok',
+        then: (schema) => schema.required('Please, fill this field'),
+      }),
+  });
+}
+
 const validationSchema = yup.object({
   ...engineOffValidation,
+  ...engineOnValidation,
   location: yup
     .string('Enter location')
     .required('Please, fill this field'),
@@ -161,6 +184,7 @@ function ForkliftForm({ location }) {
   const formik = useFormik({
     initialValues: {
       ...engineOffValues,
+      ...engineOnValues,
       location,
       operator: '',
       date: dayjs(new Date()),
@@ -169,6 +193,8 @@ function ForkliftForm({ location }) {
       signature: '',
     },
     validationSchema,
+    validateOnChange: true,
+    validateOnBlur: true,
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
     },
@@ -186,6 +212,7 @@ function ForkliftForm({ location }) {
             label="Location"
             value={formik.values.location}
             onChange={formik.handleChange}
+            onBlur={(e) => formik.setFieldTouched(e.target.name)}
             error={formik.touched.location && Boolean(formik.errors.location)}
             helperText={formik.touched.location && formik.errors.location}
           />
@@ -202,6 +229,7 @@ function ForkliftForm({ location }) {
             label="Operator"
             value={formik.values.operator}
             onChange={formik.handleChange}
+            onBlur={(e) => formik.setFieldTouched(e.target.name)}
             error={formik.touched.operator && Boolean(formik.errors.operator)}
             helperText={formik.touched.operator && formik.errors.operator}
           />
@@ -210,7 +238,11 @@ function ForkliftForm({ location }) {
             name="machineHours"
             label="Machine hours"
             value={formik.values.machineHours}
-            onChange={formik.handleChange}
+            onChange={(e) => {
+              formik.setFieldTouched(e.target.name);
+              formik.handleChange(e);
+            }}
+            onBlur={(e) => formik.setFieldTouched(e.target.name)}
             error={formik.touched.machineHours && Boolean(formik.errors.machineHours)}
             helperText={formik.touched.machineHours && formik.errors.machineHours}
           />
@@ -220,6 +252,7 @@ function ForkliftForm({ location }) {
             label="Registration No."
             value={formik.values.regNumber}
             onChange={formik.handleChange}
+            onBlur={(e) => formik.setFieldTouched(e.target.name)}
             error={formik.touched.regNumber && Boolean(formik.errors.regNumber)}
             helperText={formik.touched.regNumber && formik.errors.regNumber}
           />
@@ -229,6 +262,7 @@ function ForkliftForm({ location }) {
             label="Signature"
             value={formik.values.signature}
             onChange={formik.handleChange}
+            onBlur={(e) => formik.setFieldTouched(e.target.name)}
             error={formik.touched.signature && Boolean(formik.errors.signature)}
             helperText={formik.touched.signature && formik.errors.signature}
           />
@@ -281,6 +315,7 @@ function ForkliftForm({ location }) {
                         name={`${elem.item}.actionsNeeded`}
                         value={formik.values[elem.item]?.actionsNeeded}
                         onChange={formik.handleChange}
+                        onBlur={(e) => formik.setFieldTouched(e.target.name)}
                         error={formik.touched[`${elem.item}`]?.actionsNeeded && Boolean(formik.errors[`${elem.item}`]?.actionsNeeded)}
                         helperText={formik.touched[`${elem.item}`]?.actionsNeeded && formik.errors[`${elem.item}`]?.actionsNeeded}
                       />
@@ -290,6 +325,43 @@ function ForkliftForm({ location }) {
                 <TableRow>
                   <TableCell colSpan={6} sx={{ border: 1 }}><h3>With Engine On</h3></TableCell>
                 </TableRow>
+                {engineOnChecklist && engineOnChecklist?.map((elem, index) => (
+                  <TableRow key={index + engineOffChecklist.length}>
+                    <TableCell sx={{ border: 1 }}>{index + 1 + engineOffChecklist.length}</TableCell>
+                    <TableCell sx={{ border: 1 }}>{elem.item}</TableCell>
+                    <TableCell sx={{ border: 1 }}>{elem.hint}</TableCell>
+                    <TableCell sx={{ border: 1 }}>
+                      <RadioGroup
+                        row
+                        name={`${elem.item}.condition`}
+                        value={formik.values[elem.item]?.condition}
+                        onChange={formik.handleChange}
+                      >
+                        <FormControlLabel value="ok" control={<Radio />} label="" />
+                      </RadioGroup>
+                    </TableCell>
+                    <TableCell sx={{ border: 1 }}>
+                      <RadioGroup
+                        row
+                        name={`${elem.item}.condition`}
+                        value={formik.values[elem.item]?.condition}
+                        onChange={formik.handleChange}
+                      >
+                        <FormControlLabel value="nok" control={<Radio />} label="" />
+                      </RadioGroup>
+                    </TableCell>
+                    <TableCell sx={{ border: 1 }}>
+                      <TextField
+                        name={`${elem.item}.actionsNeeded`}
+                        value={formik.values[elem.item]?.actionsNeeded}
+                        onChange={formik.handleChange}
+                        onBlur={(e) => formik.setFieldTouched(e.target.name)}
+                        error={formik.touched[`${elem.item}`]?.actionsNeeded && Boolean(formik.errors[`${elem.item}`]?.actionsNeeded)}
+                        helperText={formik.touched[`${elem.item}`]?.actionsNeeded && formik.errors[`${elem.item}`]?.actionsNeeded}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>
