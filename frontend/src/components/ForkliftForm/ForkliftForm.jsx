@@ -22,9 +22,15 @@ import {
   Button,
   Box,
   Container,
+  MenuItem,
+  // FormControl,
+  // InputLabel,
+  // Select,
+  // FormHelperText,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
+import './ForkliftForm.css';
 
 const engineOffChecklist = [
   {
@@ -111,7 +117,7 @@ const engineOnChecklist = [
     hint: 'Functioning Properly',
   },
   {
-    item: 'Gauges: Speed, Oil, Hours, Fuel, Temp.',
+    item: 'Gauges: Speed, Oil, Hours, Fuel, Temp',
     hint: 'Functioning Properly',
   },
 ];
@@ -185,7 +191,7 @@ function ForkliftForm({ location }) {
     initialValues: {
       ...engineOffValues,
       ...engineOnValues,
-      location,
+      location: '',
       operator: '',
       date: dayjs(new Date()),
       machineHours: '',
@@ -203,10 +209,16 @@ function ForkliftForm({ location }) {
   return (
     <Container>
       <form onSubmit={formik.handleSubmit}>
-        <h1>Forklift safety inspection checklist</h1>
-        <Box>
-          <h2>Truck and operator details</h2>
+        <h1 className="form-h1">Forklift safety inspection checklist</h1>
+        <Box
+          sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
+          mb={5}
+          align="center"
+        >
+          <h2 className="form-h2">A.&ensp;Truck and operator details</h2>
           <TextField
+            select
+            align="left"
             id="location"
             name="location"
             label="Location"
@@ -215,7 +227,12 @@ function ForkliftForm({ location }) {
             onBlur={(e) => formik.setFieldTouched(e.target.name)}
             error={formik.touched.location && Boolean(formik.errors.location)}
             helperText={formik.touched.location && formik.errors.location}
-          />
+          >
+            {location.map((el, index) => (
+              <MenuItem key={index + 1} value={el}>{el}</MenuItem>
+            ))}
+          </TextField>
+
           <DatePicker
             label="Date"
             name="date"
@@ -267,51 +284,73 @@ function ForkliftForm({ location }) {
             helperText={formik.touched.signature && formik.errors.signature}
           />
         </Box>
-        <Box>
-          <h2>Inspection</h2>
+        <Box mb={5}>
+          <h2 className="form-h2">B.&ensp;Inspection</h2>
           <TableContainer component={Paper} sx={{ border: 1, alignContent: 'center' }}>
             <Table>
               <TableHead>
-                <TableRow>
-                  <TableCell colSpan={6} sx={{ border: 1 }}><h3>With Engine Off</h3></TableCell>
+                <TableRow sx={{ background: '#bfbfbf' }}>
+                  <TableCell colSpan={6} sx={{ border: 1 }}>
+                    <h3 className="form-h3">With Engine Off</h3>
+                  </TableCell>
                 </TableRow>
-                <TableRow>
-                  <TableCell sx={{ border: 1 }}>№</TableCell>
-                  <TableCell sx={{ border: 1 }}><h4>What are you inspecting?</h4></TableCell>
-                  <TableCell sx={{ border: 1 }}><h4>What are you looking for?</h4></TableCell>
-                  <TableCell sx={{ border: 1 }}><h4>OK</h4></TableCell>
-                  <TableCell sx={{ border: 1 }}><h4>NOK</h4></TableCell>
-                  <TableCell sx={{ border: 1 }}><h4>Action needed</h4></TableCell>
+                <TableRow sx={{ background: '#bfbfbf' }}>
+                  <TableCell sx={{ border: 1, padding: '10px' }} align="center">№</TableCell>
+                  <TableCell sx={{ border: 1, padding: '10px' }}>
+                    <h4 className="form-h4">What are you inspecting?</h4>
+                  </TableCell>
+                  <TableCell sx={{ border: 1, padding: '10px' }}>
+                    <h4 className="form-h4">What are you looking for?</h4>
+                  </TableCell>
+                  <TableCell sx={{ border: 1, padding: '10px 0' }} align="center">
+                    <h4 className="form-h4">OK</h4>
+                  </TableCell>
+                  <TableCell sx={{ border: 1, padding: '10px 0' }} align="center">
+                    <h4 className="form-h4">NOK</h4>
+                  </TableCell>
+                  <TableCell sx={{ border: 1, padding: '10px' }}>
+                    <h4 className="form-h4">Action needed</h4>
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {engineOffChecklist && engineOffChecklist?.map((elem, index) => (
                   <TableRow key={index}>
-                    <TableCell sx={{ border: 1 }}>{index + 1}</TableCell>
-                    <TableCell sx={{ border: 1 }}>{elem.item}</TableCell>
-                    <TableCell sx={{ border: 1 }}>{elem.hint}</TableCell>
-                    <TableCell sx={{ border: 1 }}>
-                      <RadioGroup
-                        row
-                        name={`${elem.item}.condition`}
-                        value={formik.values[elem.item]?.condition}
-                        onChange={formik.handleChange}
-                      >
-                        <FormControlLabel value="ok" control={<Radio />} label="" />
-                      </RadioGroup>
+                    <TableCell sx={{ border: 1, padding: '0 10px' }} align="center">{index + 1}</TableCell>
+                    <TableCell sx={{ border: 1, padding: '0 10px' }}>{elem.item}</TableCell>
+                    <TableCell sx={{ border: 1, padding: '0 10px' }}>{elem.hint}</TableCell>
+                    <TableCell sx={{ border: 1, padding: 0 }} align="center">
+                      <Box display="flex" justifyContent="center">
+                        <RadioGroup
+                          row
+                          name={`${elem.item}.condition`}
+                          value={formik.values[elem.item]?.condition}
+                          onChange={formik.handleChange}
+                        >
+                          <FormControlLabel sx={{ margin: 1 }} value="ok" control={<Radio />} label="" />
+                        </RadioGroup>
+                      </Box>
                     </TableCell>
-                    <TableCell sx={{ border: 1 }}>
-                      <RadioGroup
-                        row
-                        name={`${elem.item}.condition`}
-                        value={formik.values[elem.item]?.condition}
-                        onChange={formik.handleChange}
-                      >
-                        <FormControlLabel value="nok" control={<Radio />} label="" />
-                      </RadioGroup>
+                    <TableCell sx={{ border: 1, padding: 0 }} align="center">
+                      <Box display="flex" justifyContent="center">
+                        <RadioGroup
+                          row
+                          name={`${elem.item}.condition`}
+                          value={formik.values[elem.item]?.condition}
+                          onChange={formik.handleChange}
+                        >
+                          <FormControlLabel sx={{ margin: 1 }} value="nok" control={<Radio />} label="" />
+                        </RadioGroup>
+                      </Box>
                     </TableCell>
-                    <TableCell sx={{ border: 1 }}>
+                    <TableCell sx={{ border: 1, padding: '0 10px' }}>
                       <TextField
+                        fullWidth
+                        inputProps={{
+                          style: {
+                            padding: '5px',
+                          },
+                        }}
                         name={`${elem.item}.actionsNeeded`}
                         value={formik.values[elem.item]?.actionsNeeded}
                         onChange={formik.handleChange}
@@ -322,36 +361,48 @@ function ForkliftForm({ location }) {
                     </TableCell>
                   </TableRow>
                 ))}
-                <TableRow>
-                  <TableCell colSpan={6} sx={{ border: 1 }}><h3>With Engine On</h3></TableCell>
+                <TableRow sx={{ background: '#bfbfbf' }}>
+                  <TableCell colSpan={6} sx={{ border: 1 }}>
+                    <h3 className="form-h3">With Engine On</h3>
+                  </TableCell>
                 </TableRow>
                 {engineOnChecklist && engineOnChecklist?.map((elem, index) => (
                   <TableRow key={index + engineOffChecklist.length}>
-                    <TableCell sx={{ border: 1 }}>{index + 1 + engineOffChecklist.length}</TableCell>
-                    <TableCell sx={{ border: 1 }}>{elem.item}</TableCell>
-                    <TableCell sx={{ border: 1 }}>{elem.hint}</TableCell>
-                    <TableCell sx={{ border: 1 }}>
-                      <RadioGroup
-                        row
-                        name={`${elem.item}.condition`}
-                        value={formik.values[elem.item]?.condition}
-                        onChange={formik.handleChange}
-                      >
-                        <FormControlLabel value="ok" control={<Radio />} label="" />
-                      </RadioGroup>
+                    <TableCell sx={{ border: 1, padding: '0 10px' }}>{index + 1 + engineOffChecklist.length}</TableCell>
+                    <TableCell sx={{ border: 1, padding: '0 10px' }}>{elem.item}</TableCell>
+                    <TableCell sx={{ border: 1, padding: '0 10px' }}>{elem.hint}</TableCell>
+                    <TableCell sx={{ border: 1, padding: 0 }}>
+                      <Box display="flex" justifyContent="center">
+                        <RadioGroup
+                          row
+                          name={`${elem.item}.condition`}
+                          value={formik.values[elem.item]?.condition}
+                          onChange={formik.handleChange}
+                        >
+                          <FormControlLabel sx={{ margin: 1 }} value="ok" control={<Radio />} label="" />
+                        </RadioGroup>
+                      </Box>
                     </TableCell>
-                    <TableCell sx={{ border: 1 }}>
-                      <RadioGroup
-                        row
-                        name={`${elem.item}.condition`}
-                        value={formik.values[elem.item]?.condition}
-                        onChange={formik.handleChange}
-                      >
-                        <FormControlLabel value="nok" control={<Radio />} label="" />
-                      </RadioGroup>
+                    <TableCell sx={{ border: 1, padding: 0 }}>
+                      <Box display="flex" justifyContent="center">
+                        <RadioGroup
+                          row
+                          name={`${elem.item}.condition`}
+                          value={formik.values[elem.item]?.condition}
+                          onChange={formik.handleChange}
+                        >
+                          <FormControlLabel sx={{ margin: 1 }} value="nok" control={<Radio />} label="" />
+                        </RadioGroup>
+                      </Box>
                     </TableCell>
-                    <TableCell sx={{ border: 1 }}>
+                    <TableCell sx={{ border: 1, padding: '0 10px' }}>
                       <TextField
+                        fullWidth
+                        inputProps={{
+                          style: {
+                            padding: '5px',
+                          },
+                        }}
                         name={`${elem.item}.actionsNeeded`}
                         value={formik.values[elem.item]?.actionsNeeded}
                         onChange={formik.handleChange}
@@ -366,9 +417,11 @@ function ForkliftForm({ location }) {
             </Table>
           </TableContainer>
         </Box>
-        <Button color="primary" variant="contained" type="submit">
-          Submit
-        </Button>
+        <Box mb={5}>
+          <Button color="primary" variant="contained" type="submit">
+            Submit
+          </Button>
+        </Box>
       </form>
     </Container>
   );
