@@ -6,6 +6,7 @@ class MailService {
     this.transporter = nodeMailer.createTransport({
       host: process.env.MAIL_HOST,
       port: process.env.MAIL_PORT,
+      service: process.env.MAIL_SERVICE,
       secure: false,
       auth: {
         user: process.env.MAIL_USER,
@@ -15,6 +16,7 @@ class MailService {
   }
 
   async sendActivationMail(to, link) {
+    console.log('$$$$$$$$$$$$$$$$', process.env.MAIL_USER, process.env.MAIL_PASSWORD);
     await this.transporter.sendMail({
       from: process.env.MAIL_USER,
       to,

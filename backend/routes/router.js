@@ -34,9 +34,9 @@ router.post(
     .withMessage('Password must be at least 6 characters long'),
   userController.registration,
 );
-// router.post('/login', userController.login);
+router.post('/login', userController.login);
+router.get('/activate/:link', userController.activate);
 // router.post('/logout', userController.logout);
-// router.get('/activate/:link', userController.activate);
 // router.get('/refresh', userController.refresh);
 
 module.exports = router;

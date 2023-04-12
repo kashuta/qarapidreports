@@ -8,6 +8,7 @@ const tokenService = require('./token-service');
 class UserService {
   async registration(userName, email, password, role = 'manager') {
     try {
+      // eslint-disable-next-line no-unused-vars
       const [roleFind, createdRole] = await Roles.findOrCreate({ where: { name: role } });
       const [newUser, createdUser] = await Users.findOrCreate({
         where: { email },
@@ -24,10 +25,8 @@ class UserService {
       }
       const activationLink = uuid.v4();
       const userFront = {
-        id: newUser.id,
         userName: newUser.userName,
-        email: newUser.email,
-        isActive: newUser.isActive,
+        uniqueString: uuid.v4(),
       };
       await mailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`);
       const tokens = await tokenService.generateTokens({ ...userFront });
@@ -35,29 +34,31 @@ class UserService {
       return { ...tokens, user: userFront };
     } catch (err) {
       console.log(err);
-      // throw err; error: emais doesnt send; errorHandler
+      // throw error: emails doesnt send; errorHandler
+      throw new Error('Emails doesnt send');
     }
   }
 
-  // async activate(activationLink) {
-  //   const user = await Users.findOne({ where: { activationLink } });
-  //   const userFront = {
-  //     id: user.id,
-  //     email: user.email,
-  //     isActivated: user.isActivated,
-  //   };
-  //   if (!user) {
-  //     // throw ApiError.badRequestError('User not found');
-  //   }
-  //   if (user.isActivated) {
-  //     // throw ApiError.badRequestError('User already activated');
-  //   }
-  //   user.isActivated = true;
-  //   await user.save();
-  //   const tokens = await tokenService.generateTokens({ ...userFront });
-  //   await tokenService.saveToken(user, tokens.refreshToken);
-  //   return { ...tokens, userFront };
-  // }
+  async activate(activationLink) {
+    const user = await Users.findOne({ where: { activationLink } });
+    if (!user) {
+      // throw ApiError.badRequestError('User not found');
+    }
+    if (user.isActivated) {
+      // throw ApiError.badRequestError('User already activated');
+    }
+    await Users.update({ isActive: true }, { where: { id: user.dataValues.id } });
+    const userUpdated = await Users.findOne({ where: { id: user.dataValues.id } });
+    const userFront = {
+      id: userUpdated.id,
+      userName: userUpdated.userName,
+      email: userUpdated.email,
+      isActive: userUpdated.isActive,
+    };
+    const tokens = await tokenService.generateTokens({ ...userFront });
+    await tokenService.saveToken(user, tokens.refreshToken);
+    return { ...tokens, userFront };
+  }
 
   // async login(email, password) {
   //   console.log(email, password);
