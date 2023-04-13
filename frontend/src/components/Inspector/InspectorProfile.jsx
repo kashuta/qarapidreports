@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Box, Button } from '@mui/material';
 import WebcamCapture from '../WebCam/WebCam';
@@ -16,10 +16,10 @@ function InspectorProfile() {
     fetch('http://localhost:3001/api/v1/upload', {
       method: 'POST',
       credentials: 'include',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      body: JSON.stringify(data),
+      // headers: {
+      //   'Content-Type': 'multipart/form-data',
+      // },
+      body: data,
     })
       .then((res) => res.json())
       .then((file) => {
@@ -27,6 +27,8 @@ function InspectorProfile() {
       })
       .catch(console.error);
   }, [selectedFile]);
+
+  console.log('+++++++', selectedFile, '++++++++++++++++++');
 
   return (
     <Box
@@ -41,7 +43,7 @@ function InspectorProfile() {
         border: '1px solid black',
         borderRadius: '5px',
       }}>
-      {showWebcam && <WebcamCapture />}
+      {showWebcam && <WebcamCapture setSelectedFile={setSelectedFile} />}
       <Button
         variant="contained"
         component="label"

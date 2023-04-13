@@ -58,7 +58,7 @@ export default function Navbar() {
               Logout
             </Button>
           )}
-          {/* {avatar && <Avatar alt="ava" src={} />} */}
+          {avatar && <Avatar alt="ava" src={`${avatar?.path}`} />}
         </Toolbar>
       </AppBar>
     </Box>

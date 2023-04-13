@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   class RefreshToken extends Model {
     static associate(models) {
       // Associations
-      this.belongsTo(models.User, {
+      this.belongsTo(models.Users, {
         foreignKey: 'userId',
       });
     }
