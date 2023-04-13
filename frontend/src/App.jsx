@@ -21,6 +21,7 @@ import PageNotFound from './components/ProtectedRoute/PageNotFound';
 import MainPage from './components/MainPage/MainPage';
 import FormGME0024 from './components/Forms/FormGME0024';
 import ForkliftForm from './components/ForkliftForm/ForkliftForm';
+import RegForm from './components/Auth/RegForm';
 
 // import { setUserAction } from './components/Redux/user.action';
 
@@ -41,11 +42,17 @@ function App() {
         <Navbar />
         <Routes>
           <Route element={<ProtectedRoute isLogged={false} />}>
+            <Route path="/reg" element={<RegForm />} />
             <Route path="/login" element={<SignInForm />} />
           </Route>
-          <Route element={<ProtectedRoute isLogged redirectTo="/login" />}>
+          <Route element={<ProtectedRoute isLogged redirectTo="/reg" />}>
             <Route path="/" element={<MainPage />} />
             <Route element={<ProtectedRoleRoute role="Inspector" />}>
+              <Route path="/FormGME0024" element={<FormGME0024 />} />
+              <Route
+                path="/form1"
+                element={<ForkliftForm location={locations} />}
+              />
               <Route path="/profile/:surname" element={<InspectorProfile />} />
             </Route>
             <Route element={<ProtectedRoleRoute role="Manager" />}>
@@ -53,8 +60,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
             </Route>
           </Route>
-          <Route path="/FormGME0024" element={<FormGME0024 />} />
-          <Route path="/form1" element={<ForkliftForm location={locations} />} />
+
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Container>

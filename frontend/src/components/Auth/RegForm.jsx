@@ -1,26 +1,29 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from 'react';
-import { Button, TextField } from '@mui/material';
+import {
+  Button, InputLabel, MenuItem, Select, TextField,
+} from '@mui/material';
 import { Box } from '@mui/system';
 
-// import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-// import { setUserAction } from '../../Redux/user.action';
+import { useDispatch } from 'react-redux';
+import { setUserAction } from '../../Redux/user.action';
 
-function SignInForm() {
+function RegForm() {
   // const user = useSelector((state) => state.UserReducer.user);
   const [form, setForm] = useState({
+    username: '',
     email: '',
     password: '',
+    role: '',
   });
 
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    
-    // fetch('http://localhost:5050/auth/login', {
+    // fetch('http://localhost:5050/auth/reg', {
     //   method: 'POST',
     //   headers: {
     //     'Content-Type': 'application/json',
@@ -34,16 +37,13 @@ function SignInForm() {
     //       alert(data.msg);
     //       navigate('/reg');
     //     } else {
-    //       // dispatch(setUserAction(data));
     //       navigate('/login');
     //       console.log('registration');
     //     }
     //   })
     //   .catch(console.log);
-
-    // dispatch(setUserAction(form));
-
-    navigate('/');
+    dispatch(setUserAction(form));
+    navigate('/login');
   };
 
   const handleInput = (event) => {
@@ -62,6 +62,18 @@ function SignInForm() {
         marginLeft: 35,
         marginTop: 10,
       }}>
+      <TextField
+        required
+        label="First and Last Name"
+        name="username"
+        variant="outlined"
+        onChange={handleInput}
+        value={form.name}
+        sx={{
+          marginBottom: '1rem',
+          width: '100%',
+        }}
+      />
       <TextField
         required
         label="Email"
@@ -87,6 +99,24 @@ function SignInForm() {
           width: '100%',
         }}
       />
+      <InputLabel id="demo-simple-select-label" required>
+        Choose your role
+      </InputLabel>
+      <Select
+        required
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        name="role"
+        value={form.role}
+        onChange={handleInput}
+        sx={{
+          marginBottom: '1rem',
+          width: '100%',
+        }}>
+        <MenuItem value="Admin">Admin</MenuItem>
+        <MenuItem value="Manager">Manager</MenuItem>
+        <MenuItem value="Inspector">Inspector</MenuItem>
+      </Select>
       <Button
         onClick={handleSubmit}
         variant="contained"
@@ -100,4 +130,4 @@ function SignInForm() {
   );
 }
 
-export default SignInForm;
+export default RegForm;
