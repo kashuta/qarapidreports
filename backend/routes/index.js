@@ -52,6 +52,7 @@ router.post('/login', async (req, res, next) => {
 router.post('/upload', multerMiddleware.single('avatar'), async (req, res) => {
   try {
     if (req.file) {
+      // const imageUrl = `http://localhost:3001/public/img/${req.file.filename}`;
       res.json(req.file);
     }
   } catch (error) {
