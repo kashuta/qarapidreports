@@ -19,6 +19,10 @@ module.exports = {
       },
       isActive: {
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      activationLink: {
+        type: Sequelize.TEXT,
       },
       roleId: {
         type: Sequelize.INTEGER,
@@ -37,7 +41,6 @@ module.exports = {
       },
     });
   },
-  // eslint-disable-next-line no-unused-vars
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Users');
   },
