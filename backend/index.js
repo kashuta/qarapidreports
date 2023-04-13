@@ -1,4 +1,6 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
 
 const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
 dotenv.config({ path: envFile });
@@ -6,11 +8,11 @@ dotenv.config({ path: envFile });
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const path = require('path');
 const morgan = require('morgan');
-const { sequelize } = require('./db/models');
-const { handleErrorsMiddleware, authMiddleware } = require('./middlewares');
-const router = require('./routes/index');
+const { authMiddleware } = require('./middlewares');
+// const router = require('./routes/index');
+const authRouter = require('./routes/authRouter');
+const dataRouter = require('./routes/dataRouter');
 
 const app = express();
 
@@ -25,6 +27,9 @@ app.use(
   }),
 );
 app.use(express.json());
+app.use(cookieParser());
+app.use(express.static('public'));
+app.set('view engine', 'pug');
 
 // add swagger api doc
 if (envFile === '.env.development') {
@@ -37,8 +42,10 @@ if (envFile === '.env.development') {
 }
 
 // Routes
-app.use('/api/v1/', router);
-app.use(handleErrorsMiddleware);
+// app.use('/api/v1/', router);
+app.use('/api/v2/', authRouter);
+app.use('/api/v3/', authMiddleware, dataRouter);
+// app.use(handleErrorsMiddleware);
 
 // Server
 

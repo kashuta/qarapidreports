@@ -3,7 +3,6 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class FormField extends Model {
     static associate(models) {
-      // define association here
       this.belongsTo(models.FormSection, {
         foreignKey: 'formSectionId',
       });
