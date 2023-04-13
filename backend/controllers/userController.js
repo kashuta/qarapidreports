@@ -32,7 +32,7 @@ class UserController {
       const userData = await userService.login(email, password);
       res.cookie('refreshToken', userData.refreshToken, {
         httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24 * 30,
+        maxAge: 1000 * 60 * 60 * 24 * 30
       });
       return res.json(userData);
     } catch (err) {
@@ -67,7 +67,7 @@ class UserController {
       const userData = await userService.refresh(refreshToken);
       res.cookie('refreshToken', userData.refreshToken, {
         httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24 * 30,
+        maxAge: 1000 * 60 * 60 * 24 * 30
       });
       return res.json(userData);
     } catch (err) {

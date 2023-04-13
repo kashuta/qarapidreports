@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const multerMiddleware = require('../middlewares/multer.middleware');
+
 
 
 /**
@@ -49,16 +49,7 @@ router.post('/login', async (req, res, next) => {
     next(err);
   }
 });
-router.post('/upload', multerMiddleware.single('avatar'), async (req, res) => {
-  try {
-    if (req.file) {
-      // const imageUrl = `http://localhost:3001/public/img/${req.file.filename}`;
-      res.json(req.file);
-    }
-  } catch (error) {
-    console.log(error);
-  }
-});
+
 
 
 module.exports = router;
