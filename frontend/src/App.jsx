@@ -10,6 +10,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import SignInForm from './components/Auth/SignInForm';
 import Navbar from './components/Navbar/Navbar';
 import './App.css';
+
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import ProtectedRoleRoute from './components/ProtectedRoute/ProtectedRoleRoute';
 
@@ -37,6 +38,7 @@ function App() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
+
       <Container maxWidth="xl">
         <Navbar />
         <Routes>
