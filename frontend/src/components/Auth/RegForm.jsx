@@ -6,8 +6,8 @@ import {
 import { Box } from '@mui/system';
 
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setUserAction } from '../../Redux/user.action';
+// import { useDispatch } from 'react-redux';
+// import { setUserAction } from '../../Redux/user.action';
 
 function RegForm() {
   // const user = useSelector((state) => state.UserReducer.user);
@@ -19,31 +19,30 @@ function RegForm() {
   });
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  //   const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // fetch('http://localhost:5050/auth/reg', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(form),
-    //   credentials: 'include',
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     if (data.msg) {
-    //       alert(data.msg);
-    //       navigate('/reg');
-    //     } else {
-    //       navigate('/login');
-    //       console.log('registration');
-    //     }
-    //   })
-    //   .catch(console.log);
-    dispatch(setUserAction(form));
-    navigate('/login');
+    fetch('http://localhost:3001/api/v2/reg', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(form),
+      credentials: 'include',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.msg) {
+          alert(data.msg);
+          navigate('/reg');
+        } else {
+          console.log(data, 'registration');
+          navigate('/login');
+          //   console.log('registration');
+        }
+      })
+      .catch(console.log);
   };
 
   const handleInput = (event) => {

@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 import { Button, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 
-// import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-// import { setUserAction } from '../../Redux/user.action';
+// import { setAuthToken } from '../ProtectedRoute/SetAuthToken';
+import { getUserLoaderAction, setUserAction } from '../../Redux/user.action';
 
 function SignInForm() {
   // const user = useSelector((state) => state.UserReducer.user);
@@ -15,31 +16,28 @@ function SignInForm() {
   });
 
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    
-    // fetch('http://localhost:5050/auth/login', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(form),
-    //   credentials: 'include',
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     if (data.msg) {
-    //       alert(data.msg);
-    //       navigate('/reg');
-    //     } else {
-    //       // dispatch(setUserAction(data));
-    //       navigate('/login');
-    //       console.log('registration');
-    //     }
-    //   })
-    //   .catch(console.log);
+
+    fetch('http://localhost:3001/api/v2/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(form),
+      credentials: 'include',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // // const token = response.data.token;
+        // localStorage.setItem('token', token);
+        // setAuthToken(token);
+        dispatch(setUserAction(data));
+        dispatch(getUserLoaderAction(true));
+      })
+      .catch(console.log);
 
     // dispatch(setUserAction(form));
 

@@ -2,7 +2,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 // import { useDispatch } from 'react-redux';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Container from '@mui/material/Container';
 import { Route, Routes } from 'react-router-dom';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -22,11 +22,17 @@ import MainPage from './components/MainPage/MainPage';
 import FormGME0024 from './components/Forms/FormGME0024';
 import ForkliftForm from './components/ForkliftForm/ForkliftForm';
 import RegForm from './components/Auth/RegForm';
+import { setAuthToken } from './components/ProtectedRoute/SetAuthToken';
 
 // import { setUserAction } from './components/Redux/user.action';
 
 function App() {
+  const token = localStorage.getItem('token');
+  if (token) {
+    setAuthToken(token);
+  }
   // const user = useSelector((state) => state.UserReducer.user);
+  const loader = useSelector((state) => state.UserReducer.loader);
 
   // const dispatch = useDispatch();
 
@@ -35,6 +41,10 @@ function App() {
   // }, []);
 
   const locations = ['Moscow', 'Tbilisi', 'Dubai'];
+
+  if (!loader) {
+    return <h2 style={{ margin: 300 }}>Loading...</h2>;
+  }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -50,7 +60,7 @@ function App() {
             <Route element={<ProtectedRoleRoute role="Inspector" />}>
               <Route path="/FormGME0024" element={<FormGME0024 />} />
               <Route
-                path="/form1"
+                path="/ForkLiftForm"
                 element={<ForkliftForm location={locations} />}
               />
               <Route path="/profile/:surname" element={<InspectorProfile />} />
