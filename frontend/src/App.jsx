@@ -26,6 +26,7 @@ import VechSafInspCheckForm from './components/Forms/VechSafInspCheckForm';
 
 // import { setUserAction } from './components/Redux/user.action';
 
+
 function App() {
   // const user = useSelector((state) => state.UserReducer.user);
 
@@ -63,6 +64,7 @@ function App() {
         </Routes>
       </Container>
     </LocalizationProvider>
+
   );
 }
 

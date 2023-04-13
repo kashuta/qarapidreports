@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import {
   Button, InputLabel, MenuItem, Select, TextField,
+
 } from '@mui/material';
 import { Box } from '@mui/system';
 
@@ -13,6 +14,7 @@ import WebcamCapture from '../WebCam/WebCam';
 function SignInForm() {
   // const [selectedFile, setSelectedFile] = useState(null);
   // const user = useSelector((state) => state.UserReducer.user);
+
   const [form, setForm] = useState({
     name: '',
     surname: '',
@@ -35,6 +37,7 @@ function SignInForm() {
     dispatch(setUserAction(form));
 
     navigate('/');
+
   };
 
   const handleInput = (event) => {
@@ -46,6 +49,7 @@ function SignInForm() {
       component="form"
       sx={{
         width: '40%',
+
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -54,6 +58,7 @@ function SignInForm() {
         marginTop: 10,
       }}>
       <WebcamCapture />
+
       <TextField
         required
         label="First Name"
@@ -108,10 +113,12 @@ function SignInForm() {
       </InputLabel>
       <Select
         required
+
         labelId="demo-simple-select-label"
         id="demo-simple-select"
         name="role"
         value={form.role}
+
         onChange={handleInput}
         sx={{
           marginBottom: '1rem',
@@ -144,6 +151,19 @@ function SignInForm() {
         />
         {selectedFile && <span>{selectedFile.name}</span>}
       </Button> */}
+
+      <Button
+        onClick={handleSubmit}
+        variant="contained"
+        component="label"
+        sx={{
+          marginBottom: '1rem',
+          width: '100%',
+        }}
+      >
+        Upload Your Photo
+        <input hidden accept="image/*" multiple type="file" />
+      </Button>
       <Button
         onClick={handleSubmit}
         variant="contained"
@@ -151,6 +171,7 @@ function SignInForm() {
         sx={{
           width: '100%',
         }}>
+
         Login
       </Button>
     </Box>

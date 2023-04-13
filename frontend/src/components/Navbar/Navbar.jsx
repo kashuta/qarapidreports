@@ -45,6 +45,7 @@ export default function Navbar() {
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
+
           <img
             alt="pcm-logo"
             src="https://www.pcm.eu/sites/default/files/logo_pcm.png"
@@ -53,6 +54,7 @@ export default function Navbar() {
           {user?.role === 'Manager' && <ManagerNav />}
           {user?.role === 'Admin' && <AdminNav />}
           {user && <Button onClick={handleSignout} color="inherit">Logout</Button>}
+
         </Toolbar>
       </AppBar>
     </Box>
