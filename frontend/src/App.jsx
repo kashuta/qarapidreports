@@ -20,6 +20,7 @@ import Dashboard from './components/Manager/Dashboard';
 import PageNotFound from './components/ProtectedRoute/PageNotFound';
 import MainPage from './components/MainPage/MainPage';
 import FormGME0024 from './components/Forms/FormGME0024';
+import ForkliftForm from './components/ForkliftForm/ForkliftForm';
 
 // import { setUserAction } from './components/Redux/user.action';
 
@@ -31,6 +32,8 @@ function App() {
   // useEffect(() => {
   //   dispatch(setUserAction());
   // }, []);
+
+  const locations = ['Moscow', 'Tbilisi', 'Dubai'];
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -51,6 +54,7 @@ function App() {
             </Route>
           </Route>
           <Route path="/FormGME0024" element={<FormGME0024 />} />
+          <Route path="/form1" element={<ForkliftForm location={locations} />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Container>
