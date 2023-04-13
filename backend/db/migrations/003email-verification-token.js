@@ -11,6 +11,17 @@ module.exports = {
       token: {
         type: Sequelize.TEXT,
       },
+      userId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
+      },
+      expiresAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

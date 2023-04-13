@@ -21,6 +21,9 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
+      activationLink: {
+        type: Sequelize.TEXT,
+      },
       roleId: {
         type: Sequelize.INTEGER,
         references: {

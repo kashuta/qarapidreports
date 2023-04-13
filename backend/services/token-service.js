@@ -3,7 +3,7 @@ const { RefreshToken } = require('../db/models');
 
 class TokenService {
   async generateTokens(payload) {
-    const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30m' });
+    const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30s' });
     const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '30d' });
     return { accessToken, refreshToken };
   }
@@ -33,9 +33,8 @@ class TokenService {
 
   validateAccessToken(token) {
     try {
-      const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-      console.log(decoded);
-      return decoded;
+      const userData = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+      return userData;
     } catch (err) {
       return null;
     }
@@ -43,8 +42,8 @@ class TokenService {
 
   validateRefreshToken(token) {
     try {
-      const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
-      return decoded;
+      const userData = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+      return userData;
     } catch (err) {
       return null;
     }

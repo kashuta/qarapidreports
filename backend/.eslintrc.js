@@ -16,5 +16,6 @@ module.exports = {
     'class-methods-use-this': 0,
     'max-len': 0,
     'consistent-return': 0,
+    'no-restricted-syntax': 0,
   },
 };

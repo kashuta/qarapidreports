@@ -8,6 +8,8 @@ import React from 'react';
 // import { useSelector } from 'react-redux';
 import Container from '@mui/material/Container';
 import { Route, Routes } from 'react-router-dom';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import SignInForm from './components/Auth/SignInForm';
 import Navbar from './components/Navbar/Navbar';
 import './App.css';
@@ -20,6 +22,8 @@ import ManagerProfile from './components/Manager/ManagerProfile';
 import Dashboard from './components/Manager/Dashboard';
 import PageNotFound from './components/ProtectedRoute/PageNotFound';
 import MainPage from './components/MainPage/MainPage';
+import FormGME0024 from './components/Forms/FormGME0024';
+
 // import { setUserAction } from './components/Redux/user.action';
 
 function App() {
@@ -32,25 +36,28 @@ function App() {
   // }, []);
 
   return (
-    <Container maxWidth="xl">
-      <Navbar />
-      <Routes>
-        <Route element={<ProtectedRoute isLogged={false} />}>
-          <Route path="/login" element={<SignInForm />} />
-        </Route>
-        <Route element={<ProtectedRoute isLogged redirectTo="/login" />}>
-          <Route path="/" element={<MainPage />} />
-          <Route element={<ProtectedRoleRoute role="Inspector" />}>
-            <Route path="/profile/:surname" element={<InspectorProfile />} />
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Container maxWidth="xl">
+        <Navbar />
+        <Routes>
+          <Route element={<ProtectedRoute isLogged={false} />}>
+            <Route path="/login" element={<SignInForm />} />
           </Route>
-          <Route element={<ProtectedRoleRoute role="Manager" />}>
-            <Route path="/profile/:surname" element={<ManagerProfile />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+          <Route element={<ProtectedRoute isLogged redirectTo="/login" />}>
+            <Route path="/" element={<MainPage />} />
+            <Route element={<ProtectedRoleRoute role="Inspector" />}>
+              <Route path="/profile/:surname" element={<InspectorProfile />} />
+            </Route>
+            <Route element={<ProtectedRoleRoute role="Manager" />}>
+              <Route path="/profile/:surname" element={<ManagerProfile />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+            </Route>
           </Route>
-        </Route>
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
-    </Container>
+          <Route path="/FormGME0024" element={<FormGME0024 />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </Container>
+    </LocalizationProvider>
   );
 }
 
