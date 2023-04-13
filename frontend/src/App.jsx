@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
 /* eslint-disable jsx-a11y/aria-role */
->>>>>>> 29b690b82dc3a3dfa9150c8ff6846ce2885406f7
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 // import { useDispatch } from 'react-redux';
