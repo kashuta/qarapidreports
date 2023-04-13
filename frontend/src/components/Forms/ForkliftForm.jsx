@@ -28,8 +28,9 @@ import {
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
-import './ForkliftForm.css';
-import DialogForm from '../Forms/DialogForm';
+// import './ForkliftForm.css';
+import styles from './Form.module.css';
+import DialogForm from './DialogForm';
 
 const engineOffChecklist = [
   {
@@ -260,13 +261,13 @@ function ForkliftForm({ location }) {
   return (
     <Container>
       <form onSubmit={formik.handleSubmit}>
-        <h1 className="form-h1">Forklift safety inspection checklist</h1>
+        <h1 className={styles.form_h1}>Forklift safety inspection checklist</h1>
         <Box
           sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
           mb={5}
           align="center"
         >
-          <h2 className="form-h2">A.&ensp;Truck and operator details</h2>
+          <h2 className={styles.form_h2}>A.&ensp;Truck and operator details</h2>
           <TextField
             select
             align="left"
@@ -336,28 +337,28 @@ function ForkliftForm({ location }) {
           />
         </Box>
         <Box mb={5}>
-          <h2 className="form-h2">B.&ensp;Inspection</h2>
+          <h2 className={styles.form_h2}>B.&ensp;Inspection</h2>
           <TableContainer component={Paper} sx={{ border: 1, alignContent: 'center' }}>
             <Table>
               <TableHead>
                 <TableRow sx={{ background: '#bfbfbf' }}>
                   <TableCell colSpan={6} sx={{ border: 1 }}>
-                    <h3 className="form-h3">With Engine Off</h3>
+                    <h3 className={styles.form_h3}>With Engine Off</h3>
                   </TableCell>
                 </TableRow>
                 <TableRow sx={{ background: '#bfbfbf' }}>
                   <TableCell sx={{ border: 1, padding: '10px' }} align="center">№</TableCell>
                   <TableCell sx={{ border: 1, padding: '10px' }}>
-                    <h4 className="form-h4">What are you inspecting?</h4>
+                    <h4 className={styles.form_h4}>What are you inspecting?</h4>
                   </TableCell>
                   <TableCell sx={{ border: 1, padding: '10px' }}>
-                    <h4 className="form-h4">What are you looking for?</h4>
+                    <h4 className={styles.form_h4}>What are you looking for?</h4>
                   </TableCell>
                   <TableCell sx={{ border: 1, padding: '10px' }}>
-                    <h4 className="form-h4">Condition</h4>
+                    <h4 className={styles.form_h4}>Condition</h4>
                   </TableCell>
                   <TableCell sx={{ border: 1, padding: '10px' }}>
-                    <h4 className="form-h4">Action needed</h4>
+                    <h4 className={styles.form_h4}>Action needed</h4>
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -402,7 +403,7 @@ function ForkliftForm({ location }) {
                 ))}
                 <TableRow sx={{ background: '#bfbfbf' }}>
                   <TableCell colSpan={6} sx={{ border: 1 }}>
-                    <h3 className="form-h3">With Engine On</h3>
+                    <h3 className={styles.form_h3}>With Engine On</h3>
                   </TableCell>
                 </TableRow>
                 {engineOnChecklist && engineOnChecklist?.map((elem, index) => (
@@ -448,10 +449,10 @@ function ForkliftForm({ location }) {
           </TableContainer>
         </Box>
         <Box mb={5} fullWidth>
-          <h2 className="form-h2">C.&ensp;Guide</h2>
-          <div className="form-image">
-            <div className="img-container">
-              <div className="img-wrapper">
+          <h2 className={styles.form_h2}>C.&ensp;Guide</h2>
+          <div className={styles.form_image}>
+            <div className={styles.img_container}>
+              <div className={styles.img_wrapper}>
                 <img src="../img/forklift.jpg" alt="guide" />
               </div>
             </div>

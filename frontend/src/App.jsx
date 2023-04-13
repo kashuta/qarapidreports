@@ -21,11 +21,11 @@ import Dashboard from './components/Manager/Dashboard';
 import PageNotFound from './components/ProtectedRoute/PageNotFound';
 import MainPage from './components/MainPage/MainPage';
 import MonthSafCheck from './components/Forms/MonthSafCheck';
-import ForkliftForm from './components/ForkliftForm/ForkliftForm';
+import ForkliftForm from './components/Forms/ForkliftForm';
 import VechSafInspCheckForm from './components/Forms/VechSafInspCheckForm';
+import HSEObservationForm from './components/Forms/HSEObservationForm';
 
 // import { setUserAction } from './components/Redux/user.action';
-
 
 function App() {
   // const user = useSelector((state) => state.UserReducer.user);
@@ -57,9 +57,10 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
             </Route>
           </Route>
-          <Route path="/FormGME0144" element={<MonthSafCheck location={locations} />} />
-          <Route path="/FormGME0024" element={<VechSafInspCheckForm location={locations} />} />
+          <Route path="/form2" element={<MonthSafCheck location={locations} />} />
+          <Route path="/form3" element={<VechSafInspCheckForm location={locations} />} />
           <Route path="/form1" element={<ForkliftForm location={locations} />} />
+          <Route path="/form4" element={<HSEObservationForm location={locations} />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Container>
