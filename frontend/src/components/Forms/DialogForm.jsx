@@ -22,7 +22,7 @@ function DialogForm({
         {
           statusBtn === 'submit' ? 'Submit'
             : statusBtn === 'save' ? 'Save'
-              : 'Clear'
+              : statusBtn === 'validation-error' ? 'Some fields are incorrect' : 'Clear'
           }
       </DialogTitle>
       <DialogContent>
@@ -30,7 +30,7 @@ function DialogForm({
           {
           statusBtn === 'submit' ? 'Are you sure you want to Submit'
             : statusBtn === 'save' ? 'Are you sure you want to Save?'
-              : 'Are you sure you want to Clear?'
+              : statusBtn === 'validation-error' ? 'Please, fill all required fields correctly before submit' : 'Are you sure you want to Clear?'
           }
         </DialogContentText>
       </DialogContent>
@@ -38,15 +38,17 @@ function DialogForm({
         <Button onClick={handleClose} color="primary">
           Cancel
         </Button>
-        <Button
-          onClick={
-            statusBtn === 'submit' ? handleConfirm : statusBtn === 'save' ? handleConfirmSave : handleConfirmClear
-          }
-          color="primary"
-          autoFocus
-        >
-          Confirm
-        </Button>
+        {statusBtn !== 'validation-error' && (
+          <Button
+            onClick={
+              statusBtn === 'submit' ? handleConfirm : statusBtn === 'save' ? handleConfirmSave : handleConfirmClear
+            }
+            color="primary"
+            autoFocus
+          >
+            Confirm
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

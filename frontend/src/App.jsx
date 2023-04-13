@@ -20,8 +20,9 @@ import ManagerProfile from './components/Manager/ManagerProfile';
 import Dashboard from './components/Manager/Dashboard';
 import PageNotFound from './components/ProtectedRoute/PageNotFound';
 import MainPage from './components/MainPage/MainPage';
-import FormGME0024 from './components/Forms/FormGME0024';
+import MonthSafCheck from './components/Forms/MonthSafCheck';
 import ForkliftForm from './components/ForkliftForm/ForkliftForm';
+import VechSafInspCheckForm from './components/Forms/VechSafInspCheckForm';
 
 // import { setUserAction } from './components/Redux/user.action';
 
@@ -55,7 +56,8 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
             </Route>
           </Route>
-          <Route path="/FormGME0024" element={<FormGME0024 />} />
+          <Route path="/FormGME0144" element={<MonthSafCheck location={locations} />} />
+          <Route path="/FormGME0024" element={<VechSafInspCheckForm location={locations} />} />
           <Route path="/form1" element={<ForkliftForm location={locations} />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
