@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
 const { authMiddleware } = require('./middlewares');
-// const router = require('./routes/index');
+const router = require('./routes/index');
 const authRouter = require('./routes/authRouter');
 const dataRouter = require('./routes/dataRouter');
 

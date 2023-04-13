@@ -1,34 +1,68 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Box, Button } from '@mui/material';
 import WebcamCapture from '../WebCam/WebCam';
 import { setAvatarAction } from '../../Redux/file.action';
+import { refreshAccessToken } from '../../JWT/authActions';
+import authFetch from '../../JWT/authFetch';
 
 function InspectorProfile() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [showWebcam, setShowWebcam] = useState(false);
   const dispatch = useDispatch();
 
-  const sendFile = useCallback(() => {
-    const data = new FormData();
-    data.append('avatar', selectedFile);
+  // const navigate = useNavigate();
 
-    fetch('http://localhost:3001/api/v1/upload', {
-      method: 'POST',
-      credentials: 'include',
-      // headers: {
-      //   'Content-Type': 'multipart/form-data',
-      // },
-      body: data,
-    })
-      .then((res) => res.json())
-      .then((file) => {
-        dispatch(setAvatarAction(file));
-      })
-      .catch(console.error);
-  }, [selectedFile]);
+  const fetchData = async () => {
+    try {
+      const data = new FormData();
+      data.append('avatar', selectedFile);
+      const response = await authFetch('http://localhost:3001/api/v3/upload', {
+        method: 'POST',
+        credentials: 'include',
+        body: data,
+      });
+      if (response.status === 401) {
+        const newAccessToken = await dispatch(refreshAccessToken());
+        if (!newAccessToken) {
+          return;
+          // Handle error, for example, redirect to the login page or show an error message
+        }
+        // Retry the request with the new access token
+        fetchData();
+      } else if (response.ok) {
+        const result = await response.json();
+        console.log(result);
+        dispatch(setAvatarAction(result));
+        // Process the data
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // , [dispatch, selectedFile]);
 
-  console.log('+++++++', selectedFile, '++++++++++++++++++');
+  useEffect(() => {
+    fetchData();
+  }, []); // Add dependencies if needed
+
+  // const sendFile = useCallback(() => {
+  //   const data = new FormData();
+  //   data.append('avatar', selectedFile);
+
+  //   authFetch('http://localhost:3001/api/v3/upload', {
+  //     method: 'POST',
+  //     credentials: 'include',
+  //     body: data,
+  //   })
+  //     .then((res) => res.json())
+  //     .then((file) => {
+  //       dispatch(setAvatarAction(file));
+  //     })
+  //     .catch((er) => console.log(er.message));
+  // }, []);
+
+  // console.log('+++++++', selectedFile, '++++++++++++++++++');
 
   return (
     <Box
@@ -64,7 +98,7 @@ function InspectorProfile() {
         variant="contained"
         component="label"
         type="submit"
-        onClick={sendFile}>
+        onClick={fetchData}>
         Submit
       </Button>
     </Box>

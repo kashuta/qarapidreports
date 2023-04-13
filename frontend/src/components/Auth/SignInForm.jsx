@@ -31,10 +31,10 @@ function SignInForm() {
     })
       .then((res) => res.json())
       .then((data) => {
-        // // const token = response.data.token;
-        // localStorage.setItem('token', token);
+        const token = data.accessToken;
+        localStorage.setItem('accessToken', token);
         // setAuthToken(token);
-        dispatch(setUserAction(data));
+        dispatch(setUserAction(data.userFront));
         dispatch(getUserLoaderAction(true));
       })
       .catch(console.log);

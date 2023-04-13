@@ -6,6 +6,7 @@ export const setAuthToken = (token) => {
     fetch('http://localhost:3001/api/v2/refresh', {
       method: 'GET',
       headers,
+      credentials: 'include',
     });
   } else {
     delete headers.Authorization;

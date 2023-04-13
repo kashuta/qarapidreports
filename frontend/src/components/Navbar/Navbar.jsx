@@ -29,6 +29,14 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   const handleSignout = () => {
+    fetch('http://localhost:3001/api/v2/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+    localStorage.removeItem('token');
     dispatch(setUserAction(null));
     navigate('/login');
   };
@@ -50,9 +58,9 @@ export default function Navbar() {
             alt="pcm-logo"
             src="https://www.pcm.eu/sites/default/files/logo_pcm.png"
           />
-          {user?.role === 'Inspector' && <InspectorNav />}
-          {user?.role === 'Manager' && <ManagerNav />}
-          {user?.role === 'Admin' && <AdminNav />}
+          {user?.role === 'inspector' && <InspectorNav />}
+          {user?.role === 'manager' && <ManagerNav />}
+          {user?.role === 'admin' && <AdminNav />}
           {user && (
             <Button onClick={handleSignout} color="inherit">
               Logout
