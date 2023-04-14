@@ -23,14 +23,14 @@ function DialogForm({
           statusBtn === 'submit' ? 'Submit'
             : statusBtn === 'save' ? 'Save'
               : 'Clear'
-          }
+        }
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           {
-          statusBtn === 'submit' ? 'Are you sure you want to Submit'
-            : statusBtn === 'save' ? 'Are you sure you want to Save?'
-              : 'Are you sure you want to Clear?'
+            statusBtn === 'submit' ? 'Are you sure you want to Submit'
+              : statusBtn === 'save' ? 'Are you sure you want to Save?'
+                : 'Are you sure you want to Clear?'
           }
         </DialogContentText>
       </DialogContent>

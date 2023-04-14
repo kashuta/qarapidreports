@@ -9,6 +9,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
+const path = require('path');
 const { authMiddleware } = require('./middlewares');
 // const router = require('./routes/index');
 const authRouter = require('./routes/authRouter');
@@ -30,6 +31,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('public'));
 app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'public'));
 
 // add swagger api doc
 if (envFile === '.env.development') {

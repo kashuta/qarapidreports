@@ -46,7 +46,7 @@ class UserController {
     try {
       const { link } = req.params;
       await userService.activate(link);
-      return res.json({ message: 'Activation success' });
+      res.render('view');
     } catch (err) {
       next(err);
     }
