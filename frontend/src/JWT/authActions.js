@@ -2,7 +2,7 @@
 /* eslint-disable no-useless-catch */
 import { setAccessToken } from './tokenHelpers';
 import authFetch from './authFetch';
-import { setUserAction } from '../Redux/user.action';
+import { getUserLoaderAction, setUserAction } from '../Redux/user.action';
 
 export const refreshAccessToken = () => async (dispatch) => {
   try {
@@ -23,6 +23,7 @@ export const refreshAccessToken = () => async (dispatch) => {
     const newAccessToken = data.accessToken;
     setAccessToken(newAccessToken);
     dispatch(setUserAction(data.userFront));
+    dispatch(getUserLoaderAction(true));
     return newAccessToken;
   } catch (error) {
     // Handle error, for example, dispatch an action to show an error message

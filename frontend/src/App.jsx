@@ -32,29 +32,19 @@ import { refreshAccessToken } from './JWT/authActions';
 
 function App() {
   const user = useSelector((state) => state.UserReducer.user);
-  // const loader = useSelector((state) => state.UserReducer.loader);
+  const loader = useSelector((state) => state.UserReducer.loader);
 
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem('token');
-  //   if (token) {
-  //     // console.log('token: ', token);
-  //     setAuthToken(token);
-  //   }
-  //   // dispatch(setUserAction());
-  // }, []);
-
-  // Fetch data when the component mounts or when a dependency changes
   useEffect(() => {
     dispatch(refreshAccessToken());
   }, []); // Add dependencies if needed
-  console.log(user);
+
   const locations = ['Moscow', 'Tbilisi', 'Dubai'];
 
-  // if (!loader) {
-  //   return <h2 style={{ margin: 300 }}>Loading...</h2>;
-  // }
+  if (!loader) {
+    return <h2 style={{ margin: 300 }}>Loading...</h2>;
+  }
   if (!user) {
     return (
       <Container maxWidth="xl">

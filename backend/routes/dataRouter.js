@@ -25,11 +25,10 @@ const multerMiddleware = require('../middlewares/multer.middleware');
  */
 
 // set form/data route
-router.post(
-  '/form',
-);
+router.post('/form');
 router.post('/upload', multerMiddleware.single('avatar'), async (req, res) => {
   try {
+    console.log(req.file, '+++++++++req.file++++++++++++');
     if (req.file) {
       // const imageUrl = `http://localhost:3001/public/img/${req.file.filename}`;
       res.json(req.file);

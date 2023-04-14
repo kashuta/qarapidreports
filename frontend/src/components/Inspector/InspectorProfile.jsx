@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Box, Button } from '@mui/material';
 import WebcamCapture from '../WebCam/WebCam';
@@ -24,6 +24,7 @@ function InspectorProfile() {
       });
       if (response.status === 401) {
         const newAccessToken = await dispatch(refreshAccessToken());
+        console.log('111111111111');
         if (!newAccessToken) {
           return;
           // Handle error, for example, redirect to the login page or show an error message
@@ -32,7 +33,6 @@ function InspectorProfile() {
         fetchData();
       } else if (response.ok) {
         const result = await response.json();
-        console.log(result);
         dispatch(setAvatarAction(result));
         // Process the data
       }
@@ -40,12 +40,14 @@ function InspectorProfile() {
       console.log(error);
     }
   };
+
   // , [dispatch, selectedFile]);
 
   useEffect(() => {
     fetchData();
   }, []); // Add dependencies if needed
 
+  console.log(selectedFile, '++++++++selectedFile++++++++++++');
   // const sendFile = useCallback(() => {
   //   const data = new FormData();
   //   data.append('avatar', selectedFile);
