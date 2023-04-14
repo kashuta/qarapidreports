@@ -1,5 +1,6 @@
 const router = require('express').Router();
 
+
 /**
  * @swagger
  * /signup:
@@ -47,5 +48,6 @@ router.post('/login', async (req, res, next) => {
     next(err);
   }
 });
+
 
 module.exports = router;

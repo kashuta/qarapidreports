@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import {
   DialogActions,
@@ -9,15 +10,19 @@ import {
 } from '@mui/material';
 
 function DialogForm({
-  open, handleClose, handleConfirm, statusBtn, handleConfirmSave, handleConfirmClear,
+  open,
+  handleClose,
+  handleConfirm,
+  statusBtn,
+  handleConfirmSave,
+  handleConfirmClear,
 }) {
   return (
     <Dialog
       open={open}
       onClose={handleClose}
       aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
+      aria-describedby="alert-dialog-description">
       <DialogTitle id="alert-dialog-title">
         {
           statusBtn === 'submit' ? 'Submit'
