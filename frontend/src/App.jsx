@@ -25,9 +25,6 @@ import { refreshAccessToken } from './JWT/authActions';
 
 import VechSafInspCheckForm from './components/Forms/VechSafInspCheckForm';
 
-
-
-
 function App() {
   const user = useSelector((state) => state.UserReducer.user);
   const loader = useSelector((state) => state.UserReducer.loader);
@@ -64,7 +61,14 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route element={<ProtectedRoleRoute role="inspector" />}>
-            <Route path="/FormGME0024" element={<FormGME0024 />} />
+            <Route
+              path="/FormGME0024"
+              element={<VechSafInspCheckForm location={locations} />}
+            />
+            <Route
+              path="/FormGME0144"
+              element={<MonthSafCheck location={locations} />}
+            />
             <Route
               path="/ForkLiftForm"
               element={<ForkliftForm location={locations} />}
@@ -79,7 +83,6 @@ function App() {
         </Routes>
       </Container>
     </LocalizationProvider>
-
   );
 }
 
