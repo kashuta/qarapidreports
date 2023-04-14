@@ -45,3 +45,11 @@
     height: 100%;
     object-fit: contain;
   }
+
+  .text_center {
+    text-align: center;
+  }
+
+  .text_uppercase {
+    text-transform: uppercase;
+  }

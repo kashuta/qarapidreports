@@ -8,13 +8,6 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
   Radio,
   RadioGroup,
   FormControlLabel,
@@ -25,13 +18,15 @@ import {
   MenuItem,
   FormControl,
   FormHelperText,
+  FormGroup,
+  Checkbox,
 } from '@mui/material';
 import { DatePicker, TimeField } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import styles from './Form.module.css';
 import DialogForm from './DialogForm';
 
-const validationSchema = yup.object({
+const validationSchema = yup.object().shape({
   location: yup
     .string('Enter location')
     .required('Please, fill this field'),
@@ -47,6 +42,36 @@ const validationSchema = yup.object({
   improvement: yup
     .string('Enter improvement')
     .required('Please, fill this field'),
+  observationType: yup
+    .string()
+    .required('Please, select an option'),
+  healthHazard: yup.boolean().when('observationType', {
+    is: 'Unsafe act',
+    then: (schema) => schema.test(
+      'at-least-one-required',
+      'At least one checkbox is required',
+      (value, context) => value || context.parent.environmentalRisk || context.parent.unsafeCondition
+      ,
+    ),
+  }),
+  environmentalRisk: yup.boolean().when('observationType', {
+    is: 'Unsafe act',
+    then: (schema) => schema.test(
+      'at-least-one-required',
+      'At least one checkbox is required',
+      (values, context) => values || context.parent.healthHazard || context.parent.unsafeCondition
+      ,
+    ),
+  }),
+  unsafeCondition: yup.boolean().when('observationType', {
+    is: 'Unsafe act',
+    then: (schema) => schema.test(
+      'at-least-one-required',
+      'At least one checkbox is required',
+      (value, context) => value || context.parent.healthHazard || context.parent.environmentalRisk
+      ,
+    ),
+  }),
 });
 
 function HSEObservationForm({ location }) {
@@ -62,6 +87,10 @@ function HSEObservationForm({ location }) {
       description: '',
       action: '',
       improvement: '',
+      observationType: '',
+      healthHazard: false,
+      environmentalRisk: false,
+      unsafeCondition: false,
     },
     validationSchema,
     validateOnChange: true,
@@ -121,13 +150,13 @@ function HSEObservationForm({ location }) {
   return (
     <Container>
       <form onSubmit={formik.handleSubmit}>
-        <h1 className={styles.form_h1}>HSE OBSERVATION (STOP) CARD</h1>
+        <h1 className={`${styles.form_h1} ${styles.text_uppercase} ${styles.text_center}`}>HSE observation (stop) card</h1>
         <Box
           sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
           mb={5}
           align="center"
         >
-          <h2 className={styles.form_h2}>Observer</h2>
+          <h2 className={`${styles.form_h2} ${styles.text_uppercase} ${styles.text_center}`}>Observer</h2>
 
           <DatePicker
             label="Date"
@@ -172,12 +201,67 @@ function HSEObservationForm({ location }) {
 
         </Box>
         <Box mb={5}>
-          <h2 className={styles.form_h2}>Observation type</h2>
+          <h2 className={`${styles.form_h2} ${styles.text_uppercase} ${styles.text_center}`}>Observation type</h2>
+          <Box display="flex" alignItems="flex-start">
+            <FormControl sx={{ m: 0 }} error={formik.touched.observationType && Boolean(formik.errors.observationType)} variant="standard">
+              <RadioGroup
+                name="observationType"
+                value={formik.values.observationType}
+                onChange={(e) => {
+                  formik.setFieldValue(e.target.name, e.target.value);
+                  if (e.target.value === 'Safe observation') {
+                    formik.setFieldValue('healthHazard', false);
+                    formik.setFieldValue('environmentalRisk', false);
+                    formik.setFieldValue('unsafeCondition', false);
+                  }
+                }}
+                          >
+                <FormControlLabel sx={{ margin: 1 }} value="Unsafe act" control={<Radio />} label="Unsafe act" />
+                <FormControlLabel sx={{ margin: 1 }} value="Safe observation" control={<Radio />} label="Safe observation" />
+              </RadioGroup>
+              <FormHelperText sx={{ margin: 1 }}>{formik.touched.observationType && formik.errors.observationType}</FormHelperText>
+            </FormControl>
+            <FormControl component="fieldset" error={formik.touched.healthHazard && Boolean(formik.errors.healthHazard)}>
+              <FormGroup row>
+                <FormControlLabel
+                  disabled={formik.values.observationType !== 'Unsafe act'}
+                  sx={{ margin: 1 }}
+                  name="healthHazard"
+                  value={formik.values.healthHazard}
+                  onChange={formik.handleChange}
+                  checked={formik.values.healthHazard}
+                  control={<Checkbox />}
+                  label="Health hazard"
+                />
+                <FormControlLabel
+                  disabled={formik.values.observationType !== 'Unsafe act'}
+                  sx={{ margin: 1 }}
+                  name="environmentalRisk"
+                  value={formik.values.environmentalRisk}
+                  checked={formik.values.environmentalRisk}
+                  onChange={formik.handleChange}
+                  control={<Checkbox />}
+                  label="Environmental risk"
+                />
+                <FormControlLabel
+                  disabled={formik.values.observationType !== 'Unsafe act'}
+                  sx={{ margin: 1 }}
+                  name="unsafeCondition"
+                  value={formik.values.unsafeCondition}
+                  checked={formik.values.unsafeCondition}
+                  onChange={formik.handleChange}
+                  control={<Checkbox />}
+                  label="Unsafe condition"
+                />
+              </FormGroup>
+              <FormHelperText sx={{ margin: 1, ml: 3 }}>{formik.touched.healthHazard && formik.errors.healthHazard}</FormHelperText>
+            </FormControl>
+          </Box>
 
         </Box>
         <Box mb={5} fullWidth>
-          <h2 className={styles.form_h2}>Observation description</h2>
-          <p>Please describe your observation with a picture attached if possible:</p>
+          <h2 className={`${styles.form_h2} ${styles.text_uppercase} ${styles.text_center}`}>Observation description</h2>
+          <p className={styles.text_center}>Please describe your observation with a picture attached if possible:</p>
           <TextField
             fullWidth
             multiline
@@ -194,8 +278,8 @@ function HSEObservationForm({ location }) {
         </Box>
 
         <Box mb={5} fullWidth>
-          <h2 className={styles.form_h2}>Containment action</h2>
-          <p>What did you do to correct the situation and eliminate the risk?</p>
+          <h2 className={`${styles.form_h2} ${styles.text_uppercase} ${styles.text_center}`}>Containment action</h2>
+          <p className={styles.text_center}>What did you do to correct the situation and eliminate the risk?</p>
           <TextField
             fullWidth
             multiline
@@ -213,8 +297,8 @@ function HSEObservationForm({ location }) {
         </Box>
 
         <Box mb={5} fullWidth>
-          <h2 className={styles.form_h2}>Proposed improvement</h2>
-          <p>If you are unable to correct the situation, what do you suggest as a sotution?</p>
+          <h2 className={`${styles.form_h2} ${styles.text_uppercase} ${styles.text_center}`}>Proposed improvement</h2>
+          <p className={styles.text_center}>If you are unable to correct the situation, what do you suggest as a sotution?</p>
           <TextField
             fullWidth
             multiline
