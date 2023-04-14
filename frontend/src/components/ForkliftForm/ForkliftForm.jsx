@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable max-len */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-unused-vars */
@@ -23,10 +24,8 @@ import {
   Box,
   Container,
   MenuItem,
-  // FormControl,
-  // InputLabel,
-  // Select,
-  // FormHelperText,
+  FormControl,
+  FormHelperText,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
@@ -126,7 +125,7 @@ const engineOnChecklist = [
 const engineOffValues = {};
 for (const item of engineOffChecklist) {
   engineOffValues[item.item] = {
-    condition: 'ok',
+    condition: '',
     actionsNeeded: '',
   };
 }
@@ -134,7 +133,7 @@ for (const item of engineOffChecklist) {
 const engineOffValidation = {};
 for (const item of engineOffChecklist) {
   engineOffValidation[item.item] = yup.object({
-    condition: yup.string(),
+    condition: yup.string().required('Please, select an option'),
     actionsNeeded: yup
       .string()
       .when('condition', {
@@ -147,7 +146,7 @@ for (const item of engineOffChecklist) {
 const engineOnValues = {};
 for (const item of engineOnChecklist) {
   engineOnValues[item.item] = {
-    condition: 'ok',
+    condition: '',
     actionsNeeded: '',
   };
 }
@@ -155,7 +154,9 @@ for (const item of engineOnChecklist) {
 const engineOnValidation = {};
 for (const item of engineOnChecklist) {
   engineOnValidation[item.item] = yup.object({
-    condition: yup.string(),
+    condition: yup
+      .string()
+      .required('Please, select an option'),
     actionsNeeded: yup
       .string()
       .when('condition', {
@@ -168,9 +169,7 @@ for (const item of engineOnChecklist) {
 const validationSchema = yup.object({
   ...engineOffValidation,
   ...engineOnValidation,
-  location: yup
-    .string('Enter location')
-    .required('Please, fill this field'),
+  location: yup.string('Enter location').required('Please, fill this field'),
   operator: yup
     .string('Enter operator name')
     .required('Please, fill this field'),
@@ -179,12 +178,8 @@ const validationSchema = yup.object({
     .typeError('Value must be a number')
     .positive('Enter positive number')
     .required('Please, fill this field'),
-  regNumber: yup
-    .string()
-    .required('Please, fill this field'),
-  signature: yup
-    .string()
-    .required('Please, fill this field'),
+  regNumber: yup.string().required('Please, fill this field'),
+  signature: yup.string().required('Please, fill this field'),
 });
 
 function ForkliftForm({ location }) {
@@ -213,18 +208,30 @@ function ForkliftForm({ location }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     setStatusBtn(event.currentTarget.value);
-    formik.validateForm().then((errors) => {
-      if (Object.keys(errors).length) {
-        formik.setErrors(errors);
-        const touchedFields = Object.keys(errors).reduce((touched, key) => {
-          touched[key] = true;
-          return touched;
-        }, {});
-        formik.setTouched(touchedFields);
-      } else {
-        setOpen(true);
-      }
-    });
+    if (event.currentTarget.value === 'submit') {
+      formik.validateForm().then((errors) => {
+        if (Object.keys(errors).length) {
+          formik.setErrors(errors);
+          const touchedFields = Object.keys(errors).reduce((touched, key) => {
+            if (typeof errors[key] === 'object') {
+              for (const nested of Object.keys(errors[key])) {
+                touched[key] = { [nested]: true };
+              }
+            } else {
+              touched[key] = true;
+            }
+            return touched;
+          }, {});
+          formik.setTouched(touchedFields);
+          setStatusBtn('validation-error');
+          setOpen(true);
+        } else {
+          setOpen(true);
+        }
+      });
+    } else {
+      setOpen(true);
+    }
   };
 
   const handleConfirm = () => {
@@ -245,8 +252,6 @@ function ForkliftForm({ location }) {
     setOpen(false);
   };
 
-  console.log('render');
-
   return (
     <Container>
       <form onSubmit={formik.handleSubmit}>
@@ -254,8 +259,7 @@ function ForkliftForm({ location }) {
         <Box
           sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
           mb={5}
-          align="center"
-        >
+          align="center">
           <h2 className="form-h2">A.&ensp;Truck and operator details</h2>
           <TextField
             select
@@ -267,10 +271,11 @@ function ForkliftForm({ location }) {
             onChange={formik.handleChange}
             onBlur={(e) => formik.setFieldTouched(e.target.name)}
             error={formik.touched.location && Boolean(formik.errors.location)}
-            helperText={formik.touched.location && formik.errors.location}
-          >
+            helperText={formik.touched.location && formik.errors.location}>
             {location.map((el, index) => (
-              <MenuItem key={index + 1} value={el}>{el}</MenuItem>
+              <MenuItem key={index + 1} value={el}>
+                {el}
+              </MenuItem>
             ))}
           </TextField>
 
@@ -278,7 +283,7 @@ function ForkliftForm({ location }) {
             label="Date"
             name="date"
             value={formik.values.date}
-            onChange={((value) => (formik.setValues({ ...formik.values, date: value })))}
+            onChange={(value) => formik.setValues({ ...formik.values, date: value })}
           />
 
           <TextField
@@ -301,8 +306,12 @@ function ForkliftForm({ location }) {
               formik.handleChange(e);
             }}
             onBlur={(e) => formik.setFieldTouched(e.target.name)}
-            error={formik.touched.machineHours && Boolean(formik.errors.machineHours)}
-            helperText={formik.touched.machineHours && formik.errors.machineHours}
+            error={
+              formik.touched.machineHours && Boolean(formik.errors.machineHours)
+            }
+            helperText={
+              formik.touched.machineHours && formik.errors.machineHours
+            }
           />
           <TextField
             id="regNumber"
@@ -327,7 +336,9 @@ function ForkliftForm({ location }) {
         </Box>
         <Box mb={5}>
           <h2 className="form-h2">B.&ensp;Inspection</h2>
-          <TableContainer component={Paper} sx={{ border: 1, alignContent: 'center' }}>
+          <TableContainer
+            component={Paper}
+            sx={{ border: 1, alignContent: 'center' }}>
             <Table>
               <TableHead>
                 <TableRow sx={{ background: '#bfbfbf' }}>
@@ -336,18 +347,17 @@ function ForkliftForm({ location }) {
                   </TableCell>
                 </TableRow>
                 <TableRow sx={{ background: '#bfbfbf' }}>
-                  <TableCell sx={{ border: 1, padding: '10px' }} align="center">№</TableCell>
+                  <TableCell sx={{ border: 1, padding: '10px' }} align="center">
+                    №
+                  </TableCell>
                   <TableCell sx={{ border: 1, padding: '10px' }}>
                     <h4 className="form-h4">What are you inspecting?</h4>
                   </TableCell>
                   <TableCell sx={{ border: 1, padding: '10px' }}>
                     <h4 className="form-h4">What are you looking for?</h4>
                   </TableCell>
-                  <TableCell sx={{ border: 1, padding: '10px 0' }} align="center">
-                    <h4 className="form-h4">OK</h4>
-                  </TableCell>
-                  <TableCell sx={{ border: 1, padding: '10px 0' }} align="center">
-                    <h4 className="form-h4">NOK</h4>
+                  <TableCell sx={{ border: 1, padding: '10px' }}>
+                    <h4 className="form-h4">Condition</h4>
                   </TableCell>
                   <TableCell sx={{ border: 1, padding: '10px' }}>
                     <h4 className="form-h4">Action needed</h4>
@@ -361,28 +371,19 @@ function ForkliftForm({ location }) {
                     <TableCell sx={{ border: 1, padding: '0 10px' }}>{elem.item}</TableCell>
                     <TableCell sx={{ border: 1, padding: '0 10px' }}>{elem.hint}</TableCell>
                     <TableCell sx={{ border: 1, padding: 0 }} align="center">
-                      <Box display="flex" justifyContent="center">
+                      <FormControl sx={{ m: 0 }} error={formik.touched[`${elem.item}`]?.condition && Boolean(formik.errors[`${elem.item}`]?.condition)} variant="standard">
                         <RadioGroup
                           row
+                          style={{ flexWrap: 'nowrap' }}
                           name={`${elem.item}.condition`}
                           value={formik.values[elem.item]?.condition}
                           onChange={formik.handleChange}
                         >
-                          <FormControlLabel sx={{ margin: 1 }} value="ok" control={<Radio />} label="" />
+                          <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="ok" control={<Radio />} label="OK" />
+                          <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="nok" control={<Radio />} label="NOK" />
                         </RadioGroup>
-                      </Box>
-                    </TableCell>
-                    <TableCell sx={{ border: 1, padding: 0 }} align="center">
-                      <Box display="flex" justifyContent="center">
-                        <RadioGroup
-                          row
-                          name={`${elem.item}.condition`}
-                          value={formik.values[elem.item]?.condition}
-                          onChange={formik.handleChange}
-                        >
-                          <FormControlLabel sx={{ margin: 1 }} value="nok" control={<Radio />} label="" />
-                        </RadioGroup>
-                      </Box>
+                        <FormHelperText sx={{ margin: '0 0 0 5px' }}>{formik.touched[`${elem.item}`]?.condition && formik.errors[`${elem.item}`]?.condition}</FormHelperText>
+                      </FormControl>
                     </TableCell>
                     <TableCell sx={{ border: 1, padding: '0 10px' }}>
                       <TextField
@@ -412,29 +413,20 @@ function ForkliftForm({ location }) {
                     <TableCell sx={{ border: 1, padding: '0 10px' }}>{index + 1 + engineOffChecklist.length}</TableCell>
                     <TableCell sx={{ border: 1, padding: '0 10px' }}>{elem.item}</TableCell>
                     <TableCell sx={{ border: 1, padding: '0 10px' }}>{elem.hint}</TableCell>
-                    <TableCell sx={{ border: 1, padding: 0 }}>
-                      <Box display="flex" justifyContent="center">
+                    <TableCell sx={{ border: 1, padding: 0 }} align="center">
+                      <FormControl sx={{ m: 0 }} error={formik.touched[`${elem.item}`]?.condition && Boolean(formik.errors[`${elem.item}`]?.condition)} variant="standard">
                         <RadioGroup
                           row
+                          style={{ flexWrap: 'nowrap' }}
                           name={`${elem.item}.condition`}
                           value={formik.values[elem.item]?.condition}
                           onChange={formik.handleChange}
                         >
-                          <FormControlLabel sx={{ margin: 1 }} value="ok" control={<Radio />} label="" />
+                          <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="ok" control={<Radio />} label="OK" />
+                          <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="nok" control={<Radio />} label="NOK" />
                         </RadioGroup>
-                      </Box>
-                    </TableCell>
-                    <TableCell sx={{ border: 1, padding: 0 }}>
-                      <Box display="flex" justifyContent="center">
-                        <RadioGroup
-                          row
-                          name={`${elem.item}.condition`}
-                          value={formik.values[elem.item]?.condition}
-                          onChange={formik.handleChange}
-                        >
-                          <FormControlLabel sx={{ margin: 1 }} value="nok" control={<Radio />} label="" />
-                        </RadioGroup>
-                      </Box>
+                        <FormHelperText sx={{ margin: '0 0 0 5px' }}>{formik.touched[`${elem.item}`]?.condition && formik.errors[`${elem.item}`]?.condition}</FormHelperText>
+                      </FormControl>
                     </TableCell>
                     <TableCell sx={{ border: 1, padding: '0 10px' }}>
                       <TextField
@@ -469,18 +461,46 @@ function ForkliftForm({ location }) {
           </div>
         </Box>
         <Box m={3} display="flex" justifyContent="center">
-          <Button sx={{ height: 80, width: 220, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="primary" value="submit">
+          <Button
+            sx={{ height: 80, width: 220, margin: 3 }}
+            size="large"
+            onClick={handleSubmit}
+            type="submit"
+            variant="contained"
+            color="primary"
+            value="submit">
             <h2>Submit</h2>
           </Button>
-          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="warning" value="save">
+          <Button
+            sx={{ height: 80, width: 250, margin: 3 }}
+            size="large"
+            onClick={handleSubmit}
+            type="submit"
+            variant="contained"
+            color="warning"
+            value="save">
             <h2>Save</h2>
           </Button>
-          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="error" value="clear">
+          <Button
+            sx={{ height: 80, width: 250, margin: 3 }}
+            size="large"
+            onClick={handleSubmit}
+            type="submit"
+            variant="contained"
+            color="error"
+            value="clear">
             <h2>Clear</h2>
           </Button>
         </Box>
       </form>
-      <DialogForm open={open} statusBtn={statusBtn} handleClose={handleClose} handleConfirm={handleConfirm} handleConfirmSave={handleConfirmSave} handleConfirmClear={handleConfirmClear} />
+      <DialogForm
+        open={open}
+        statusBtn={statusBtn}
+        handleClose={handleClose}
+        handleConfirm={handleConfirm}
+        handleConfirmSave={handleConfirmSave}
+        handleConfirmClear={handleConfirmClear}
+      />
     </Container>
   );
 }

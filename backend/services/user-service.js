@@ -66,7 +66,7 @@ class UserService {
   async login(email, password) {
     try {
       const user = await Users.findOne({ where: { email } });
-      console.log(user);
+      // console.log(user);
       const role = await Roles.findOne({ where: { id: user.dataValues.roleId }, raw: true });
       let roleName;
       for (const key in role) {

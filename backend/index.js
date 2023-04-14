@@ -11,7 +11,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const path = require('path');
 const { authMiddleware } = require('./middlewares');
-// const router = require('./routes/index');
+const router = require('./routes/index');
 const authRouter = require('./routes/authRouter');
 const dataRouter = require('./routes/dataRouter');
 
@@ -43,11 +43,22 @@ if (envFile === '.env.development') {
   app.use(process.env.SWAGGER_API_DOC, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 }
 
+// add swagger api doc
+if (envFile === '.env.development') {
+  const swaggerUi = require('swagger-ui-express');
+  const swaggerJSDoc = require('swagger-jsdoc');
+  const swaggerOptions = require('./utils/swagger/swaggerOptions');
+
+  const swaggerSpec = swaggerJSDoc(swaggerOptions);
+  app.use(process.env.SWAGGER_API_DOC, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+}
+
 // Routes
 // app.use('/api/v1/', router);
 app.use('/api/v2/', authRouter);
 app.use('/api/v3/', authMiddleware, dataRouter);
 // app.use(handleErrorsMiddleware);
+
 
 // Server
 

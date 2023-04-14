@@ -98,12 +98,14 @@ function FormGME0024() {
     setMileageReading('');
     setNextMaintenanceMileage('');
     setNextOxyInspectionDate('');
-    setValues(questions.map((question, index) => ({
-      inspected: question,
-      choice: '',
-      comments: '',
-      id: index + 1,
-    })));
+    setValues(
+      questions.map((question, index) => ({
+        inspected: question,
+        choice: '',
+        comments: '',
+        id: index + 1,
+      })),
+    );
 
     console.log('All Clear');
   };
@@ -123,35 +125,78 @@ function FormGME0024() {
         component="form"
         sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
         mb={5}
-        align="center"
-      >
+        align="center">
         <h1>VEHICLE SAFETY INSPECTION CHECKLIST</h1>
         <div>
-          <TextField required label="Location" value={location} onChange={(event) => setLocation(event.target.value)} />
-          <TextField required label="Vehicle Registration Number" value={vehicleRegNumber} onChange={(event) => setVehicleRegNumber(event.target.value)} />
-          <DatePicker label="Date" value={date} onChange={(event) => setDate(event.target.value)} />
-          <TextField label="Mileage reading (km):" value={mileageReading} onChange={(event) => setMileageReading(event.target.value)} />
-          <TextField label="Next maintenance mileage (km)" value={nextMaintenanceMileage} onChange={(event) => setNextMaintenanceMileage(event.target.value)} />
-          <TextField label="Next OXY inspection date (if applicable):" value={nextOxyInspectionDate} onChange={(event) => setNextOxyInspectionDate(event.target.value)} />
+          <TextField
+            required
+            label="Location"
+            value={location}
+            onChange={(event) => setLocation(event.target.value)}
+          />
+          <TextField
+            required
+            label="Vehicle Registration Number"
+            value={vehicleRegNumber}
+            onChange={(event) => setVehicleRegNumber(event.target.value)}
+          />
+          <DatePicker
+            label="Date"
+            value={date}
+            onChange={(event) => setDate(event.target.value)}
+          />
+          <TextField
+            label="Mileage reading (km):"
+            value={mileageReading}
+            onChange={(event) => setMileageReading(event.target.value)}
+          />
+          <TextField
+            label="Next maintenance mileage (km)"
+            value={nextMaintenanceMileage}
+            onChange={(event) => setNextMaintenanceMileage(event.target.value)}
+          />
+          <TextField
+            label="Next OXY inspection date (if applicable):"
+            value={nextOxyInspectionDate}
+            onChange={(event) => setNextOxyInspectionDate(event.target.value)}
+          />
         </div>
       </Box>
-      <TableContainer component={Paper} sx={{ border: 1, alignContent: 'center' }}>
+      <TableContainer
+        component={Paper}
+        sx={{ border: 1, alignContent: 'center' }}>
         <Table>
           <TableHead>
             <TableRow sx={{ background: '#bfbfbf' }}>
-              <TableCell sx={{ border: 1, padding: 1 }} align="center">#</TableCell>
-              <TableCell sx={{ border: 1, padding: 1 }} align="center"><h2>Item Inspected</h2></TableCell>
-              <TableCell sx={{ border: 1, padding: 1 }} align="center"><h2>Yes</h2></TableCell>
-              <TableCell sx={{ border: 1, padding: 1 }} align="center"><h2>No</h2></TableCell>
-              <TableCell sx={{ border: 1, padding: 1 }} align="center"><h2>N/A</h2></TableCell>
-              <TableCell sx={{ border: 1, padding: 1 }} align="center"><h2>Comments</h2></TableCell>
+              <TableCell sx={{ border: 1, padding: 1 }} align="center">
+                #
+              </TableCell>
+              <TableCell sx={{ border: 1, padding: 1 }} align="center">
+                <h2>Item Inspected</h2>
+              </TableCell>
+              <TableCell sx={{ border: 1, padding: 1 }} align="center">
+                <h2>Yes</h2>
+              </TableCell>
+              <TableCell sx={{ border: 1, padding: 1 }} align="center">
+                <h2>No</h2>
+              </TableCell>
+              <TableCell sx={{ border: 1, padding: 1 }} align="center">
+                <h2>N/A</h2>
+              </TableCell>
+              <TableCell sx={{ border: 1, padding: 1 }} align="center">
+                <h2>Comments</h2>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {values.map((value, index) => (
               <TableRow key={value.id}>
-                <TableCell sx={{ border: 1, padding: 1 }} align="center"><h3>{value.id}</h3></TableCell>
-                <TableCell sx={{ border: 1, padding: 1 }} align="center"><h3>{value.inspected}</h3></TableCell>
+                <TableCell sx={{ border: 1, padding: 1 }} align="center">
+                  <h3>{value.id}</h3>
+                </TableCell>
+                <TableCell sx={{ border: 1, padding: 1 }} align="center">
+                  <h3>{value.inspected}</h3>
+                </TableCell>
                 <TableCell sx={{ border: 1, padding: 1 }} align="center">
                   <Box display="flex" justifyContent="center">
                     <RadioGroup
@@ -159,9 +204,13 @@ function FormGME0024() {
                       aria-label="yes"
                       name={`choice-${index}`}
                       value={value.choice}
-                      onChange={(event) => handleRadioChange(index, event)}
-                    >
-                      <FormControlLabel sx={{ margin: 1 }} value="yes" control={<Radio />} label="" />
+                      onChange={(event) => handleRadioChange(index, event)}>
+                      <FormControlLabel
+                        sx={{ margin: 1 }}
+                        value="yes"
+                        control={<Radio />}
+                        label=""
+                      />
                     </RadioGroup>
                   </Box>
                 </TableCell>
@@ -172,9 +221,13 @@ function FormGME0024() {
                       aria-label="no"
                       name={`choice-${index}`}
                       value={value.choice}
-                      onChange={(event) => handleRadioChange(index, event)}
-                    >
-                      <FormControlLabel sx={{ margin: 1 }} value="no" control={<Radio />} label="" />
+                      onChange={(event) => handleRadioChange(index, event)}>
+                      <FormControlLabel
+                        sx={{ margin: 1 }}
+                        value="no"
+                        control={<Radio />}
+                        label=""
+                      />
                     </RadioGroup>
                   </Box>
                 </TableCell>
@@ -185,9 +238,13 @@ function FormGME0024() {
                       aria-label="na"
                       name={`choice-${index}`}
                       value={value.choice}
-                      onChange={(event) => handleRadioChange(index, event)}
-                    >
-                      <FormControlLabel sx={{ margin: 1 }} value="na" control={<Radio />} label="" />
+                      onChange={(event) => handleRadioChange(index, event)}>
+                      <FormControlLabel
+                        sx={{ margin: 1 }}
+                        value="na"
+                        control={<Radio />}
+                        label=""
+                      />
                     </RadioGroup>
                   </Box>
                 </TableCell>
@@ -206,17 +263,45 @@ function FormGME0024() {
         </Table>
       </TableContainer>
       <Box m={3} display="flex" justifyContent="center">
-        <Button sx={{ height: 80, width: 220, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="primary" value="submit">
+        <Button
+          sx={{ height: 80, width: 220, margin: 3 }}
+          size="large"
+          onClick={handleSubmit}
+          type="submit"
+          variant="contained"
+          color="primary"
+          value="submit">
           <h2>Submit</h2>
         </Button>
-        <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="warning" value="save">
+        <Button
+          sx={{ height: 80, width: 250, margin: 3 }}
+          size="large"
+          onClick={handleSubmit}
+          type="submit"
+          variant="contained"
+          color="warning"
+          value="save">
           <h2>Save</h2>
         </Button>
-        <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="error" value="clear">
+        <Button
+          sx={{ height: 80, width: 250, margin: 3 }}
+          size="large"
+          onClick={handleSubmit}
+          type="submit"
+          variant="contained"
+          color="error"
+          value="clear">
           <h2>Clear</h2>
         </Button>
       </Box>
-      <DialogForm open={open} statusBtn={statusBtn} handleClose={handleClose} handleConfirm={handleConfirm} handleConfirmSave={handleConfirmSave} handleConfirmClear={handleConfirmClear} />
+      <DialogForm
+        open={open}
+        statusBtn={statusBtn}
+        handleClose={handleClose}
+        handleConfirm={handleConfirm}
+        handleConfirmSave={handleConfirmSave}
+        handleConfirmClear={handleConfirmClear}
+      />
     </Container>
   );
 }
