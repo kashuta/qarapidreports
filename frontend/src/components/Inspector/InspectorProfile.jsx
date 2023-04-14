@@ -11,8 +11,6 @@ function InspectorProfile() {
   const [showWebcam, setShowWebcam] = useState(false);
   const dispatch = useDispatch();
 
-  // const navigate = useNavigate();
-
   const fetchData = async () => {
     try {
       const data = new FormData();
@@ -24,7 +22,6 @@ function InspectorProfile() {
       });
       if (response.status === 401) {
         const newAccessToken = await dispatch(refreshAccessToken());
-        console.log('111111111111');
         if (!newAccessToken) {
           return;
           // Handle error, for example, redirect to the login page or show an error message
@@ -41,30 +38,9 @@ function InspectorProfile() {
     }
   };
 
-  // , [dispatch, selectedFile]);
-
   useEffect(() => {
     fetchData();
   }, []); // Add dependencies if needed
-
-  console.log(selectedFile, '++++++++selectedFile++++++++++++');
-  // const sendFile = useCallback(() => {
-  //   const data = new FormData();
-  //   data.append('avatar', selectedFile);
-
-  //   authFetch('http://localhost:3001/api/v3/upload', {
-  //     method: 'POST',
-  //     credentials: 'include',
-  //     body: data,
-  //   })
-  //     .then((res) => res.json())
-  //     .then((file) => {
-  //       dispatch(setAvatarAction(file));
-  //     })
-  //     .catch((er) => console.log(er.message));
-  // }, []);
-
-  // console.log('+++++++', selectedFile, '++++++++++++++++++');
 
   return (
     <Box

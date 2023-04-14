@@ -7,23 +7,15 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import { Avatar, Button } from '@mui/material';
-// import Typography from '@mui/material/Typography';
-// import Menu from '@mui/material/Menu';
-// import Tooltip from '@mui/material/Tooltip';
-// import IconButton from '@mui/material/IconButton';
-// import MenuItem from '@mui/material/MenuItem';
 import { setUserAction } from '../../Redux/user.action';
 import InspectorNav from './InspectorNav';
 import ManagerNav from './ManagerNav';
 import AdminNav from './AdminNav';
-// // import Button from '@mui/material/Button';
-// // import IconButton from '@mui/material/IconButton';
-// // import MenuIcon from '@mui/icons-material/Menu';
+
 
 export default function Navbar() {
   const user = useSelector((state) => state.UserReducer.user);
   const avatar = useSelector((state) => state.FileReducer.avatar);
-  // console.log('>>>>>>', avatar, '<<<<<<<<<');
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

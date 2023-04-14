@@ -6,11 +6,9 @@ import {
 import { Box } from '@mui/system';
 
 import { useNavigate } from 'react-router-dom';
-// import { useDispatch } from 'react-redux';
-// import { setUserAction } from '../../Redux/user.action';
 
 function RegForm() {
-  // const user = useSelector((state) => state.UserReducer.user);
+
   const [form, setForm] = useState({
     username: '',
     email: '',
@@ -19,7 +17,7 @@ function RegForm() {
   });
 
   const navigate = useNavigate();
-  //   const dispatch = useDispatch();
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -37,9 +35,7 @@ function RegForm() {
           alert(data.msg);
           navigate('/reg');
         } else {
-          console.log(data, 'registration');
           navigate('/login');
-          //   console.log('registration');
         }
       })
       .catch(console.log);

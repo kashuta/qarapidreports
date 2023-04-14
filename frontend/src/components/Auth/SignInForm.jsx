@@ -5,12 +5,10 @@ import { Box } from '@mui/system';
 
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-// import { setAuthToken } from '../ProtectedRoute/SetAuthToken';
+
 import { getUserLoaderAction, setUserAction } from '../../Redux/user.action';
 
 function SignInForm() {
-  // const user = useSelector((state) => state.UserReducer.user);
-
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -34,16 +32,12 @@ function SignInForm() {
       .then((data) => {
         const token = data.accessToken;
         localStorage.setItem('accessToken', token);
-        // setAuthToken(token);
         dispatch(setUserAction(data.userFront));
         dispatch(getUserLoaderAction(true));
       })
       .catch(console.log);
 
-    // dispatch(setUserAction(form));
-
     navigate('/');
-
   };
 
   const handleInput = (event) => {
@@ -95,7 +89,6 @@ function SignInForm() {
         sx={{
           width: '100%',
         }}>
-
         Login
       </Button>
     </Box>

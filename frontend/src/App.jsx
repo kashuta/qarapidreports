@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/aria-role */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useEffect } from 'react';
-// import { useDispatch } from 'react-redux';
 import { useSelector, useDispatch } from 'react-redux';
 import Container from '@mui/material/Container';
 import { Route, Routes } from 'react-router-dom';
@@ -11,7 +10,6 @@ import SignInForm from './components/Auth/SignInForm';
 import Navbar from './components/Navbar/Navbar';
 import './App.css';
 
-// import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import ProtectedRoleRoute from './components/ProtectedRoute/ProtectedRoleRoute';
 
 import InspectorProfile from './components/Inspector/InspectorProfile';
@@ -23,13 +21,11 @@ import MainPage from './components/MainPage/MainPage';
 import MonthSafCheck from './components/Forms/MonthSafCheck';
 import ForkliftForm from './components/ForkliftForm/ForkliftForm';
 import RegForm from './components/Auth/RegForm';
-// import { setAuthToken } from './components/ProtectedRoute/SetAuthToken';
-// import authFetch from './JWT/authFetch';
 import { refreshAccessToken } from './JWT/authActions';
-// import { setUserAction } from './Redux/user.action';
+
 import VechSafInspCheckForm from './components/Forms/VechSafInspCheckForm';
 
-// import { setUserAction } from './Redux/user.action';
+
 
 
 function App() {
