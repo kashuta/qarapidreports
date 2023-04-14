@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable max-len */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-unused-vars */
@@ -168,9 +169,7 @@ for (const item of engineOnChecklist) {
 const validationSchema = yup.object({
   ...engineOffValidation,
   ...engineOnValidation,
-  location: yup
-    .string('Enter location')
-    .required('Please, fill this field'),
+  location: yup.string('Enter location').required('Please, fill this field'),
   operator: yup
     .string('Enter operator name')
     .required('Please, fill this field'),
@@ -179,12 +178,8 @@ const validationSchema = yup.object({
     .typeError('Value must be a number')
     .positive('Enter positive number')
     .required('Please, fill this field'),
-  regNumber: yup
-    .string()
-    .required('Please, fill this field'),
-  signature: yup
-    .string()
-    .required('Please, fill this field'),
+  regNumber: yup.string().required('Please, fill this field'),
+  signature: yup.string().required('Please, fill this field'),
 });
 
 function ForkliftForm({ location }) {
@@ -264,8 +259,7 @@ function ForkliftForm({ location }) {
         <Box
           sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
           mb={5}
-          align="center"
-        >
+          align="center">
           <h2 className="form-h2">A.&ensp;Truck and operator details</h2>
           <TextField
             select
@@ -277,10 +271,11 @@ function ForkliftForm({ location }) {
             onChange={formik.handleChange}
             onBlur={(e) => formik.setFieldTouched(e.target.name)}
             error={formik.touched.location && Boolean(formik.errors.location)}
-            helperText={formik.touched.location && formik.errors.location}
-          >
+            helperText={formik.touched.location && formik.errors.location}>
             {location.map((el, index) => (
-              <MenuItem key={index + 1} value={el}>{el}</MenuItem>
+              <MenuItem key={index + 1} value={el}>
+                {el}
+              </MenuItem>
             ))}
           </TextField>
 
@@ -288,7 +283,7 @@ function ForkliftForm({ location }) {
             label="Date"
             name="date"
             value={formik.values.date}
-            onChange={((value) => (formik.setValues({ ...formik.values, date: value })))}
+            onChange={(value) => formik.setValues({ ...formik.values, date: value })}
           />
 
           <TextField
@@ -311,8 +306,12 @@ function ForkliftForm({ location }) {
               formik.handleChange(e);
             }}
             onBlur={(e) => formik.setFieldTouched(e.target.name)}
-            error={formik.touched.machineHours && Boolean(formik.errors.machineHours)}
-            helperText={formik.touched.machineHours && formik.errors.machineHours}
+            error={
+              formik.touched.machineHours && Boolean(formik.errors.machineHours)
+            }
+            helperText={
+              formik.touched.machineHours && formik.errors.machineHours
+            }
           />
           <TextField
             id="regNumber"
@@ -337,7 +336,9 @@ function ForkliftForm({ location }) {
         </Box>
         <Box mb={5}>
           <h2 className="form-h2">B.&ensp;Inspection</h2>
-          <TableContainer component={Paper} sx={{ border: 1, alignContent: 'center' }}>
+          <TableContainer
+            component={Paper}
+            sx={{ border: 1, alignContent: 'center' }}>
             <Table>
               <TableHead>
                 <TableRow sx={{ background: '#bfbfbf' }}>
@@ -346,7 +347,9 @@ function ForkliftForm({ location }) {
                   </TableCell>
                 </TableRow>
                 <TableRow sx={{ background: '#bfbfbf' }}>
-                  <TableCell sx={{ border: 1, padding: '10px' }} align="center">№</TableCell>
+                  <TableCell sx={{ border: 1, padding: '10px' }} align="center">
+                    №
+                  </TableCell>
                   <TableCell sx={{ border: 1, padding: '10px' }}>
                     <h4 className="form-h4">What are you inspecting?</h4>
                   </TableCell>
@@ -458,18 +461,46 @@ function ForkliftForm({ location }) {
           </div>
         </Box>
         <Box m={3} display="flex" justifyContent="center">
-          <Button sx={{ height: 80, width: 220, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="primary" value="submit">
+          <Button
+            sx={{ height: 80, width: 220, margin: 3 }}
+            size="large"
+            onClick={handleSubmit}
+            type="submit"
+            variant="contained"
+            color="primary"
+            value="submit">
             <h2>Submit</h2>
           </Button>
-          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="warning" value="save">
+          <Button
+            sx={{ height: 80, width: 250, margin: 3 }}
+            size="large"
+            onClick={handleSubmit}
+            type="submit"
+            variant="contained"
+            color="warning"
+            value="save">
             <h2>Save</h2>
           </Button>
-          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="error" value="clear">
+          <Button
+            sx={{ height: 80, width: 250, margin: 3 }}
+            size="large"
+            onClick={handleSubmit}
+            type="submit"
+            variant="contained"
+            color="error"
+            value="clear">
             <h2>Clear</h2>
           </Button>
         </Box>
       </form>
-      <DialogForm open={open} statusBtn={statusBtn} handleClose={handleClose} handleConfirm={handleConfirm} handleConfirmSave={handleConfirmSave} handleConfirmClear={handleConfirmClear} />
+      <DialogForm
+        open={open}
+        statusBtn={statusBtn}
+        handleClose={handleClose}
+        handleConfirm={handleConfirm}
+        handleConfirmSave={handleConfirmSave}
+        handleConfirmClear={handleConfirmClear}
+      />
     </Container>
   );
 }
