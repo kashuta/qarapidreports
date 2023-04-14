@@ -54,6 +54,7 @@ export default function Navbar() {
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
+
           <img
             alt="pcm-logo"
             src="https://www.pcm.eu/sites/default/files/logo_pcm.png"

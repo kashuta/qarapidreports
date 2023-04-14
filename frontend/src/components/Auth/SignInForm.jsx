@@ -10,6 +10,7 @@ import { getUserLoaderAction, setUserAction } from '../../Redux/user.action';
 
 function SignInForm() {
   // const user = useSelector((state) => state.UserReducer.user);
+
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -42,6 +43,7 @@ function SignInForm() {
     // dispatch(setUserAction(form));
 
     navigate('/');
+
   };
 
   const handleInput = (event) => {
@@ -53,6 +55,7 @@ function SignInForm() {
       component="form"
       sx={{
         width: '40%',
+
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -92,6 +95,7 @@ function SignInForm() {
         sx={{
           width: '100%',
         }}>
+
         Login
       </Button>
     </Box>

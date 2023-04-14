@@ -20,15 +20,17 @@ import ManagerProfile from './components/Manager/ManagerProfile';
 import Dashboard from './components/Manager/Dashboard';
 import PageNotFound from './components/ProtectedRoute/PageNotFound';
 import MainPage from './components/MainPage/MainPage';
-import FormGME0024 from './components/Forms/FormGME0024';
+import MonthSafCheck from './components/Forms/MonthSafCheck';
 import ForkliftForm from './components/ForkliftForm/ForkliftForm';
 import RegForm from './components/Auth/RegForm';
 // import { setAuthToken } from './components/ProtectedRoute/SetAuthToken';
 // import authFetch from './JWT/authFetch';
 import { refreshAccessToken } from './JWT/authActions';
 // import { setUserAction } from './Redux/user.action';
+import VechSafInspCheckForm from './components/Forms/VechSafInspCheckForm';
 
 // import { setUserAction } from './Redux/user.action';
+
 
 function App() {
   const user = useSelector((state) => state.UserReducer.user);
@@ -81,6 +83,7 @@ function App() {
         </Routes>
       </Container>
     </LocalizationProvider>
+
   );
 }
 
