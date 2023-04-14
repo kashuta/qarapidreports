@@ -28,6 +28,7 @@ const multerMiddleware = require('../middlewares/multer.middleware');
 router.post('/form');
 router.post('/upload', multerMiddleware.single('avatar'), async (req, res) => {
   try {
+    console.log(req.file, '+++++++++req.file++++++++++++');
     if (req.file) {
       res.json(req.file);
     }
