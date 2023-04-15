@@ -47,6 +47,12 @@ const BACKEND_ERRORS = {
   FORM_NOT_FOUND: {
     message: 'Form not found',
   },
+  INTERNAL_SERVER_ERROR: {
+    message: 'Internal server error',
+  },
+  DATABASE_ERROR: {
+    message: 'Database error',
+  },
 
 };
 

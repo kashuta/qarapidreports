@@ -1,9 +1,9 @@
 const authRoutes = require('./authRouter');
-const dataRoutes = require('./dataRouter');
+const locationRoutes = require('./locationRoutes');
 const formRoutes = require('./formsRouter');
 
 module.exports = {
   authRoutes,
-  dataRoutes,
+  locationRoutes,
   formRoutes,
 };
