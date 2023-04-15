@@ -15,12 +15,12 @@ module.exports = {
 
       const responseObject = {
         formName: form.name,
-        formSections: formSections.map((el) => ({
+        columnNames: formSections.map((el) => ({
           title: el.title,
           order: el.order,
         })),
-        formFields: formFields.map((el) => ({
-          label: el.label,
+        questionFields: formFields.map((el) => ({
+          question: el.label,
           type: el.type,
           order: el.order,
         })),
