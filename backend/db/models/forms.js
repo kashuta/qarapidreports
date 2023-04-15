@@ -4,9 +4,6 @@ module.exports = (sequelize, DataTypes) => {
   class Form extends Model {
     static associate(models) {
       // define association here
-      this.belongsTo(models.Location, {
-        foreignKey: 'locationId',
-      });
       this.hasMany(models.FormSection, {
         foreignKey: 'formId',
       });

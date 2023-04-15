@@ -73,7 +73,6 @@ class UserService {
     try {
       const user = await Users.findOne({ where: { email } });
       if (!user) {
-        console.log('!HERE');
         throw backendErrors.USER_NOT_FOUND;
       }
       if (!user.isActive) {
