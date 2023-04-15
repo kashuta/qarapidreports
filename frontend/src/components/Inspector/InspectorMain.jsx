@@ -39,7 +39,7 @@ function InspectorMain() {
           </Button>
           <Button size="large" sx={{ height: 85, width: 300, borderRadius: 2 }} key="two">
             <p style={{ marginRight: '15px', padding: 'auto' }}>GME0109</p>
-            <h4 style={{ marginRight: 'auto', padding: 'auto' }}>HSE OBSERVATION STOP CARD</h4>
+            <h4 style={{ marginRight: 'auto', padding: 'auto' }}><Link to="/form4">HSE OBSERVATION STOP CARD</Link></h4>
           </Button>
           <Button size="large" sx={{ height: 85, width: 300, borderRadius: 2 }} key="three">
             <p>GME0144</p>

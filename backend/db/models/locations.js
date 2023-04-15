@@ -4,9 +4,6 @@ module.exports = (sequelize, DataTypes) => {
   class Location extends Model {
     static associate(models) {
       // Связи между моделями
-      this.hasMany(models.Form, {
-        foreignKey: 'locationId',
-      });
     }
   }
 

@@ -3,7 +3,6 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Form extends Model {
     static associate(models) {
-     
       this.hasMany(models.FormSection, {
         foreignKey: 'formId',
       });
