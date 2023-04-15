@@ -10,7 +10,7 @@ function InspectorNav() {
       <NavLink className={styles.link} to="/">
         Home
       </NavLink>
-      <NavLink className={styles.link} to={`/inspector/${user.userName}`}>
+      <NavLink className={styles.link} to={`/inspector/${user.id}`}>
         Profile
       </NavLink>
     </>
