@@ -30,10 +30,15 @@ function SignInForm() {
     })
       .then((res) => res.json())
       .then((data) => {
-        const token = data.accessToken;
-        localStorage.setItem('accessToken', token);
-        dispatch(setUserAction(data.userFront));
-        dispatch(getUserLoaderAction(true));
+        if (data.message) {
+          alert(data.message);
+          navigate('/login');
+        } else {
+          const token = data.accessToken;
+          localStorage.setItem('accessToken', token);
+          dispatch(setUserAction(data.userFront));
+          dispatch(getUserLoaderAction(true));
+        }
       })
       .catch(console.log);
 

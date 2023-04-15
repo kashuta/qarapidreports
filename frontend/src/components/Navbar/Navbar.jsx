@@ -12,7 +12,6 @@ import InspectorNav from './InspectorNav';
 import ManagerNav from './ManagerNav';
 import AdminNav from './AdminNav';
 
-
 export default function Navbar() {
   const user = useSelector((state) => state.UserReducer.user);
   const avatar = useSelector((state) => state.FileReducer.avatar);
@@ -21,7 +20,7 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   const handleSignout = () => {
-    fetch('http://localhost:3001/api/v2/logout', {
+    fetch('http://localhost:3001/api/v2/auth/logout', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -46,7 +45,6 @@ export default function Navbar() {
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
-
           <img
             alt="pcm-logo"
             src="https://www.pcm.eu/sites/default/files/logo_pcm.png"

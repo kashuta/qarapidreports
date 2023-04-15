@@ -24,6 +24,7 @@ class UserController {
         }
       }
       const { userName, email, password } = req.body;
+      console.log(req.body);
       const userData = await userService.registration(userName, email, password);
       return res.json(userData);
     } catch (err) {
