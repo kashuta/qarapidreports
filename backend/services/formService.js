@@ -31,4 +31,13 @@ module.exports = {
       throw new Error(err.message);
     }
   },
+  
+  async getAllFormNames() {
+    try {
+      const formNames = await Form.findAll();
+      return formNames;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
 };
