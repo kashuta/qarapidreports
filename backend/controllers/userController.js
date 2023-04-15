@@ -15,7 +15,6 @@ class UserController {
   async registration(req, res, next) {
     try {
       const validationErrors = validationResult(req);
-      console.log(validationErrors);
       if (!validationErrors.isEmpty()) {
         switch (validationErrors.errors[0].param) {
           case 'userName': return next(ErrorHandler.UnprocessableEntityError(backendErrors.INVALID_USERNAME, res));
