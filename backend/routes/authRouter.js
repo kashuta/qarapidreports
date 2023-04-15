@@ -32,6 +32,7 @@ router.post(
   body('password')
     .isLength({ min: 6 })
     .withMessage('Password must be at least 6 characters long'),
+  body('userName').isAlpha().withMessage('User name is required'),
   userController.registration,
 );
 router.post('/login', userController.login);
