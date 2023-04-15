@@ -30,6 +30,12 @@ class ErrorHandler extends Error {
     this.errMessage = message;
     return res.status(this.statusCode).json(this.resJson());
   }
+
+  static InternalServerError({ message }, res) {
+    this.statusCode = 500;
+    this.errMessage = message;
+    return res.status(this.statusCode).json(this.resJson());
+  }
 }
 
 module.exports = ErrorHandler;
