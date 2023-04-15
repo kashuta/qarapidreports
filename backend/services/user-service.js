@@ -6,6 +6,17 @@ const tokenService = require('./token-service');
 const { backendErrors } = require('../exceptions');
 
 class UserService {
+  /**
+   * Registers a new user, creates an activation link, sends an activation email, and returns tokens and user details.
+   *
+   * @async
+   * @param {string} userName - The user's unique username.
+   * @param {string} email - The user's email address.
+   * @param {string} password - The user's password.
+   * @param {string} [role='manager'] - The user's role (default: 'manager').
+   * @returns {Promise<Object>} Returns an object containing access token, refresh token, and user details.
+   * @throws {Error} Throws an error if user creation fails or if there's an issue with sending the activation email.
+   */
   async registration(userName, email, password, role = 'manager') {
     try {
       const [roleFind, createdRole] = await Roles.findOrCreate({ where: { [role]: true } });

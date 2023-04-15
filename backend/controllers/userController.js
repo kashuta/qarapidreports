@@ -3,6 +3,15 @@ const userService = require('../services/user-service');
 const { ErrorHandler, backendErrors } = require('../exceptions/index');
 
 class UserController {
+  /**
+   * Handles the registration request, validates the input, and returns the user data or an error.
+   *
+   * @async
+   * @param {express.Request} req - The Express request object.
+   * @param {express.Response} res - The Express response object.
+   * @param {function} next - The next middleware function to call.
+   * @returns {Promise<void>} Returns a JSON response with user data or calls the next middleware with an error.
+   */
   async registration(req, res, next) {
     try {
       const validationErrors = validationResult(req);

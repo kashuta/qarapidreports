@@ -10,12 +10,8 @@ const ErrorHandler = require('../exceptions/errorHandler');
  */
 module.exports = function (err, req, res, next) {
   if (err instanceof ErrorHandler) {
-    ErrorHandler.handleError(err, res);
-  } else {
-    ErrorHandler.handleError(
-      new ErrorHandler(500, 'INTERNAL_SERVER_ERROR', err.message, err.name, err.stack),
-      res,
-    );
+    return res.status(err.statusCode).json(err.resJson());
   }
-  next();
+  const internalError = new ErrorHandler(500, `INTERNAL_SERVER_ERROR: ${err.message}`);
+  return res.status(internalError.statusCode).json(internalError.resJson());
 };

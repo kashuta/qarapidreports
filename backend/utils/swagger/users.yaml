@@ -23,10 +23,18 @@ paths:
                 password:
                   type: string
                   description: The password for the new user account
+                role:
+                    type: string
+                    description: The role of the new user account
+                    enum:
+                        - inspector
+                        - admin
+                        - manager
               required:
                 - userName
                 - email
                 - password
+                - role
       responses:
         200:
           description: User registration successful
