@@ -1,5 +1,3 @@
-const schemas = require('./index');
-
 const swaggerDefinition = {
   openapi: '3.0.0',
   info: {
@@ -12,9 +10,6 @@ const swaggerDefinition = {
       url: 'http://localhost:3001/api/v1',
     },
   ],
-  components: {
-    schemas,
-  },
 };
 
 module.exports = swaggerDefinition;

@@ -36,11 +36,9 @@ app.set('views', path.join(__dirname, 'public'));
 // add swagger api doc
 if (envFile === '.env.development') {
   const swaggerUi = require('swagger-ui-express');
-  const swaggerJSDoc = require('swagger-jsdoc');
   const swaggerOptions = require('./utils/swagger/swaggerOptions');
 
-  const swaggerSpec = swaggerJSDoc(swaggerOptions);
-  app.use(process.env.SWAGGER_API_DOC, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.use(process.env.SWAGGER_API_DOC, swaggerUi.serve, swaggerUi.setup(swaggerOptions));
 }
 
 // Routes
