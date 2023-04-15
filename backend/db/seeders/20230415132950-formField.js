@@ -1,17 +1,13 @@
-'use strict';
-
-const createFormField = (id, formId, label, type, order, formSectionId) => {
-  return {
-    id,
-    formId,
-    label,
-    type,
-    order,
-    formSectionId,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
-};
+const createFormField = (id, formId, label, type, order, formSectionId) => ({
+  id,
+  formId,
+  label,
+  type,
+  order,
+  formSectionId,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+});
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -29,7 +25,7 @@ module.exports = {
       createFormField(11, 1, 'Is preventive maintenance of PCM machines up to date?', 'checkbox', 11, 1),
       createFormField(12, 1, 'Is calibration for all measuring tools valid?', 'checkbox', 12, 1),
       createFormField(13, 1, 'Have you checked JSAs to ensure they are still valid?', 'checkbox', 13, 1),
-      
+
       createFormField(15, 2, 'All vehicle lights are functioning?', 'checkbox', 1, 1),
       createFormField(16, 2, 'Vehicle monitoring system (IVMS) is ok?', 'checkbox', 2, 1),
       createFormField(17, 2, 'Brake fluid level is ok?', 'checkbox', 3, 1),
@@ -45,7 +41,7 @@ module.exports = {
       createFormField(27, 2, 'Jack and wheel wrench are available?', 'checkbox', 13, 1),
       createFormField(28, 2, 'OXY inspection sticker is valid?', 'checkbox', 14, 1),
       createFormField(29, 2, 'Maintenance status is ok?', 'checkbox', 15, 1),
-      
+
       createFormField(30, 3, 'Fuel; Leaks, Level', 'checkbox', 1, 1),
       createFormField(31, 3, 'Hydraulic Oil; Leaks, Level', 'checkbox', 2, 1),
       createFormField(32, 3, 'Engine Oil; Leaks, Level', 'checkbox', 3, 1),
@@ -66,18 +62,18 @@ module.exports = {
       createFormField(47, 3, 'Hoist and Lowering Control; Functioning Smoothly and Properly', 'checkbox', 18, 1),
       createFormField(48, 3, 'Horn and Lights; Functioning Properly', 'checkbox', 19, 1),
       createFormField(49, 3, 'Gauges: Speed, Oil, Hours, Fuel, Temp; Functioning Properly', 'checkbox', 20, 1),
-      
+
       createFormField(50, 4, 'Unsafe act', 'checkbox', 1, 1),
       createFormField(51, 4, 'Unsafe condition', 'checkbox', 2, 1),
       createFormField(52, 4, 'Health hazard', 'checkbox', 3, 1),
       createFormField(53, 4, 'Environmental risk', 'checkbox', 4, 1),
-      createFormField(54, 4, 'Safe observation', 'checkbox', 5, 1)
-    
+      createFormField(54, 4, 'Safe observation', 'checkbox', 5, 1),
+
     ];
-    
+
     await queryInterface.bulkInsert('FormFields', formFieldsData);
   },
-  
+
   down: async (queryInterface, Sequelize) => {
     await queryInterface.bulkDelete('FormFields', null, {});
   },

@@ -44,7 +44,6 @@ app.use('/api/v2/auth', authRoutes);
 app.use('/api/v2/data', authMiddleware, dataRoutes);
 app.use('/api/v2/form', formRoutes);
 
-
 // Server
 
 const port = process.env.PORT || 5001;

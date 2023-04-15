@@ -1,5 +1,3 @@
-'use strict';
-
 const monthlySafety = [
   { title: 'ASPECTS FOR INSPECTION', order: 1 },
   { title: 'YES', order: 2 },
@@ -53,7 +51,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert('FormSections', sectionsData);
   },
-  
+
   down: async (queryInterface, Sequelize) => {
     await queryInterface.bulkDelete('FormSections', null, {});
   },

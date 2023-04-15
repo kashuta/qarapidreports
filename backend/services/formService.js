@@ -4,44 +4,27 @@ const { backendErrors } = require('../exceptions');
 module.exports = {
   async getFormData(formId) {
     try {
-      const form = await Form.findOne({
-        where: { id: formId },
-        include: [
-          {
-            model: FormSection,
-            as: 'FormSections',
-            order: [['order', 'ASC']],
-            include: [
-              {
-                model: FormField,
-                as: 'FormFields',
-                order: [['order', 'ASC']],
-              },
-            ],
-          },
-        ],
-      });
-      if (!form) {
+      const formIdInt = parseInt(formId, 10);
+      const form = await Form.findOne({ where: { id: formIdInt } });
+      const formSections = await FormSection.findAll({ where: { formId: formIdInt } });
+      const formFields = await FormField.findAll({ where: { formId: formIdInt } });
+
+      if (!form || !formSections || !formFields) {
         throw new Error(backendErrors.FORM_NOT_FOUND.message);
       }
 
       const responseObject = {
         formName: form.name,
-        sections: form.FormSections.map((section) => ({
-          sectionName: section.title,
-          order: section.order,
-          fields: section.FormFields.map((field) => ({
-            id: field.id,
-            formId: field.formId,
-            label: field.label,
-            type: field.type,
-            order: field.order,
-          })),
+        formSections: formSections.map((el) => ({
+          title: el.title,
+          order: el.order,
+        })),
+        formFields: formFields.map((el) => ({
+          label: el.label,
+          type: el.type,
+          order: el.order,
         })),
       };
-      if (!responseObject) {
-        throw new Error(backendErrors.FORM_NOT_FOUND.message);
-      }
 
       return responseObject;
     } catch (err) {
