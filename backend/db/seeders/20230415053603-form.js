@@ -1,13 +1,9 @@
-'use strict';
-
-const createForm = (id, name) => {
-  return {
-    id,
-    name,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
-};
+const createForm = (id, name) => ({
+  id,
+  name,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+});
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -18,10 +14,10 @@ module.exports = {
       createForm(4, 'HSE OBSERVATION (STOP) CARD'),
       createForm(5, 'TOOL BOX SAFETY MEETING FORM'),
     ];
-    
+
     await queryInterface.bulkInsert('Forms', formData);
   },
-  
+
   down: async (queryInterface, Sequelize) => {
     await queryInterface.bulkDelete('Forms', null, {});
   },

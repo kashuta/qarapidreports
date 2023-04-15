@@ -1,6 +1,6 @@
 openapi: 3.0.0
 paths:
-  /registration:
+  /auth/registration:
     post:
       summary: Register a new user
       description: Create a new user account with the provided email, username, and password
@@ -72,7 +72,7 @@ paths:
                       - example: Invalid email
                       - example: Invalid password
 
-  /login:
+  /auth/login:
     post:
       summary: Log in a user
       description: Log in a user with the provided email and password

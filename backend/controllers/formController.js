@@ -11,7 +11,7 @@ module.exports = {
       const responseObject = await formService.getFormData(formId);
       return res.json(responseObject);
     } catch (err) {
-      return next(ErrorHandler.BadRequestError(err));
+      return next(ErrorHandler.BadRequestError(err, res));
     }
   },
 };
