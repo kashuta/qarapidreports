@@ -7,7 +7,7 @@ import { getUserLoaderAction, setUserAction } from '../Redux/user.action';
 export const refreshAccessToken = () => async (dispatch) => {
   try {
     // const refreshToken = getRefreshToken();
-    const response = await authFetch('http://localhost:3001/api/v2/refresh', {
+    const response = await authFetch('http://localhost:3001/api/v2/auth/refresh', {
       method: 'GET',
       credentials: 'include',
       // headers: {

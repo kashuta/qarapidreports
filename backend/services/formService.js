@@ -15,6 +15,7 @@ module.exports = {
 
       const responseObject = {
         formName: form.name,
+        formId: form.id,
         columnNames: formSections.map((el) => ({
           title: el.title,
           order: el.order,
@@ -31,7 +32,7 @@ module.exports = {
       throw new Error(err.message);
     }
   },
-  
+
   async getAllFormNames() {
     try {
       const formNames = await Form.findAll();
@@ -39,5 +40,5 @@ module.exports = {
     } catch (err) {
       throw new Error(err.message);
     }
-  }
+  },
 };

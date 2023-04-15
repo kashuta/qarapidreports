@@ -3,3 +3,5 @@ export const SET_USER = 'SET_USER';
 export const LOGIN_USER = 'LOGIN_USER';
 export const LOGOUT_USER = 'LOGOUT_USER';
 export const UPLOAD_AVATAR_PHOTO = 'UPLOAD_AVATAR_PHOTO';
+export const CREATE_REPORT = 'CREATE_REPORT';
+export const SET_REPORT_FIELDS = 'SET_REPORT_FIELDS';

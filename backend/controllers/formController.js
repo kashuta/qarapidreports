@@ -4,7 +4,7 @@ const { ErrorHandler, backendErrors } = require('../exceptions/index');
 module.exports = {
   async getFormData(req, res, next) {
     try {
-      const { formId } = req.body;
+      const { formId } = req.params;
       if (!formId) {
         return next(ErrorHandler.BadRequestError(backendErrors.VALIDATION_ERROR, res));
       }

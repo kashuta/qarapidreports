@@ -4,8 +4,9 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
 import {
   Table,
@@ -27,9 +28,11 @@ import {
   FormHelperText,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
+import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import styles from './Form.module.css';
 import DialogForm from './DialogForm';
+import { setReportFieldsAction } from '../../Redux/report.action';
 
 const engineOffChecklist = [
   {
@@ -190,6 +193,17 @@ const validationSchema = yup.object({
 function ForkliftForm({ location }) {
   const [open, setOpen] = useState(false);
   const [statusBtn, setStatusBtn] = useState('');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const formId = 1;
+  // const reportsFields = useSelector((state) => state.ReportReducer.reportsFields);
+  // const reportFields = reportsFields.find((el) => el.formId === formId);
+
+  useEffect(() => {
+    dispatch(setReportFieldsAction(formId, navigate));
+  }, []);
+
+  // console.log(reportFields);
 
   const formik = useFormik({
     initialValues: {
