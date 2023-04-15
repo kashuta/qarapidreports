@@ -20,7 +20,7 @@ function SignInForm() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch('http://localhost:3001/api/v2/login', {
+    fetch('http://localhost:3001/api/v2/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
