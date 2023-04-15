@@ -1,6 +1,7 @@
 import { refreshAccessToken } from '../JWT/authActions';
 import authFetch from '../JWT/authFetch';
-import { SET_FORMS_NAME_DATA } from './type.redux';
+import { SET_FORMS_NAME_DATA,
+  SET_REPORT_FIELDS, } from './type.redux';
 
 export const setFormsNameAction = (navigate) => async (dispatch) => {
   try {
@@ -31,11 +32,6 @@ export const setFormsNameAction = (navigate) => async (dispatch) => {
     console.log(error);
   }
 };
-import { refreshAccessToken } from '../JWT/authActions';
-import authFetch from '../JWT/authFetch';
-import {
-  SET_REPORT_FIELDS,
-} from './type.redux';
 
 export const createReportAction = (data, navigate, formId) => async (dispatch) => {
   try {
