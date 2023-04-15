@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Box from '@mui/material/Box';
 import { Container } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 function InspectorMain() {
   return (
@@ -34,7 +35,7 @@ function InspectorMain() {
         >
           <Button size="large" sx={{ height: 85, width: 300, borderRadius: 2 }} key="one">
             <p style={{ marginRight: '15px', padding: 'auto' }}>GME0024</p>
-            <h4 style={{ marginRight: 'auto', padding: 'auto' }}>VEHICLE SAFETY INSPECTION CHECKLIST</h4>
+            <h4 style={{ marginRight: 'auto', padding: 'auto' }}><Link to="/FormGME0024">VEHICLE SAFETY INSPECTION CHECKLIST</Link></h4>
           </Button>
           <Button size="large" sx={{ height: 85, width: 300, borderRadius: 2 }} key="two">
             <p style={{ marginRight: '15px', padding: 'auto' }}>GME0109</p>
@@ -46,7 +47,7 @@ function InspectorMain() {
           </Button>
           <Button size="large" sx={{ height: 85, width: 300, borderRadius: 2 }} key="four">
             <p style={{ marginRight: '15px', padding: 'auto' }}>GME0176</p>
-            <h4 style={{ marginRight: 'auto', padding: 'auto' }}>Fork Safety Inspection Checklist</h4>
+            <h4 style={{ marginRight: 'auto', padding: 'auto' }}><Link to="/ForkLiftForm">Fork Safety Inspection Checklist</Link></h4>
           </Button>
           <Button size="large" sx={{ height: 85, width: 300, borderRadius: 2 }} key="five">
             <p style={{ marginRight: '15px', padding: 'auto' }}>WW0320</p>

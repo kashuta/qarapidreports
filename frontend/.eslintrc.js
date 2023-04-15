@@ -15,5 +15,6 @@ module.exports = {
     'react/jsx-closing-bracket-location': 0,
     'import/no-extraneous-dependencies': 0,
     'react/prop-types': 0,
+    'import/prefer-default-export': 0,
   },
 };

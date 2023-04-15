@@ -6,28 +6,29 @@ import { useSelector, useDispatch } from 'react-redux';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-// import { Avatar, Button } from '@mui/material';
-// import Typography from '@mui/material/Typography';
-// import Menu from '@mui/material/Menu';
-// import Tooltip from '@mui/material/Tooltip';
-// import IconButton from '@mui/material/IconButton';
-// import MenuItem from '@mui/material/MenuItem';
-import { Button } from '@mui/material';
+import { Avatar, Button } from '@mui/material';
 import { setUserAction } from '../../Redux/user.action';
 import InspectorNav from './InspectorNav';
 import ManagerNav from './ManagerNav';
 import AdminNav from './AdminNav';
-// // import Button from '@mui/material/Button';
-// // import IconButton from '@mui/material/IconButton';
-// // import MenuIcon from '@mui/icons-material/Menu';
+
 
 export default function Navbar() {
   const user = useSelector((state) => state.UserReducer.user);
+  const avatar = useSelector((state) => state.FileReducer.avatar);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSignout = () => {
+    fetch('http://localhost:3001/api/v2/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+    localStorage.removeItem('token');
     dispatch(setUserAction(null));
     navigate('/login');
   };
@@ -50,11 +51,15 @@ export default function Navbar() {
             alt="pcm-logo"
             src="https://www.pcm.eu/sites/default/files/logo_pcm.png"
           />
-          {user?.role === 'Inspector' && <InspectorNav />}
-          {user?.role === 'Manager' && <ManagerNav />}
-          {user?.role === 'Admin' && <AdminNav />}
-          {user && <Button onClick={handleSignout} color="inherit">Logout</Button>}
-
+          {user?.role === 'inspector' && <InspectorNav />}
+          {user?.role === 'manager' && <ManagerNav />}
+          {user?.role === 'admin' && <AdminNav />}
+          {user && (
+            <Button onClick={handleSignout} color="inherit">
+              Logout
+            </Button>
+          )}
+          {avatar && <Avatar alt="ava" src={`${avatar?.path}`} />}
         </Toolbar>
       </AppBar>
     </Box>

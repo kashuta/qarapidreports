@@ -1,31 +1,16 @@
 const router = require('express').Router();
-
-/**
- * @swagger
- * /signup:
- *   get:
- *     summary: Signup route
- *     description: Retrieve signup information
- *     tags:
- *       - Signup
- *     responses:
- *       200:
- *         description: Successful signup response
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: signup
- *       500:
- *         description: Internal server error
- */
+const multerMiddleware = require('../middlewares/multer.middleware');
 
 // set form/data route
-router.post(
-  '/form',
-);
+router.post('/form');
+router.post('/upload', multerMiddleware.single('avatar'), async (req, res) => {
+  try {
+    if (req.file) {
+      res.json(req.file);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 module.exports = router;
