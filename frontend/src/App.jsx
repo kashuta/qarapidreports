@@ -19,11 +19,14 @@ import Dashboard from './components/Manager/Dashboard';
 import PageNotFound from './components/ProtectedRoute/PageNotFound';
 import MainPage from './components/MainPage/MainPage';
 import MonthSafCheck from './components/Forms/MonthSafCheck';
-import ForkliftForm from './components/ForkliftForm/ForkliftForm';
+import ForkliftForm from './components/Forms/ForkliftForm';
 import RegForm from './components/Auth/RegForm';
 import { refreshAccessToken } from './JWT/authActions';
 
 import VechSafInspCheckForm from './components/Forms/VechSafInspCheckForm';
+import HSEObservationForm from './components/Forms/HSEObservationForm';
+
+// import { setUserAction } from './components/Redux/user.action';
 
 function App() {
   const user = useSelector((state) => state.UserReducer.user);
@@ -37,9 +40,9 @@ function App() {
 
   const locations = ['Moscow', 'Tbilisi', 'Dubai'];
 
-  if (!loader) {
-    return <h2 style={{ margin: 300 }}>Loading...</h2>;
-  }
+  // if (!loader) {
+  //   return <h2 style={{ margin: 300 }}>Loading...</h2>;
+  // }
   if (!user) {
     return (
       <Container maxWidth="xl">
@@ -73,6 +76,7 @@ function App() {
               path="/ForkLiftForm"
               element={<ForkliftForm location={locations} />}
             />
+            <Route path="/form4" element={<HSEObservationForm location={locations} />} />
             <Route path="/inspector/:userName" element={<InspectorProfile />} />
           </Route>
           <Route element={<ProtectedRoleRoute role="manager" />}>
