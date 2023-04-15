@@ -1,18 +1,19 @@
-const { Locations } = require('../db/models');
+const { Location } = require('../db/models');
 
 class LocationService {
-  async getData() {
-    const location = await Locations.findAll();
+  async getLocationData() {
+    const location = await Location.findAll();
     return location;
   }
 
-  async addData(name, id) {
-    const location = await Locations.create({ name, id });
+  async addLocationData(name, managerId) {
+    console.log('!!!!!!!!!!!!!!!', name, managerId);
+    const location = await Location.create({ name, managerId });
     return location;
   }
 
-  async deleteData(name) {
-    const data = await Locations.destroy({ where: { name } });
+  async deleteLocationData(name) {
+    const data = await Location.destroy({ where: { name } });
     return data;
   }
 }

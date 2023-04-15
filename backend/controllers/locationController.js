@@ -17,8 +17,8 @@ class LocationController {
 
   async addLocation(req, res, next) {
     try {
-      const { name, id } = req.body;
-      const data = await locationService.addLocationData(name, id);
+      const { name, managerId } = req.body;
+      const data = await locationService.addLocationData(name, managerId);
       if (!data) {
         return next(ErrorHandler.InternalServerError(backendErrors.DATABASE_ERROR, res));
       }
