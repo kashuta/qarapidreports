@@ -11,9 +11,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const path = require('path');
 const { authMiddleware } = require('./middlewares');
-const router = require('./routes/index');
-const authRouter = require('./routes/authRouter');
-const dataRouter = require('./routes/dataRouter');
+const { authRoutes, dataRoutes, formRoutes } = require('./routes/index');
 
 const app = express();
 
@@ -42,10 +40,9 @@ if (envFile === '.env.development') {
 }
 
 // Routes
-// app.use('/api/v1/', router);
-app.use('/api/v2/', authRouter);
-app.use('/api/v3/', authMiddleware, dataRouter);
-// app.use(handleErrorsMiddleware);
+app.use('/api/v2/auth', authRoutes);
+app.use('/api/v2/data', authMiddleware, dataRoutes);
+app.use('/api/v2/form', formRoutes);
 
 // Server
 

@@ -59,6 +59,10 @@ const BACKEND_ERRORS = {
     // code: 1014,
     message: 'User not activated, please check your email',
   },
+  FORM_NOT_FOUND: {
+    // code: 1015,
+    message: 'Form not found',
+  },
 
 };
 

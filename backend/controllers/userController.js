@@ -28,7 +28,7 @@ class UserController {
       const userData = await userService.registration(userName, email, password);
       return res.json(userData);
     } catch (err) {
-      return next(ErrorHandler.BadRequestError(err, res));
+      return next(ErrorHandler.BadRequestError(err));
     }
   }
 
@@ -45,7 +45,7 @@ class UserController {
       });
       return res.json(userData);
     } catch (err) {
-      return next(ErrorHandler.BadRequestError(err, res));
+      return next(ErrorHandler.BadRequestError(err));
     }
   }
 
@@ -66,7 +66,7 @@ class UserController {
       await userService.activate(link);
       res.render('view');
     } catch (err) {
-      return next(ErrorHandler.BadRequestError(err, res));
+      return next(ErrorHandler.BadRequestError(err));
     }
   }
 

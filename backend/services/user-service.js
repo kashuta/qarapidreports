@@ -38,7 +38,7 @@ class UserService {
         userName: newUser.userName,
         uniqueString: uuid.v4(),
       };
-      await mailService.sendActivationMail(email, `${process.env.API_URL}/api/v2/activate/${activationLink}`);
+      await mailService.sendActivationMail(email, `${process.env.API_URL}/api/v2/auth/activate/${activationLink}`);
       const tokens = await tokenService.generateTokens({ ...userFront });
       await tokenService.saveToken(newUser, tokens.refreshToken);
       return { ...tokens, user: userFront };
