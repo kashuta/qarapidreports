@@ -19,7 +19,7 @@ import Dashboard from './components/Manager/Dashboard';
 import PageNotFound from './components/ProtectedRoute/PageNotFound';
 import MainPage from './components/MainPage/MainPage';
 import MonthSafCheck from './components/Forms/MonthSafCheck';
-import ForkliftForm from './components/ForkliftForm/ForkliftForm';
+import ForkliftForm from './components/Forms/ForkliftForm';
 import RegForm from './components/Auth/RegForm';
 import { refreshAccessToken } from './JWT/authActions';
 
@@ -76,6 +76,7 @@ function App() {
               path="/ForkLiftForm"
               element={<ForkliftForm location={locations} />}
             />
+            <Route path="/form4" element={<HSEObservationForm location={locations} />} />
             <Route path="/inspector/:userName" element={<InspectorProfile />} />
           </Route>
           <Route element={<ProtectedRoleRoute role="manager" />}>

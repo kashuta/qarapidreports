@@ -28,7 +28,6 @@ import {
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
-// import './ForkliftForm.css';
 import styles from './Form.module.css';
 import DialogForm from './DialogForm';
 
