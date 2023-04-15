@@ -1,33 +1,42 @@
 const { validationResult } = require('express-validator');
 const userService = require('../services/user-service');
-// const ApiError = require('../exceptions/api-errors');
+const { ErrorHandler, backendErrors } = require('../exceptions/index');
 
 class UserController {
   async registration(req, res, next) {
     try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        // return next(ApiError.badRequestError('Validation error', errors.array()));
+      const validationErrors = validationResult(req);
+      console.log(validationErrors);
+      if (!validationErrors.isEmpty()) {
+        switch (validationErrors.errors[0].param) {
+          case 'userName': return next(ErrorHandler.UnprocessableEntityError(backendErrors.INVALID_USERNAME, res));
+          case 'email': return next(ErrorHandler.UnprocessableEntityError(backendErrors.INVALID_EMAIL, res));
+          case 'password': return next(ErrorHandler.UnprocessableEntityError(backendErrors.INVALID_PASSWORD, res));
+          default: return next(ErrorHandler.UnprocessableEntityError(backendErrors.SWW_ERROR, res));
+        }
       }
       const { userName, email, password } = req.body;
       const userData = await userService.registration(userName, email, password);
       return res.json(userData);
     } catch (err) {
-      next(err);
+      return next(ErrorHandler.BadRequestError(err, res));
     }
   }
 
   async login(req, res, next) {
     try {
       const { email, password } = req.body;
+      if (email === '' || password === '') {
+        return next(ErrorHandler.UnprocessableEntityError(backendErrors.VALIDATION_ERROR, res));
+      }
       const userData = await userService.login(email, password);
       res.cookie('refreshToken', userData.refreshToken, {
         httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24 * 30
+        maxAge: 1000 * 60 * 60 * 24 * 30,
       });
       return res.json(userData);
     } catch (err) {
-      next(err);
+      return next(ErrorHandler.BadRequestError(err, res));
     }
   }
 
@@ -38,7 +47,7 @@ class UserController {
       res.clearCookie('refreshToken');
       return res.json({ message: 'Logout success' });
     } catch (err) {
-      next(err);
+      return next(ErrorHandler.UnautorizedError(err, res));
     }
   }
 
@@ -48,7 +57,7 @@ class UserController {
       await userService.activate(link);
       res.render('view');
     } catch (err) {
-      next(err);
+      return next(ErrorHandler.BadRequestError(err, res));
     }
   }
 
@@ -58,11 +67,11 @@ class UserController {
       const userData = await userService.refresh(refreshToken);
       res.cookie('refreshToken', userData.refreshToken, {
         httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24 * 30
+        maxAge: 1000 * 60 * 60 * 24 * 30,
       });
       return res.json(userData);
     } catch (err) {
-      next(err);
+      return next(ErrorHandler.UnautorizedError(err, res));
     }
   }
 }
