@@ -14,4 +14,12 @@ module.exports = {
       return next(ErrorHandler.BadRequestError(err, res));
     }
   },
+  async getAllFormNames(req, res, next) {
+    try {
+      const responseObject = await formService.getAllFormNames();
+      return res.json(responseObject);
+    } catch (err) {
+      return next(ErrorHandler.BadRequestError(err, res));
+    }
+  }
 };
