@@ -28,7 +28,7 @@ import {
   FormHelperText,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import styles from './Form.module.css';
 import DialogForm from './DialogForm';
@@ -195,7 +195,7 @@ function ForkliftForm({ location }) {
   const [statusBtn, setStatusBtn] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const formId = 1;
+  const formId = 3;
   // const reportsFields = useSelector((state) => state.ReportReducer.reportsFields);
   // const reportFields = reportsFields.find((el) => el.formId === formId);
 
