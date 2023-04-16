@@ -93,11 +93,8 @@ const validationSchema = yup.object({
     .typeError('Value must be a number')
     .positive('Enter positive number')
     .required('Please, fill this field'),
-  NextOxyInspect: yup
-    .number('Enter number')
-    .typeError('Value must be a number')
-    .positive('Enter positive number')
-    .required('Please, fill this field'),
+  nextDate: yup
+    .required('Please, select another date'),
 });
 
 function VechSafInspCheckForm({ location }) {
@@ -112,7 +109,7 @@ function VechSafInspCheckForm({ location }) {
       date: dayjs(new Date()),
       MileageReading: '',
       NextMileage: '',
-      NextOxyInspect: '',
+      nextDate: dayjs(new Date()),
     },
     validationSchema,
     validateOnChange: true,
@@ -234,15 +231,11 @@ function VechSafInspCheckForm({ location }) {
             error={formik.touched.NextMileage && Boolean(formik.errors.NextMileage)}
             helperText={formik.touched.NextMileage && formik.errors.NextMileage}
           />
-          <TextField
-            id="NextOxyInspect"
-            name="NextOxyInspect"
+          <DatePicker
             label="Next OXY inspection date (if applicable)"
-            value={formik.values.NextOxyInspect}
-            onChange={formik.handleChange}
-            onBlur={(e) => formik.setFieldTouched(e.target.name)}
-            error={formik.touched.NextOxyInspect && Boolean(formik.errors.NextOxyInspect)}
-            helperText={formik.touched.NextOxyInspect && formik.errors.NextOxyInspect}
+            name="nextDate"
+            value={formik.values.nextDate}
+            onChange={((value) => (formik.setValues({ ...formik.values, nextDate: value })))}
           />
         </Box>
         <Box mb={5}>
@@ -300,6 +293,14 @@ function VechSafInspCheckForm({ location }) {
               </TableBody>
             </Table>
           </TableContainer>
+        </Box>
+        <Box
+          component="form"
+          sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
+          mb={5}
+          align="left"
+        >
+          <p>Inspected by Name & Sign:  __________________</p>
         </Box>
         <Box m={3} display="flex" justifyContent="center">
           <Button sx={{ height: 80, width: 220, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="primary" value="submit">

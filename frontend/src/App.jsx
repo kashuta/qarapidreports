@@ -37,9 +37,9 @@ function App() {
 
   const locations = ['Moscow', 'Tbilisi', 'Dubai'];
 
-  if (!loader) {
-    return <h2 style={{ margin: 300 }}>Loading...</h2>;
-  }
+  // if (!loader) {
+  //   return <h2 style={{ margin: 300 }}>Loading...</h2>;
+  // }
   if (!user) {
     return (
       <Container maxWidth="xl">
