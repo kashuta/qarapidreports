@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable no-console */
 import React, { useState } from 'react';
 import {
   Table,
@@ -15,8 +17,6 @@ import {
   Container,
   Box,
 } from '@mui/material';
-// import { Formik, Form, Field } from 'formik';
-// import * as Yup from 'yup';
 import { DatePicker } from '@mui/x-date-pickers';
 import DialogForm from './DialogForm';
 

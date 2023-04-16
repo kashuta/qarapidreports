@@ -20,6 +20,9 @@ import Dashboard from './components/Manager/Dashboard';
 import PageNotFound from './components/ProtectedRoute/PageNotFound';
 import MainPage from './components/MainPage/MainPage';
 import FormGME0024 from './components/Forms/FormGME0024';
+import FormTest from './components/Forms/FormTest';
+import MyReactPdf from './components/Forms/MyReactPdf';
+import TestPdf from './components/Forms/TestPdf';
 
 // import { setUserAction } from './components/Redux/user.action';
 
@@ -51,6 +54,9 @@ function App() {
             </Route>
           </Route>
           <Route path="/FormGME0024" element={<FormGME0024 />} />
+          <Route path="/FormTest" element={<FormTest />} />
+          <Route path="/MyReactPdf" element={<MyReactPdf />} />
+          <Route path="/TestPdf" element={<TestPdf />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Container>
