@@ -47,12 +47,6 @@ function ForkliftForm({ location }) {
     dispatch(setReportFieldsAction(formId, navigate));
   }, []);
 
-  if (!reportsFields) {
-    return (
-      <div>Loading...</div>
-    );
-  }
-
   const formFields = reportsFields.find((el) => el.formId === +formId);
   const questions = formFields?.questionFields.map((el) => {
     const obj = {};
@@ -154,6 +148,12 @@ function ForkliftForm({ location }) {
       dispatch(createReportAction(JSON.stringify(obj), navigate));
     },
   });
+
+  if (!reportsFields) {
+    return (
+      <div>Loading...</div>
+    );
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
