@@ -419,8 +419,7 @@ function ForkliftForm({ location }) {
           </Button>
         </Box>
       </form>
-      <DialogForm open={open} statusBtn={statusBtn} handleClose={handleClose} handleConfirm={handleConfirm} handleConfirmSave={handleConfirmSave} handleConfirmClear=//   if (reportsFields) {
-// }{handleConfirmClear} />
+      <DialogForm open={open} statusBtn={statusBtn} handleClose={handleClose} handleConfirm={handleConfirm} handleConfirmSave={handleConfirmSave} handleConfirmClear={handleConfirmClear} />
     </Container>
   );
 }
