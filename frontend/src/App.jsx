@@ -18,13 +18,9 @@ import ManagerProfile from './components/Manager/ManagerProfile';
 import Dashboard from './components/Manager/Dashboard';
 import PageNotFound from './components/ProtectedRoute/PageNotFound';
 import MainPage from './components/MainPage/MainPage';
-import MonthSafCheck from './components/Forms/MonthSafCheck';
-import ForkliftForm from './components/Forms/ForkliftForm';
 import RegForm from './components/Auth/RegForm';
 import { refreshAccessToken } from './JWT/authActions';
-
-import VechSafInspCheckForm from './components/Forms/VechSafInspCheckForm';
-import HSEObservationForm from './components/Forms/HSEObservationForm';
+import Forms from './components/Forms/Forms';
 
 function App() {
   const user = useSelector((state) => state.UserReducer.user);
@@ -63,7 +59,8 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route element={<ProtectedRoleRoute role="inspector" />}>
-            <Route
+            <Route path="/:formId" element={<Forms location={locations} />} />
+            {/* <Route
               path="/:formId"
               element={<VechSafInspCheckForm location={locations} />}
             />
@@ -78,7 +75,7 @@ function App() {
             <Route
               path="/:formId"
               element={<HSEObservationForm location={locations} />}
-            />
+            /> */}
             <Route path="/inspector/:userId" element={<InspectorProfile />} />
           </Route>
           <Route element={<ProtectedRoleRoute role="manager" />}>

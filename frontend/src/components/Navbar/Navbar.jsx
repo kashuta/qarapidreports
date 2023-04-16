@@ -27,7 +27,7 @@ export default function Navbar() {
       },
       credentials: 'include',
     });
-    localStorage.removeItem('token');
+    localStorage.removeItem('accessToken');
     dispatch(setUserAction(null));
     navigate('/login');
   };
