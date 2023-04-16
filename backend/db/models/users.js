@@ -15,9 +15,6 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.RefreshToken, {
         foreignKey: 'userId',
       });
-      this.hasMany(models.FormResponse, {
-        foreignKey: 'userId',
-      });
     }
   }
   Users.init({

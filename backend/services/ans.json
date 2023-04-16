@@ -1,0 +1,98 @@
+{
+  "id": 1,
+  "formResponseId": 1,
+  "answer": {
+      "Fuel": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "Hydraulic Oil": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "Engine Oil": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "Radiator Coolant": {
+          "condition": "nok",
+          "actionsNeeded": "ttt"
+      },
+      "Transmission Fluid": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "Tires": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "Forks": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "Mast Chains and hoses": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "Overhead Guard": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "Battery": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "Engine Belt": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "Air filter": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "Accelerator or Direction Control Pedal": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "Service Brake": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "Parking Brake": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "Steering Operation": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "Drive Control – Forward/Reverse": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "Tilt Control – Forward and Back": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "Hoist and Lowering Control": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "Horn and Lights": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "Gauges: Speed, Oil, Hours, Fuel, Temp": {
+          "condition": "ok",
+          "actionsNeeded": ""
+      },
+      "location": "Moscow",
+      "operator": "rt",
+      "date": "2023-04-15T15:31:41.569Z",
+      "machineHours": "6",
+      "regNumber": "rt",
+      "signature": "t"
+  },
+  "updatedAt": "2023-04-16T11:16:50.963Z",
+  "createdAt": "2023-04-16T11:16:50.963Z"
+}
