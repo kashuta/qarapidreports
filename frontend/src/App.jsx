@@ -60,22 +60,6 @@ function App() {
           <Route path="/" element={<MainPage />} />
           <Route element={<ProtectedRoleRoute role="inspector" />}>
             <Route path="/:formId" element={<Forms location={locations} />} />
-            {/* <Route
-              path="/:formId"
-              element={<VechSafInspCheckForm location={locations} />}
-            />
-            <Route
-              path="/:formId"
-              element={<MonthSafCheck location={locations} />}
-            />
-            <Route
-              path="/:formId"
-              element={<ForkliftForm location={locations} />}
-            />
-            <Route
-              path="/:formId"
-              element={<HSEObservationForm location={locations} />}
-            /> */}
             <Route path="/inspector/:userId" element={<InspectorProfile />} />
           </Route>
           <Route element={<ProtectedRoleRoute role="manager" />}>
