@@ -17,6 +17,7 @@ class FormService {
 
       const responseObject = {
         formName: form.name,
+        formId: form.id,
         columnNames: formSections.map((el) => ({
           title: el.title,
           order: el.order,

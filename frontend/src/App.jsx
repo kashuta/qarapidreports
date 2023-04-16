@@ -65,15 +65,15 @@ function App() {
               element={<VechSafInspCheckForm location={locations} />}
             />
             <Route
-              path="/:formId"
+              path="/1"
               element={<MonthSafCheck location={locations} />}
             />
             <Route
-              path="/:formId"
+              path="/3"
               element={<ForkliftForm location={locations} />}
             />
             <Route
-              path="/:formId"
+              path="/4"
               element={<HSEObservationForm location={locations} />}
             /> */}
             <Route path="/inspector/:userId" element={<InspectorProfile />} />
