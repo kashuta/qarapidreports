@@ -6,7 +6,7 @@ const createFormField = (id, formId, label, type, order, formSectionId) => ({
   order,
   formSectionId,
   createdAt: new Date(),
-  updatedAt: new Date()
+  updatedAt: new Date(),
 });
 
 module.exports = {
@@ -18,7 +18,7 @@ module.exports = {
         'All field service vehicles inspection completed as per schedule?',
         'checkbox',
         1,
-        1
+        1,
       ),
       createFormField(
         2,
@@ -26,7 +26,7 @@ module.exports = {
         'All PPE is in good condition and suitable for task?',
         'checkbox',
         2,
-        1
+        1,
       ),
       createFormField(3, 1, 'All vehicles have OXY inspection tag up to date?', 'checkbox', 3, 1),
       createFormField(4, 1, 'All materials used for work are stored correctly?', 'checkbox', 4, 1),
@@ -37,7 +37,7 @@ module.exports = {
         'IVMS, blue key system are working without any problems?',
         'checkbox',
         6,
-        1
+        1,
       ),
       createFormField(
         7,
@@ -45,7 +45,7 @@ module.exports = {
         'Are all HSE training cards for each employee are carried by employee and up to date?',
         'checkbox',
         7,
-        1
+        1,
       ),
       createFormField(8, 1, 'Do all employees have their own blue key?', 'checkbox', 8, 1),
       createFormField(9, 1, 'Is housekeeping in workshop and store acceptable?', 'checkbox', 9, 1),
@@ -55,7 +55,7 @@ module.exports = {
         'Are chemical ontainers identified and stored on top of spill retention pallets?',
         'checkbox',
         10,
-        1
+        1,
       ),
       createFormField(
         11,
@@ -63,7 +63,7 @@ module.exports = {
         'Is preventive maintenance of PCM machines up to date?',
         'checkbox',
         11,
-        1
+        1,
       ),
       createFormField(12, 1, 'Is calibration for all measuring tools valid?', 'checkbox', 12, 1),
       createFormField(
@@ -72,7 +72,7 @@ module.exports = {
         'Have you checked JSAs to ensure they are still valid?',
         'checkbox',
         13,
-        1
+        1,
       ),
 
       createFormField(15, 2, 'All vehicle lights are functioning?', 'checkbox', 1, 1),
@@ -90,7 +90,7 @@ module.exports = {
         'First aid kit is available and contents not expired?',
         'checkbox',
         10,
-        1
+        1,
       ),
       createFormField(25, 2, 'Reflective jacket is available?', 'checkbox', 11, 1),
       createFormField(26, 2, 'Reflective triangle is available?', 'checkbox', 12, 1),
@@ -111,7 +111,7 @@ module.exports = {
         'Mast Chains and hoses; Visual Check, Leaks, Damage',
         'checkbox',
         8,
-        1
+        1,
       ),
       createFormField(38, 3, 'Overhead Guard; Attached, Damage', 'checkbox', 9, 1),
       createFormField(39, 3, 'Battery; Check Condition', 'checkbox', 10, 1),
@@ -125,7 +125,7 @@ module.exports = {
         'Steering Operation; Functioning Smoothly and Properly',
         'checkbox',
         15,
-        1
+        1,
       ),
       createFormField(
         45,
@@ -133,7 +133,7 @@ module.exports = {
         'Drive Control – Forward/Reverse; Functioning Smoothly and Properly',
         'checkbox',
         16,
-        1
+        1,
       ),
       createFormField(
         46,
@@ -141,7 +141,7 @@ module.exports = {
         'Tilt Control – Forward and Back; Functioning Smoothly and Properly',
         'checkbox',
         17,
-        1
+        1,
       ),
       createFormField(
         47,
@@ -149,7 +149,7 @@ module.exports = {
         'Hoist and Lowering Control; Functioning Smoothly and Properly',
         'checkbox',
         18,
-        1
+        1,
       ),
       createFormField(48, 3, 'Horn and Lights; Functioning Properly', 'checkbox', 19, 1),
       createFormField(
@@ -158,14 +158,14 @@ module.exports = {
         'Gauges: Speed, Oil, Hours, Fuel, Temp; Functioning Properly',
         'checkbox',
         20,
-        1
+        1,
       ),
 
       createFormField(50, 4, 'Unsafe act', 'checkbox', 1, 1),
       createFormField(51, 4, 'Unsafe condition', 'checkbox', 2, 1),
       createFormField(52, 4, 'Health hazard', 'checkbox', 3, 1),
       createFormField(53, 4, 'Environmental risk', 'checkbox', 4, 1),
-      createFormField(54, 4, 'Safe observation', 'checkbox', 5, 1)
+      createFormField(54, 4, 'Safe observation', 'checkbox', 5, 1),
     ];
 
     await queryInterface.bulkInsert('FormFields', formFieldsData);
@@ -175,7 +175,7 @@ module.exports = {
     await queryInterface.bulkDelete('FormFields', null, {
       truncate: true,
       cascade: true,
-      restartIdentity: true
+      restartIdentity: true,
     });
-  }
+  },
 };
