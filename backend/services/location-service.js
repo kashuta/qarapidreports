@@ -7,7 +7,6 @@ class LocationService {
   }
 
   async addLocationData(name, managerId) {
-    console.log('!!!!!!!!!!!!!!!', name, managerId);
     const location = await Location.create({ name, managerId });
     return location;
   }
