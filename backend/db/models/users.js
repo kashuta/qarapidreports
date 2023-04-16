@@ -15,9 +15,6 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.RefreshToken, {
         foreignKey: 'userId',
       });
-      this.hasMany(models.FormResponse, {
-        foreignKey: 'userId',
-      });
     }
   }
   Users.init({
@@ -25,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     password: DataTypes.TEXT,
     isActive: DataTypes.BOOLEAN,
+    activationLink: DataTypes.TEXT,
     roleId: DataTypes.INTEGER,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,

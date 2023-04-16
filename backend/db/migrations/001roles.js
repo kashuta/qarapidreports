@@ -11,10 +11,10 @@ module.exports = {
       admin: {
         type: Sequelize.BOOLEAN,
       },
-      inspector: {
+      manager: {
         type: Sequelize.BOOLEAN,
       },
-      manager: {
+      inspector: {
         type: Sequelize.BOOLEAN,
       },
       createdAt: {

@@ -4,9 +4,6 @@ module.exports = (sequelize, DataTypes) => {
   class FormResponseAnswer extends Model {
     static associate(models) {
       // Связи между моделями
-      this.belongsTo(models.FormField, {
-        foreignKey: 'formFieldId',
-      });
       this.belongsTo(models.FormResponse, {
         foreignKey: 'formResponseId',
       });
@@ -27,20 +24,8 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
-    formFieldId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'FormFields',
-        key: 'id',
-      },
-    },
     answer: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    comment: {
-      type: DataTypes.STRING,
+      type: DataTypes.JSON,
       allowNull: true,
     },
     createdAt: {

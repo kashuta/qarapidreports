@@ -8,9 +8,15 @@ function ManagerNav() {
   const user = useSelector((state) => state.UserReducer.user);
   return (
     <>
-      <NavLink className={styles.link} to="/">Home</NavLink>
-      <NavLink className={styles.link} to="/dashboard">Dashboard</NavLink>
-      <NavLink className={styles.link} to={`/profile/${user.surname}`}>Profile</NavLink>
+      <NavLink className={styles.link} to="/">
+        Home
+      </NavLink>
+      <NavLink className={styles.link} to="/dashboard">
+        Dashboard
+      </NavLink>
+      <NavLink className={styles.link} to={`/manager/${user.id}`}>
+        Profile
+      </NavLink>
     </>
   );
 }
