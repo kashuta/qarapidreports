@@ -20,7 +20,7 @@ function SignInForm() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch('http://localhost:3001/api/v2/login', {
+    fetch('http://localhost:3001/api/v2/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -30,10 +30,15 @@ function SignInForm() {
     })
       .then((res) => res.json())
       .then((data) => {
-        const token = data.accessToken;
-        localStorage.setItem('accessToken', token);
-        dispatch(setUserAction(data.userFront));
-        dispatch(getUserLoaderAction(true));
+        if (data.message) {
+          alert(data.message);
+          navigate('/login');
+        } else {
+          const token = data.accessToken;
+          localStorage.setItem('accessToken', token);
+          dispatch(setUserAction(data.userFront));
+          dispatch(getUserLoaderAction(true));
+        }
       })
       .catch(console.log);
 

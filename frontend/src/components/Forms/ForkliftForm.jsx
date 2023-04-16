@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 /* eslint-disable max-len */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-unused-vars */
@@ -29,8 +28,8 @@ import {
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
-import './ForkliftForm.css';
-import DialogForm from '../Forms/DialogForm';
+import styles from './Form.module.css';
+import DialogForm from './DialogForm';
 
 const engineOffChecklist = [
   {
@@ -169,7 +168,9 @@ for (const item of engineOnChecklist) {
 const validationSchema = yup.object({
   ...engineOffValidation,
   ...engineOnValidation,
-  location: yup.string('Enter location').required('Please, fill this field'),
+  location: yup
+    .string('Enter location')
+    .required('Please, fill this field'),
   operator: yup
     .string('Enter operator name')
     .required('Please, fill this field'),
@@ -178,8 +179,12 @@ const validationSchema = yup.object({
     .typeError('Value must be a number')
     .positive('Enter positive number')
     .required('Please, fill this field'),
-  regNumber: yup.string().required('Please, fill this field'),
-  signature: yup.string().required('Please, fill this field'),
+  regNumber: yup
+    .string()
+    .required('Please, fill this field'),
+  signature: yup
+    .string()
+    .required('Please, fill this field'),
 });
 
 function ForkliftForm({ location }) {
@@ -255,12 +260,13 @@ function ForkliftForm({ location }) {
   return (
     <Container>
       <form onSubmit={formik.handleSubmit}>
-        <h1 className="form-h1">Forklift safety inspection checklist</h1>
+        <h1 className={styles.form_h1}>Forklift safety inspection checklist</h1>
         <Box
           sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
           mb={5}
-          align="center">
-          <h2 className="form-h2">A.&ensp;Truck and operator details</h2>
+          align="center"
+        >
+          <h2 className={styles.form_h2}>A.&ensp;Truck and operator details</h2>
           <TextField
             select
             align="left"
@@ -271,11 +277,10 @@ function ForkliftForm({ location }) {
             onChange={formik.handleChange}
             onBlur={(e) => formik.setFieldTouched(e.target.name)}
             error={formik.touched.location && Boolean(formik.errors.location)}
-            helperText={formik.touched.location && formik.errors.location}>
+            helperText={formik.touched.location && formik.errors.location}
+          >
             {location.map((el, index) => (
-              <MenuItem key={index + 1} value={el}>
-                {el}
-              </MenuItem>
+              <MenuItem key={index + 1} value={el}>{el}</MenuItem>
             ))}
           </TextField>
 
@@ -283,7 +288,7 @@ function ForkliftForm({ location }) {
             label="Date"
             name="date"
             value={formik.values.date}
-            onChange={(value) => formik.setValues({ ...formik.values, date: value })}
+            onChange={((value) => (formik.setValues({ ...formik.values, date: value })))}
           />
 
           <TextField
@@ -306,12 +311,8 @@ function ForkliftForm({ location }) {
               formik.handleChange(e);
             }}
             onBlur={(e) => formik.setFieldTouched(e.target.name)}
-            error={
-              formik.touched.machineHours && Boolean(formik.errors.machineHours)
-            }
-            helperText={
-              formik.touched.machineHours && formik.errors.machineHours
-            }
+            error={formik.touched.machineHours && Boolean(formik.errors.machineHours)}
+            helperText={formik.touched.machineHours && formik.errors.machineHours}
           />
           <TextField
             id="regNumber"
@@ -335,32 +336,28 @@ function ForkliftForm({ location }) {
           />
         </Box>
         <Box mb={5}>
-          <h2 className="form-h2">B.&ensp;Inspection</h2>
-          <TableContainer
-            component={Paper}
-            sx={{ border: 1, alignContent: 'center' }}>
+          <h2 className={styles.form_h2}>B.&ensp;Inspection</h2>
+          <TableContainer component={Paper} sx={{ border: 1, alignContent: 'center' }}>
             <Table>
               <TableHead>
                 <TableRow sx={{ background: '#bfbfbf' }}>
                   <TableCell colSpan={6} sx={{ border: 1 }}>
-                    <h3 className="form-h3">With Engine Off</h3>
+                    <h3 className={styles.form_h3}>With Engine Off</h3>
                   </TableCell>
                 </TableRow>
                 <TableRow sx={{ background: '#bfbfbf' }}>
-                  <TableCell sx={{ border: 1, padding: '10px' }} align="center">
-                    №
+                  <TableCell sx={{ border: 1, padding: '10px' }} align="center">№</TableCell>
+                  <TableCell sx={{ border: 1, padding: '10px' }}>
+                    <h4 className={styles.form_h4}>What are you inspecting?</h4>
                   </TableCell>
                   <TableCell sx={{ border: 1, padding: '10px' }}>
-                    <h4 className="form-h4">What are you inspecting?</h4>
+                    <h4 className={styles.form_h4}>What are you looking for?</h4>
                   </TableCell>
                   <TableCell sx={{ border: 1, padding: '10px' }}>
-                    <h4 className="form-h4">What are you looking for?</h4>
+                    <h4 className={styles.form_h4}>Condition</h4>
                   </TableCell>
                   <TableCell sx={{ border: 1, padding: '10px' }}>
-                    <h4 className="form-h4">Condition</h4>
-                  </TableCell>
-                  <TableCell sx={{ border: 1, padding: '10px' }}>
-                    <h4 className="form-h4">Action needed</h4>
+                    <h4 className={styles.form_h4}>Action needed</h4>
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -405,7 +402,7 @@ function ForkliftForm({ location }) {
                 ))}
                 <TableRow sx={{ background: '#bfbfbf' }}>
                   <TableCell colSpan={6} sx={{ border: 1 }}>
-                    <h3 className="form-h3">With Engine On</h3>
+                    <h3 className={styles.form_h3}>With Engine On</h3>
                   </TableCell>
                 </TableRow>
                 {engineOnChecklist && engineOnChecklist?.map((elem, index) => (
@@ -451,56 +448,28 @@ function ForkliftForm({ location }) {
           </TableContainer>
         </Box>
         <Box mb={5} fullWidth>
-          <h2 className="form-h2">C.&ensp;Guide</h2>
-          <div className="form-image">
-            <div className="img-container">
-              <div className="img-wrapper">
+          <h2 className={styles.form_h2}>C.&ensp;Guide</h2>
+          <div className={styles.form_image}>
+            <div className={styles.img_container}>
+              <div className={styles.img_wrapper}>
                 <img src="../img/forklift.jpg" alt="guide" />
               </div>
             </div>
           </div>
         </Box>
         <Box m={3} display="flex" justifyContent="center">
-          <Button
-            sx={{ height: 80, width: 220, margin: 3 }}
-            size="large"
-            onClick={handleSubmit}
-            type="submit"
-            variant="contained"
-            color="primary"
-            value="submit">
+          <Button sx={{ height: 80, width: 220, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="primary" value="submit">
             <h2>Submit</h2>
           </Button>
-          <Button
-            sx={{ height: 80, width: 250, margin: 3 }}
-            size="large"
-            onClick={handleSubmit}
-            type="submit"
-            variant="contained"
-            color="warning"
-            value="save">
+          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="warning" value="save">
             <h2>Save</h2>
           </Button>
-          <Button
-            sx={{ height: 80, width: 250, margin: 3 }}
-            size="large"
-            onClick={handleSubmit}
-            type="submit"
-            variant="contained"
-            color="error"
-            value="clear">
+          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="error" value="clear">
             <h2>Clear</h2>
           </Button>
         </Box>
       </form>
-      <DialogForm
-        open={open}
-        statusBtn={statusBtn}
-        handleClose={handleClose}
-        handleConfirm={handleConfirm}
-        handleConfirmSave={handleConfirmSave}
-        handleConfirmClear={handleConfirmClear}
-      />
+      <DialogForm open={open} statusBtn={statusBtn} handleClose={handleClose} handleConfirm={handleConfirm} handleConfirmSave={handleConfirmSave} handleConfirmClear={handleConfirmClear} />
     </Container>
   );
 }

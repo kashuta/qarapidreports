@@ -4,27 +4,28 @@ import { setAccessToken } from './tokenHelpers';
 import authFetch from './authFetch';
 import { getUserLoaderAction, setUserAction } from '../Redux/user.action';
 
-export const refreshAccessToken = () => async (dispatch) => {
+export const refreshAccessToken = (navigate) => async (dispatch) => {
   try {
     // const refreshToken = getRefreshToken();
-    const response = await authFetch('http://localhost:3001/api/v2/refresh', {
-      method: 'GET',
-      credentials: 'include',
-      // headers: {
-      //   'Content-Type': 'application/json',
-      // },
-    });
+    const response = await authFetch(
+      'http://localhost:3001/api/v2/auth/refresh',
+      {
+        method: 'GET',
+        credentials: 'include',
+      },
+    );
 
-    if (!response.ok) {
+    if (response.status === 422) {
+      navigate('/');
       throw new Error('Failed to refresh access token');
+    } else {
+      const data = await response.json();
+      const newAccessToken = data.accessToken;
+      setAccessToken(newAccessToken);
+      dispatch(setUserAction(data.userFront));
+      dispatch(getUserLoaderAction(true));
+      return newAccessToken;
     }
-
-    const data = await response.json();
-    const newAccessToken = data.accessToken;
-    setAccessToken(newAccessToken);
-    dispatch(setUserAction(data.userFront));
-    dispatch(getUserLoaderAction(true));
-    return newAccessToken;
   } catch (error) {
     // Handle error, for example, dispatch an action to show an error message
     throw error;

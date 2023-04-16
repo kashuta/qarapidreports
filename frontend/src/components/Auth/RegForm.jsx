@@ -1,27 +1,23 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from 'react';
-import {
-  Button, InputLabel, MenuItem, Select, TextField,
-} from '@mui/material';
+import { Button, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 
 import { useNavigate } from 'react-router-dom';
 
 function RegForm() {
-
   const [form, setForm] = useState({
-    username: '',
+    userName: '',
     email: '',
     password: '',
     role: '',
   });
 
   const navigate = useNavigate();
-
-
   const handleSubmit = (event) => {
     event.preventDefault();
-    fetch('http://localhost:3001/api/v2/reg', {
+    fetch('http://localhost:3001/api/v2/auth/registration', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -31,10 +27,11 @@ function RegForm() {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.msg) {
-          alert(data.msg);
+        if (data.message) {
+          alert(data.message);
           navigate('/reg');
         } else {
+          alert('Please check your email and activate your account');
           navigate('/login');
         }
       })
@@ -60,7 +57,7 @@ function RegForm() {
       <TextField
         required
         label="First and Last Name"
-        name="username"
+        name="userName"
         variant="outlined"
         onChange={handleInput}
         value={form.name}

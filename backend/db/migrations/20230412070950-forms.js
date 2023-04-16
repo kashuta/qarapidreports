@@ -11,14 +11,6 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      locationId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Locations',
-          key: 'id',
-        },
-      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,

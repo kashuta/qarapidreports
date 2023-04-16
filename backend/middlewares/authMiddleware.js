@@ -1,11 +1,13 @@
 /* eslint-disable func-names */
 const tokenServise = require('../services/token-service');
+const { ErrorHandler, errors } = require('../exceptions');
 
-module.exports = function (req, res, next) {
+module.exports = function (err, req, res, next) {
   try {
     const autorizationHeader = req.headers.authorization;
     if (!autorizationHeader) {
-      return next({ message: 'Unauthorized error', statusCode: 401 });
+      // return next({ message: 'Unauthorized error', statusCode: 401 });
+      // return next(ErrorHandler.UnautorizedError(errors.BACKEND_ERRORS.UNAUTHORIZED_ERROR, res));
     }
 
     const accessToken = autorizationHeader.split(' ')[1];
