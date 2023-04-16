@@ -1,7 +1,9 @@
 import { refreshAccessToken } from '../JWT/authActions';
 import authFetch from '../JWT/authFetch';
-import { SET_FORMS_NAME_DATA,
-  SET_REPORT_FIELDS, } from './type.redux';
+import {
+  SET_FORMS_NAME_DATA,
+  SET_REPORT_FIELDS,
+} from './type.redux';
 
 export const setFormsNameAction = (navigate) => async (dispatch) => {
   try {
@@ -33,9 +35,9 @@ export const setFormsNameAction = (navigate) => async (dispatch) => {
   }
 };
 
-export const createReportAction = (data, navigate, formId) => async (dispatch) => {
+export const createReportAction = (data, navigate) => async (dispatch) => {
   try {
-    const response = await authFetch(`http://localhost:3001/api/v2/form/form/${formId}`, {
+    const response = await authFetch('http://localhost:3001/api/v2/form/form_save_data', {
       method: 'POST',
       credentials: 'include',
       headers: {

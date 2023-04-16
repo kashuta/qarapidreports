@@ -32,7 +32,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import styles from './Form.module.css';
 import DialogForm from './DialogForm';
-import { setReportFieldsAction } from '../../Redux/report.action';
+import { createReportAction, setReportFieldsAction } from '../../Redux/report.action';
 
 function ForkliftForm({ location }) {
   const [open, setOpen] = useState(false);
@@ -41,6 +41,7 @@ function ForkliftForm({ location }) {
   const dispatch = useDispatch();
   const formId = useLocation().pathname.split('/').at(-1);
   const reportsFields = useSelector((state) => state.ReportReducer.reportFields);
+  const user = useSelector((state) => state.UserReducer.user);
 
   useEffect(() => {
     dispatch(setReportFieldsAction(formId, navigate));
@@ -152,7 +153,14 @@ function ForkliftForm({ location }) {
       validateOnChange: true,
       validateOnBlur: true,
       onSubmit: (values) => {
-        alert(JSON.stringify(values, null, 2));
+        const obj = {
+          formId,
+          userId: user.id,
+          formData: values,
+          status: 'submit',
+        };
+        dispatch(createReportAction(JSON.stringify(obj), navigate));
+        // alert(JSON.stringify(obj));
       },
     });
 
