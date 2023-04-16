@@ -1,7 +1,9 @@
-const { Form, FormSection, FormField } = require('../db/models');
+const {
+  Form, FormSection, FormField, FormResponse, FormResponseAnswer,
+} = require('../db/models');
 const { backendErrors } = require('../exceptions');
 
-module.exports = {
+class FormService {
   async getFormData(formId) {
     try {
       const formIdInt = parseInt(formId, 10);
@@ -15,7 +17,6 @@ module.exports = {
 
       const responseObject = {
         formName: form.name,
-        formId: form.id,
         columnNames: formSections.map((el) => ({
           title: el.title,
           order: el.order,
@@ -31,7 +32,7 @@ module.exports = {
     } catch (err) {
       throw new Error(err.message);
     }
-  },
+  }
 
   async getAllFormNames() {
     try {
@@ -40,5 +41,27 @@ module.exports = {
     } catch (err) {
       throw new Error(err.message);
     }
-  },
-};
+  }
+
+  async saveFormData(userId, formId, status, formData) {
+    try {
+      const created = await FormResponse.create({
+        formId, inspectorId: userId, status,
+      });
+      if (!created) {
+        throw new Error(backendErrors.DATABASE_ERROR);
+      }
+      const createdAnswer = await FormResponseAnswer.create({
+        formResponseId: created.dataValues.id,
+        answer: formData,
+      });
+      if (!createdAnswer) {
+        throw new Error(backendErrors.DATABASE_ERROR);
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+}
+
+module.exports = new FormService();

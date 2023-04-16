@@ -53,6 +53,9 @@ const BACKEND_ERRORS = {
   DATABASE_ERROR: {
     message: 'Database error',
   },
+  INCORRECT_DATA_ERROR: {
+    message: 'Incorrect data',
+  },
 
 };
 

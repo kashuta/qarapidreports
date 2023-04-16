@@ -1,7 +1,7 @@
-const formService = require('../services/formService');
+const formService = require('../services/form-service');
 const { ErrorHandler, backendErrors } = require('../exceptions/index');
 
-module.exports = {
+class FormController {
   async getFormData(req, res, next) {
     try {
       const { formId } = req.params;
@@ -13,7 +13,8 @@ module.exports = {
     } catch (err) {
       return next(ErrorHandler.BadRequestError(err, res));
     }
-  },
+  }
+
   async getAllFormNames(req, res, next) {
     try {
       const responseObject = await formService.getAllFormNames();
@@ -22,4 +23,21 @@ module.exports = {
       return next(ErrorHandler.BadRequestError(err, res));
     }
   }
-};
+
+  async saveFormData(req, res, next) {
+    try {
+      const {
+        formId, status, formData, userId,
+      } = req.body;
+      if (!formId || !status || !formData || !userId) {
+        return next(ErrorHandler.UnprocessableEntityError(backendErrors.INCORRECT_DATA_ERROR, res));
+      }
+      await formService.saveFormData(userId, formId, status, formData);
+      return res.status(200).json({ message: 'Form saved successfully' });
+    } catch (err) {
+      return next(ErrorHandler.BadRequestError(err, res));
+    }
+  }
+}
+
+module.exports = new FormController();
