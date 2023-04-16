@@ -59,8 +59,8 @@ function ForkliftForm({ location }) {
     [obj.item, obj.hint] = el.question.split('; ');
     return obj;
   });
-  const engineOffChecklist = questions?.slice(0, 12);
-  const engineOnChecklist = questions?.slice(12);
+  const engineOffChecklist = questions?.slice(0, 12) || [];
+  const engineOnChecklist = questions?.slice(12) || [];
 
   const engineOffValues = {};
   const engineOffValidation = {};
@@ -68,47 +68,44 @@ function ForkliftForm({ location }) {
   const engineOnValues = {};
   const engineOnValidation = {};
 
-  if (engineOffChecklist?.length) {
-    for (const item of engineOffChecklist) {
-      engineOffValidation[item.item] = yup.object({
-        condition: yup.string().required('Please, select an option'),
-        actionsNeeded: yup
-          .string()
-          .when('condition', {
-            is: 'nok',
-            then: (schema) => schema.required('Please, fill this field'),
-          }),
-      });
-    }
-    for (const item of engineOffChecklist) {
-      engineOffValues[item.item] = {
-        condition: '',
-        actionsNeeded: '',
-      };
-    }
+  for (const item of engineOffChecklist) {
+    engineOffValidation[item.item] = yup.object({
+      condition: yup.string().required('Please, select an option'),
+      actionsNeeded: yup
+        .string()
+        .when('condition', {
+          is: 'nok',
+          then: (schema) => schema.required('Please, fill this field'),
+        }),
+    });
   }
 
-  if (engineOnChecklist?.length) {
-    for (const item of engineOnChecklist) {
-      engineOnValues[item.item] = {
-        condition: '',
-        actionsNeeded: '',
-      };
-    }
+  for (const item of engineOffChecklist) {
+    engineOffValues[item.item] = {
+      condition: '',
+      actionsNeeded: '',
+    };
+  }
 
-    for (const item of engineOnChecklist) {
-      engineOnValidation[item.item] = yup.object({
-        condition: yup
-          .string()
-          .required('Please, select an option'),
-        actionsNeeded: yup
-          .string()
-          .when('condition', {
-            is: 'nok',
-            then: (schema) => schema.required('Please, fill this field'),
-          }),
-      });
-    }
+  for (const item of engineOnChecklist) {
+    engineOnValues[item.item] = {
+      condition: '',
+      actionsNeeded: '',
+    };
+  }
+
+  for (const item of engineOnChecklist) {
+    engineOnValidation[item.item] = yup.object({
+      condition: yup
+        .string()
+        .required('Please, select an option'),
+      actionsNeeded: yup
+        .string()
+        .when('condition', {
+          is: 'nok',
+          then: (schema) => schema.required('Please, fill this field'),
+        }),
+    });
   }
 
   const validationSchema = yup.object({
