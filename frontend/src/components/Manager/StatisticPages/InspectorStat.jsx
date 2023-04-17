@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -16,24 +16,26 @@ import InspectorTable from './InspectorTable';
 function InspectorStat() {
   const [value1, setValue1] = useState('');
   const [value2, setValue2] = useState('');
+  const [inspector, setInspector] = useState('All Inspectors');
+
+  const inspectors = ['All Inspectors'];
+
+  useEffect(() => {
+    console.log('Updated inspector state:', inspector);
+  }, [inspector]);
+
+  for (let i = 1; i <= 10; i += 1) {
+    inspectors.push(`Inspector${i}`);
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
   };
 
-  const [inspector, setInspector] = useState('');
-
   const handleChange = (event) => {
     event.preventDefault();
     setInspector(event.target.value);
-    console.log(inspector);
   };
-
-  const inspectors = ['All Inspectors'];
-
-  for (let i = 1; i <= 10; i += 1) {
-    inspectors.push(`Inspector${i}`);
-  }
 
   return (
     <Box>
@@ -78,8 +80,8 @@ function InspectorStat() {
             ))}
           </Select>
         </FormControl>
-        <InspectorTable />
       </Box>
+      <InspectorTable inspector={inspector} />
     </Box>
   );
 }

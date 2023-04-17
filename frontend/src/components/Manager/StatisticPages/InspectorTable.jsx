@@ -21,7 +21,20 @@ const rows = [
   createData('TOOL BOX SAFETY MEETING FORM', 'inspector5', 'Abu Dhabi', '04/02/23'),
 ];
 
-export default function BasicTable() {
+function BasicTable({ inspector }) {
+  if (inspector === 'All Inspectors') {
+    console.log(inspector);
+  }
+  if (inspector === 'Inspector1') {
+    console.log(inspector);
+  }
+  if (inspector === 'Inspector2') {
+    console.log(inspector);
+  }
+  if (inspector === 'Inspector3') {
+    console.log(inspector);
+  }
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -45,6 +58,8 @@ export default function BasicTable() {
               <TableCell align="right">{row.inspector}</TableCell>
               <TableCell align="right">{row.location}</TableCell>
               <TableCell align="right">{row.date}</TableCell>
+              <TableCell align="right"><button>download</button></TableCell>
+              <TableCell align="right"><button>open</button></TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -52,3 +67,5 @@ export default function BasicTable() {
     </TableContainer>
   );
 }
+
+export default BasicTable;
