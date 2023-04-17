@@ -90,12 +90,12 @@ function VechSafInspCheckForm({ location }) {
     dispatch(setReportFieldsAction(formId, navigate));
   }, []);
 
-  const formFields = reportsFields.find((el) => el.formId === +formId);
+ const formFields = reportsFields.find((el) => el.formId === +formId);
 
   const checklist = [];
   formFields?.questionFields.forEach((el) => {
     checklist.push(el);
-  });
+  }); 
 
   const questionsValues = {};
   for (const item of checklist) {
