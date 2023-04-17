@@ -93,9 +93,45 @@ const validationSchema = yup.object({
     .typeError('Value must be a number')
     .positive('Enter positive number')
     .required('Please, fill this field'),
-  nextDate: yup
-    .required('Please, select another date'),
+  // nextDate: yup.date().when('date', {
+  //   is: (date) => !!date,
+  //   then: yup.date().test(
+  //     'is-greater-than-or-equal-to-date',
+  //     'Next date must be greater than or equal to the current date',
+  //     (value, context) => {
+  //       console.log('nextDate', value.getTime());
+  //       const { date } = context.parent;
+  //       console.log('curDate', date.$d.getTime());
+  //       console.log('test', date.$d > value);
+  //       return !date || !value || value >= date;
+  //     },
+  //   ),
+  // }),
 });
+
+// const schema = yup.object().shape({
+//   date: yup.date(),
+//   nextDate: yup.date().when('date', {
+//     is: (date) => !!date,
+//     then: yup.date().test(
+//       'is-greater-than-or-equal-to-date',
+//       'Next date must be greater than or equal to the current date',
+//       (value, context) => {
+//         const { date } = context.parent;
+//         return !date || !value || value >= date;
+//       },
+//     ),
+//   }),
+// });
+
+// Проверка данных формы
+// schema.validate(nextDate)
+//   .then((validData) => {
+//     // Данные формы валидны
+//   })
+//   .catch((error) => {
+//     // Данные формы не валидны
+//   });
 
 function VechSafInspCheckForm({ location }) {
   const [open, setOpen] = useState(false);
@@ -116,6 +152,7 @@ function VechSafInspCheckForm({ location }) {
     validateOnBlur: true,
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
+      console.log(JSON.stringify(values, null, 2));
     },
   });
 
