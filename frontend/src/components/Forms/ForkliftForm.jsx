@@ -1,11 +1,13 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable max-len */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
 import {
   Table,
@@ -27,169 +29,101 @@ import {
   FormHelperText,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import styles from './Form.module.css';
 import DialogForm from './DialogForm';
-
-const engineOffChecklist = [
-  {
-    item: 'Fuel',
-    hint: 'Leaks, Level',
-  },
-  {
-    item: 'Hydraulic Oil',
-    hint: 'Leaks, Level',
-  },
-  {
-    item: 'Engine Oil',
-    hint: 'Leaks, Level',
-  },
-  {
-    item: 'Radiator Coolant',
-    hint: 'Leaks, Level',
-  },
-  {
-    item: 'Transmission Fluid',
-    hint: 'Leaks, Level',
-  },
-  {
-    item: 'Tires',
-    hint: 'Condition and Pressure',
-  },
-  {
-    item: 'Forks',
-    hint: 'Visual Check',
-  },
-  {
-    item: 'Mast Chains and hoses',
-    hint: 'Visual Check, Leaks, Damage',
-  },
-  {
-    item: 'Overhead Guard',
-    hint: 'Attached, Damage',
-  },
-  {
-    item: 'Battery',
-    hint: 'Check Condition',
-  },
-  {
-    item: 'Engine Belt',
-    hint: 'Cracked, Damage, Visual Check',
-  },
-  {
-    item: 'Air filter',
-    hint: 'Visually check condition',
-  },
-];
-
-const engineOnChecklist = [
-  {
-    item: 'Accelerator or Direction Control Pedal',
-    hint: 'Functioning Smoothly and Properly',
-  },
-  {
-    item: 'Service Brake',
-    hint: 'Functioning Smoothly and Properly',
-  },
-  {
-    item: 'Parking Brake',
-    hint: 'Functioning Smoothly and Properly',
-  },
-  {
-    item: 'Steering Operation',
-    hint: 'Functioning Smoothly and Properly',
-  },
-  {
-    item: 'Drive Control – Forward/Reverse',
-    hint: 'Functioning Smoothly and Properly',
-  },
-  {
-    item: 'Tilt Control – Forward and Back',
-    hint: 'Functioning Smoothly and Properly',
-  },
-  {
-    item: 'Hoist and Lowering Control',
-    hint: 'Functioning Smoothly and Properly',
-  },
-  {
-    item: 'Horn and Lights',
-    hint: 'Functioning Properly',
-  },
-  {
-    item: 'Gauges: Speed, Oil, Hours, Fuel, Temp',
-    hint: 'Functioning Properly',
-  },
-];
-
-const engineOffValues = {};
-for (const item of engineOffChecklist) {
-  engineOffValues[item.item] = {
-    condition: '',
-    actionsNeeded: '',
-  };
-}
-
-const engineOffValidation = {};
-for (const item of engineOffChecklist) {
-  engineOffValidation[item.item] = yup.object({
-    condition: yup.string().required('Please, select an option'),
-    actionsNeeded: yup
-      .string()
-      .when('condition', {
-        is: 'nok',
-        then: (schema) => schema.required('Please, fill this field'),
-      }),
-  });
-}
-
-const engineOnValues = {};
-for (const item of engineOnChecklist) {
-  engineOnValues[item.item] = {
-    condition: '',
-    actionsNeeded: '',
-  };
-}
-
-const engineOnValidation = {};
-for (const item of engineOnChecklist) {
-  engineOnValidation[item.item] = yup.object({
-    condition: yup
-      .string()
-      .required('Please, select an option'),
-    actionsNeeded: yup
-      .string()
-      .when('condition', {
-        is: 'nok',
-        then: (schema) => schema.required('Please, fill this field'),
-      }),
-  });
-}
-
-const validationSchema = yup.object({
-  ...engineOffValidation,
-  ...engineOnValidation,
-  location: yup
-    .string('Enter location')
-    .required('Please, fill this field'),
-  operator: yup
-    .string('Enter operator name')
-    .required('Please, fill this field'),
-  machineHours: yup
-    .number('Enter number')
-    .typeError('Value must be a number')
-    .positive('Enter positive number')
-    .required('Please, fill this field'),
-  regNumber: yup
-    .string()
-    .required('Please, fill this field'),
-  signature: yup
-    .string()
-    .required('Please, fill this field'),
-});
+import { createReportAction, setReportFieldsAction } from '../../Redux/report.action';
 
 function ForkliftForm({ location }) {
   const [open, setOpen] = useState(false);
   const [statusBtn, setStatusBtn] = useState('');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const formId = useLocation().pathname.split('/').at(-1);
+  const reportsFields = useSelector((state) => state.ReportReducer.reportFields);
+  const user = useSelector((state) => state.UserReducer.user);
+
+  useEffect(() => {
+    dispatch(setReportFieldsAction(formId, navigate));
+  }, []);
+
+  const formFields = reportsFields.find((el) => el.formId === +formId);
+  const questions = formFields?.questionFields.map((el) => {
+    const obj = {};
+    [obj.item, obj.hint] = el.question.split('; ');
+    return obj;
+  });
+  const engineOffChecklist = questions?.slice(0, 12) || [];
+  const engineOnChecklist = questions?.slice(12) || [];
+
+  const engineOffValues = {};
+  const engineOffValidation = {};
+
+  const engineOnValues = {};
+  const engineOnValidation = {};
+
+  for (const item of engineOffChecklist) {
+    engineOffValidation[item.item] = yup.object({
+      condition: yup.string().required('Please, select an option'),
+      actionsNeeded: yup
+        .string()
+        .when('condition', {
+          is: 'nok',
+          then: (schema) => schema.required('Please, fill this field'),
+        }),
+    });
+  }
+
+  for (const item of engineOffChecklist) {
+    engineOffValues[item.item] = {
+      condition: '',
+      actionsNeeded: '',
+    };
+  }
+
+  for (const item of engineOnChecklist) {
+    engineOnValues[item.item] = {
+      condition: '',
+      actionsNeeded: '',
+    };
+  }
+
+  for (const item of engineOnChecklist) {
+    engineOnValidation[item.item] = yup.object({
+      condition: yup
+        .string()
+        .required('Please, select an option'),
+      actionsNeeded: yup
+        .string()
+        .when('condition', {
+          is: 'nok',
+          then: (schema) => schema.required('Please, fill this field'),
+        }),
+    });
+  }
+
+  const validationSchema = yup.object({
+    ...engineOffValidation,
+    ...engineOnValidation,
+    location: yup
+      .string('Enter location')
+      .required('Please, fill this field'),
+    operator: yup
+      .string('Enter operator name')
+      .required('Please, fill this field'),
+    machineHours: yup
+      .number('Enter number')
+      .typeError('Value must be a number')
+      .positive('Enter positive number')
+      .required('Please, fill this field'),
+    regNumber: yup
+      .string()
+      .required('Please, fill this field'),
+    signature: yup
+      .string()
+      .required('Please, fill this field'),
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -206,9 +140,21 @@ function ForkliftForm({ location }) {
     validateOnChange: true,
     validateOnBlur: true,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      const obj = {
+        formId,
+        userId: user.id,
+        formData: values,
+        status: 'submit',
+      };
+      dispatch(createReportAction(JSON.stringify(obj), navigate));
     },
   });
+
+  if (!reportsFields) {
+    return (
+      <div>Loading...</div>
+    );
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -256,6 +202,8 @@ function ForkliftForm({ location }) {
   const handleClose = () => {
     setOpen(false);
   };
+
+  // console.log('render');
 
   return (
     <Container>
@@ -373,7 +321,7 @@ function ForkliftForm({ location }) {
                           row
                           style={{ flexWrap: 'nowrap' }}
                           name={`${elem.item}.condition`}
-                          value={formik.values[elem.item]?.condition}
+                          value={formik.values[elem.item]?.condition ?? ''}
                           onChange={formik.handleChange}
                         >
                           <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="ok" control={<Radio />} label="OK" />
@@ -416,7 +364,7 @@ function ForkliftForm({ location }) {
                           row
                           style={{ flexWrap: 'nowrap' }}
                           name={`${elem.item}.condition`}
-                          value={formik.values[elem.item]?.condition}
+                          value={formik.values[elem.item]?.condition ?? ''}
                           onChange={formik.handleChange}
                         >
                           <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="ok" control={<Radio />} label="OK" />
@@ -447,7 +395,7 @@ function ForkliftForm({ location }) {
             </Table>
           </TableContainer>
         </Box>
-        <Box mb={5} fullWidth>
+        <Box mb={5}>
           <h2 className={styles.form_h2}>C.&ensp;Guide</h2>
           <div className={styles.form_image}>
             <div className={styles.img_container}>

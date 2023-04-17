@@ -15,7 +15,7 @@ function InspectorProfile() {
     try {
       const data = new FormData();
       data.append('avatar', selectedFile);
-      const response = await authFetch('http://localhost:3001/api/v3/form/upload', {
+      const response = await authFetch('http://localhost:3001/api/v2/form/upload', {
         method: 'POST',
         credentials: 'include',
         body: data,
