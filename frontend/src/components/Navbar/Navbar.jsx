@@ -33,12 +33,11 @@ export default function Navbar() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar
-        position="static"
-        sx={{
-          width: '100%',
-        }}>
+    <Box
+      sx={{
+        maxWidth: '100%',
+      }}>
+      <AppBar position="static">
         <Toolbar
           sx={{
             display: 'flex',
