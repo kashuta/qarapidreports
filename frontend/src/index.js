@@ -4,16 +4,32 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { ThemeProvider, createTheme } from '@mui/material';
 import store from './Redux/store';
 
 import './index.css';
 import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const theme = createTheme({
+  typography: {
+    fontFamily: 'Arial',
+  },
+  palette: {
+    primary: {
+      main: '#15315b',
+    },
+    secondary: {
+      main: '#717073',
+    },
+  },
+});
 root.render(
-  <BrowserRouter>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </BrowserRouter>,
+  <ThemeProvider theme={theme}>
+    <BrowserRouter>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </BrowserRouter>
+  </ThemeProvider>,
 );

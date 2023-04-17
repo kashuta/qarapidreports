@@ -76,9 +76,7 @@ for (const item of questions) {
 
 const validationSchema = yup.object({
   ...questionsValidation,
-  location: yup
-    .string('Enter location')
-    .required('Please, fill this field'),
+  location: yup.string('Enter location').required('Please, fill this field'),
 });
 
 function VechSafInspCheckForm({ location }) {
@@ -149,13 +147,14 @@ function VechSafInspCheckForm({ location }) {
   return (
     <Container>
       <form onSubmit={formik.handleSubmit}>
-        <h1 className={styles.form_h1}>MONTHLY SAFETY CHECKLIST - FIELD SERVICES</h1>
+        <h1 className={styles.form_h1}>
+          MONTHLY SAFETY CHECKLIST - FIELD SERVICES
+        </h1>
         <Box
           component="form"
           sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
           mb={5}
-          align="center"
-        >
+          align="center">
           <TextField
             select
             align="left"
@@ -166,8 +165,7 @@ function VechSafInspCheckForm({ location }) {
             onChange={formik.handleChange}
             onBlur={(e) => formik.setFieldTouched(e.target.name)}
             error={formik.touched.location && Boolean(formik.errors.location)}
-            helperText={formik.touched.location && formik.errors.location}
-          >
+            helperText={formik.touched.location && formik.errors.location}>
             {location.map((el, index) => (
               <MenuItem key={index + 1} value={el}>
                 {el}
@@ -179,9 +177,8 @@ function VechSafInspCheckForm({ location }) {
             label="Date"
             name="date"
             value={formik.values.date}
-            onChange={((value) => (formik.setValues({ ...formik.values, date: value })))}
+            onChange={(value) => formik.setValues({ ...formik.values, date: value })}
           />
-
         </Box>
         <Box mb={5}>
           <TableContainer
@@ -190,51 +187,97 @@ function VechSafInspCheckForm({ location }) {
             <Table>
               <TableHead>
                 <TableRow sx={{ background: '#bfbfbf' }}>
-                  <TableCell sx={{ border: 1, padding: '10px' }} align="center"><h4 className={styles.form_h4}>№</h4></TableCell>
-                  <TableCell sx={{ border: 1, padding: '10px' }}><h4 className={styles.form_h4}>ASPECTS FOR INSPECTION</h4></TableCell>
-                  <TableCell sx={{ border: 1, padding: '10px' }}><h4 className={styles.form_h4}>CONDITION</h4></TableCell>
-                  <TableCell sx={{ border: 1, padding: '10px' }}><h4 className={styles.form_h4}>COMMENTS</h4></TableCell>
+                  <TableCell sx={{ border: 1, padding: '10px' }} align="center">
+                    <h4 className={styles.form_h4}>№</h4>
+                  </TableCell>
+                  <TableCell sx={{ border: 1, padding: '10px' }}>
+                    <h4 className={styles.form_h4}>ASPECTS FOR INSPECTION</h4>
+                  </TableCell>
+                  <TableCell sx={{ border: 1, padding: '10px' }}>
+                    <h4 className={styles.form_h4}>CONDITION</h4>
+                  </TableCell>
+                  <TableCell sx={{ border: 1, padding: '10px' }}>
+                    <h4 className={styles.form_h4}>COMMENTS</h4>
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {questions && questions?.map((elem, index) => (
-                  <TableRow key={index}>
-                    <TableCell sx={{ border: 1, padding: '0 10px' }} align="center">{index + 1}</TableCell>
-                    <TableCell sx={{ border: 1, padding: '0 10px' }}>{elem}</TableCell>
-                    <TableCell sx={{ border: 1, padding: '0 10px' }} align="center">
-                      <FormControl sx={{ m: 0 }} error={formik.touched[`${elem}`]?.condition && Boolean(formik.errors[`${elem}`]?.condition)} variant="standard">
-                        <RadioGroup
-                          row
-                          style={{ flexWrap: 'nowrap' }}
-                          name={`${elem}.condition`}
-                          value={formik.values[elem]?.condition}
+                {questions
+                  && questions?.map((elem, index) => (
+                    <TableRow key={index}>
+                      <TableCell
+                        sx={{ border: 1, padding: '0 10px' }}
+                        align="center">
+                        {index + 1}
+                      </TableCell>
+                      <TableCell sx={{ border: 1, padding: '0 10px' }}>
+                        {elem}
+                      </TableCell>
+                      <TableCell
+                        sx={{ border: 1, padding: '0 10px' }}
+                        align="center">
+                        <FormControl
+                          sx={{ m: 0 }}
+                          error={
+                            formik.touched[`${elem}`]?.condition
+                            && Boolean(formik.errors[`${elem}`]?.condition)
+                          }
+                          variant="standard">
+                          <RadioGroup
+                            row
+                            style={{ flexWrap: 'nowrap' }}
+                            name={`${elem}.condition`}
+                            value={formik.values[elem]?.condition}
+                            onChange={formik.handleChange}>
+                            <FormControlLabel
+                              sx={{ margin: '0 8px 0 0' }}
+                              value="yes"
+                              control={<Radio />}
+                              label="YES"
+                            />
+                            <FormControlLabel
+                              sx={{ margin: '0 8px 0 0' }}
+                              value="no"
+                              control={<Radio />}
+                              label="NO"
+                            />
+                            <FormControlLabel
+                              sx={{ margin: '0 8px 0 0' }}
+                              value="na"
+                              control={<Radio />}
+                              label="N/A"
+                            />
+                          </RadioGroup>
+                          <FormHelperText sx={{ margin: '0 0 0 5px' }}>
+                            {formik.touched[`${elem}`]?.condition
+                              && formik.errors[`${elem}`]?.condition}
+                          </FormHelperText>
+                        </FormControl>
+                      </TableCell>
+                      <TableCell sx={{ border: 1, padding: '0 10px' }}>
+                        <TextField
+                          fullWidth
+                          inputProps={{
+                            style: {
+                              padding: '5px',
+                            },
+                          }}
+                          name={`${elem}.comments`}
+                          value={formik.values[elem]?.comments}
                           onChange={formik.handleChange}
-                        >
-                          <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="yes" control={<Radio />} label="YES" />
-                          <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="no" control={<Radio />} label="NO" />
-                          <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="na" control={<Radio />} label="N/A" />
-                        </RadioGroup>
-                        <FormHelperText sx={{ margin: '0 0 0 5px' }}>{formik.touched[`${elem}`]?.condition && formik.errors[`${elem}`]?.condition}</FormHelperText>
-                      </FormControl>
-                    </TableCell>
-                    <TableCell sx={{ border: 1, padding: '0 10px' }}>
-                      <TextField
-                        fullWidth
-                        inputProps={{
-                          style: {
-                            padding: '5px',
-                          },
-                        }}
-                        name={`${elem}.comments`}
-                        value={formik.values[elem]?.comments}
-                        onChange={formik.handleChange}
-                        onBlur={(e) => formik.setFieldTouched(e.target.name)}
-                        error={formik.touched[`${elem}`]?.comments && Boolean(formik.errors[`${elem}`]?.comments)}
-                        helperText={formik.touched[`${elem}`]?.comments && formik.errors[`${elem}`]?.comments}
-                    />
-                    </TableCell>
-                  </TableRow>
-                ))}
+                          onBlur={(e) => formik.setFieldTouched(e.target.name)}
+                          error={
+                            formik.touched[`${elem}`]?.comments
+                            && Boolean(formik.errors[`${elem}`]?.comments)
+                          }
+                          helperText={
+                            formik.touched[`${elem}`]?.comments
+                            && formik.errors[`${elem}`]?.comments
+                          }
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </TableContainer>
@@ -243,23 +286,50 @@ function VechSafInspCheckForm({ location }) {
           component="form"
           sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
           mb={5}
-          align="left"
-        >
-          <p>Field service manager Name & Sign:  __________________</p>
+          align="left">
+          <p>Field service manager Name & Sign: __________________</p>
         </Box>
         <Box m={3} display="flex" justifyContent="center">
-          <Button sx={{ height: 80, width: 220, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="primary" value="submit">
+          <Button
+            sx={{ height: 80, width: 220, margin: 3 }}
+            size="large"
+            onClick={handleSubmit}
+            type="submit"
+            variant="contained"
+            color="primary"
+            value="submit">
             <h2>Submit</h2>
           </Button>
-          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="warning" value="save">
+          <Button
+            sx={{ height: 80, width: 250, margin: 3 }}
+            size="large"
+            onClick={handleSubmit}
+            type="submit"
+            variant="outlined"
+            color="primary"
+            value="save">
             <h2>Save</h2>
           </Button>
-          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="error" value="clear">
+          <Button
+            sx={{ height: 80, width: 250, margin: 3 }}
+            size="large"
+            onClick={handleSubmit}
+            type="submit"
+            variant="contained"
+            color="error"
+            value="clear">
             <h2>Clear</h2>
           </Button>
         </Box>
       </form>
-      <DialogForm open={open} statusBtn={statusBtn} handleClose={handleClose} handleConfirm={handleConfirm} handleConfirmSave={handleConfirmSave} handleConfirmClear={handleConfirmClear} />
+      <DialogForm
+        open={open}
+        statusBtn={statusBtn}
+        handleClose={handleClose}
+        handleConfirm={handleConfirm}
+        handleConfirmSave={handleConfirmSave}
+        handleConfirmClear={handleConfirmClear}
+      />
     </Container>
   );
 }

@@ -1,7 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from 'react';
-import { Button, TextField } from '@mui/material';
+import {
+  Button, IconButton, InputAdornment, TextField,
+} from '@mui/material';
 import { Box } from '@mui/system';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -49,6 +53,14 @@ function SignInForm() {
     setForm({ ...form, [event.target.name]: event.target.value });
   };
 
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
   return (
     <Box
       component="form"
@@ -78,13 +90,25 @@ function SignInForm() {
         required
         label="Password"
         name="password"
-        type="password"
+        type={showPassword ? 'text' : 'password'}
         variant="outlined"
         onChange={handleInput}
         value={form.password}
         sx={{
           marginBottom: '1rem',
           width: '100%',
+        }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}>
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          ),
         }}
       />
       <Button
