@@ -146,6 +146,7 @@ function ForkliftForm({ location }) {
         formData: values,
         status: 'submit',
       };
+      // console.log(JSON.stringify(obj, null, 2));
       dispatch(createReportAction(JSON.stringify(obj), navigate));
     },
   });
@@ -165,8 +166,9 @@ function ForkliftForm({ location }) {
           formik.setErrors(errors);
           const touchedFields = Object.keys(errors).reduce((touched, key) => {
             if (typeof errors[key] === 'object') {
+              touched[key] = {};
               for (const nested of Object.keys(errors[key])) {
-                touched[key] = { [nested]: true };
+                touched[key][nested] = true;
               }
             } else {
               touched[key] = true;
