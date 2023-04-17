@@ -7,11 +7,11 @@ import {
   MenuItem,
   Select,
 } from '@mui/material';
-
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import InspectorTable from './InspectorTable';
 
 function InspectorStat() {
   const [value1, setValue1] = useState('');
@@ -29,7 +29,7 @@ function InspectorStat() {
     console.log(inspector);
   };
 
-  const inspectors = [];
+  const inspectors = ['All Inspectors'];
 
   for (let i = 1; i <= 10; i += 1) {
     inspectors.push(`Inspector${i}`);
@@ -78,6 +78,7 @@ function InspectorStat() {
             ))}
           </Select>
         </FormControl>
+        <InspectorTable />
       </Box>
     </Box>
   );
