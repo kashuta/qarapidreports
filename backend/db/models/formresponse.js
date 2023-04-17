@@ -8,10 +8,6 @@ module.exports = (sequelize, DataTypes) => {
         as: 'inspector',
         foreignKey: 'inspectorId',
       });
-      this.belongsTo(models.Users, {
-        as: 'manager',
-        foreignKey: 'managerId',
-      });
       this.hasMany(models.FormResponseAnswer, {
         foreignKey: 'formResponseId',
       });
@@ -24,10 +20,12 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
     },
+    // из объекта ответа
     formId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    // из объекта ответа
     inspectorId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -36,14 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
-    managerId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'Users',
-        key: 'id',
-      },
-    },
+    // из объекта ответа
     status: {
       type: DataTypes.STRING,
       allowNull: false,

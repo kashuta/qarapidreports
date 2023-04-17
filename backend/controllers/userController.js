@@ -45,7 +45,7 @@ class UserController {
       });
       return res.json(userData);
     } catch (err) {
-      return next(ErrorHandler.BadRequestError(err));
+      return next(ErrorHandler.BadRequestError(err, res));
     }
   }
 
@@ -66,7 +66,7 @@ class UserController {
       await userService.activate(link);
       res.render('view');
     } catch (err) {
-      return next(ErrorHandler.BadRequestError(err));
+      return next(ErrorHandler.BadRequestError(err, res));
     }
   }
 

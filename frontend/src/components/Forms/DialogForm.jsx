@@ -35,7 +35,7 @@ function DialogForm({
           {
           statusBtn === 'submit' ? 'Are you sure you want to Submit'
             : statusBtn === 'save' ? 'Are you sure you want to Save?'
-              : statusBtn === 'validation-error' ? 'Please, fill all required fields correctly before submit' : 'Are you sure you want to Clear?'
+              : statusBtn === 'validation-error' ? 'Please, fill all required fields correctly before submitting' : 'Are you sure you want to Clear?'
           }
         </DialogContentText>
       </DialogContent>

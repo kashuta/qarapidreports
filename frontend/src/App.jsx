@@ -21,6 +21,11 @@ import MainPage from './components/MainPage/MainPage';
 import RegForm from './components/Auth/RegForm';
 import { refreshAccessToken } from './JWT/authActions';
 import Forms from './components/Forms/Forms';
+import FormTest from './components/Forms/FormTest';
+import MyReactPdf from './components/Forms/MyReactPdf';
+import TestPdf from './components/Forms/TestPdf';
+
+// import { setUserAction } from './components/Redux/user.action';
 
 function App() {
   const user = useSelector((state) => state.UserReducer.user);
@@ -60,12 +65,34 @@ function App() {
           <Route path="/" element={<MainPage />} />
           <Route element={<ProtectedRoleRoute role="inspector" />}>
             <Route path="/:formId" element={<Forms location={locations} />} />
+<<<<<<< HEAD
+=======
+            {/* <Route
+              path="/:formId"
+              element={<VechSafInspCheckForm location={locations} />}
+            />
+            <Route
+              path="/1"
+              element={<MonthSafCheck location={locations} />}
+            />
+            <Route
+              path="/3"
+              element={<ForkliftForm location={locations} />}
+            />
+            <Route
+              path="/4"
+              element={<HSEObservationForm location={locations} />}
+            /> */}
+>>>>>>> develop
             <Route path="/inspector/:userId" element={<InspectorProfile />} />
           </Route>
           <Route element={<ProtectedRoleRoute role="manager" />}>
             <Route path="/manager/:userId" element={<ManagerProfile />} />
             <Route path="/dashboard" element={<Dashboard />} />
           </Route>
+          <Route path="/FormTest" element={<FormTest />} />
+          <Route path="/MyReactPdf" element={<MyReactPdf />} />
+          <Route path="/TestPdf" element={<TestPdf />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Container>
