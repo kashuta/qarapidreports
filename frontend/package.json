@@ -15,7 +15,9 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "chart.js": "^4.2.1",
     "dayjs": "^1.11.7",
+    "faker": "^6.6.6",
     "formik": "^2.2.9",
     "html-to-pdfmake": "^2.4.16",
     "html2canvas": "^1.4.1",
@@ -24,6 +26,7 @@
     "pdf-parse": "^1.1.1",
     "pdfmake": "^0.2.7",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-pdf": "^6.2.2",
     "react-redux": "^8.0.5",
@@ -58,6 +61,7 @@
     ]
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "eslint": "^8.38.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.27.5",

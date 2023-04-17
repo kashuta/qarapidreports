@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable max-len */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-unused-vars */
@@ -202,7 +203,7 @@ function ForkliftForm({ location }) {
     setOpen(false);
   };
 
-  console.log('render');
+  // console.log('render');
 
   return (
     <Container>
