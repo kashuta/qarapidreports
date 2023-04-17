@@ -38,6 +38,18 @@ class FormController {
       return next(ErrorHandler.BadRequestError(err, res));
     }
   }
+
+  async formDataForDashboard(req, res, next) {
+    try {
+      const { dataS, dataE } = req.body;
+      if (!dataS || !dataE) {
+        return next(ErrorHandler.UnprocessableEntityError(backendErrors.INCORRECT_DATA_ERROR, res));
+      }
+      const formNames = await formService.getAllFormNames();
+    } catch (err) {
+      return next(ErrorHandler.BadRequestError(err, res));
+    }
+  }
 }
 
 module.exports = new FormController();

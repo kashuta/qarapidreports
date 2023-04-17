@@ -9,7 +9,13 @@ router.post('/form_data', formController.getFormData);
 router.get('/form_names', formController.getAllFormNames);
 
 // Запрос, который сохраняет данные в форм
-router.get('/form_save_data', formController.saveFormData);
+router.post('/form_save_data', formController.saveFormData);
+
+// Запрос, который возвращает данные в форм
+router.post('/get_form_data', formController.getFormData);
+
+// Запрос, который возвращает данные в форм
+router.post('/form_data_for_dashboard', formController.formDataForDashboard);
 
 // Запрос, который сохраняет фотографию
 router.post('/upload', multerMiddleware.single('avatar'), async (req, res) => {

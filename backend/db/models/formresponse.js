@@ -39,6 +39,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    // unsafe
+    // default: none
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
