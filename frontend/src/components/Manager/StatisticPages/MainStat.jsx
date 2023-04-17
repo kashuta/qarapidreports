@@ -5,23 +5,76 @@ import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Divider from '@mui/material/Divider';
 
 import { Bar, Doughnut } from 'react-chartjs-2';
+import { useDispatch } from 'react-redux';
 
 import { dataForDoughnut } from '../ChartsComponents/Doughnut';
 import { barData, barOptions } from '../ChartsComponents/Bar';
+import { HSEbarData, HSEbarOptions } from '../ChartsComponents/HSE.Bar';
+import authFetch from '../../../JWT/authFetch';
+import { refreshAccessToken } from '../../../JWT/authActions';
 
 function MainStat() {
   const [value1, setValue1] = useState([]);
   const [value2, setValue2] = useState([]);
+  const dispatch = useDispatch();
+
+  const fetchData = async () => {
+    try {
+      const data = { date: { from: value1, to: value2 } };
+      const response = await authFetch(
+        'http://localhost:3001/api/v2/form/upload',
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: data,
+        },
+      );
+      if (response.status === 401) {
+        const newAccessToken = await dispatch(refreshAccessToken());
+        if (!newAccessToken) {
+          return;
+          // Handle error, for example, redirect to the login page or show an error message
+        }
+        // Retry the request with the new access token
+        fetchData();
+      } else if (response.ok) {
+        const result = await response.json();
+        console.log(result);
+        // Process the data
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log({ from: value1, to: value2 });
+    fetchData();
+    console.log({ date: { from: value1, to: value2 } });
   };
   return (
-    <>
-      <Box>
+    <Box
+      sx={{
+        width: 1,
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+        gap: '20px',
+      }}>
+      <Box
+        sx={{
+          width: 1,
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column',
+          gap: '20px',
+        }}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={['DatePicker', 'DatePicker']}>
             <DemoItem label="Date Range">
@@ -38,29 +91,47 @@ function MainStat() {
                 onChange={(newValue) => setValue2(newValue)}
               />
             </DemoItem>
-            <Button
-              onClick={handleSubmit}
-              variant="contained"
-              type="submit"
-              sx={{
-                width: '100%',
-              }}>
-              Submit
-            </Button>
           </DemoContainer>
+          <Button onClick={handleSubmit} variant="contained" type="submit">
+            Submit
+          </Button>
         </LocalizationProvider>
       </Box>
-      <Box>
+      <Box
+        sx={{
+          width: 1,
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          gap: '30px',
+        }}>
         <h2>Total Reports: </h2>
+        <Divider orientation="vertical" flexItem />
         <h2>HSE Observation Unsafe: </h2>
+        <Divider orientation="vertical" flexItem />
         <h2>HSE Observation Safe: </h2>
       </Box>
-
-      <Box sx={{ width: 600 }}>
+      <Divider />
+      <Box sx={{ width: '800px' }}>
         <Bar options={barOptions} data={barData} />
-        <Doughnut data={dataForDoughnut} width="300px" />
       </Box>
-    </>
+      <Divider />
+      <Box
+        sx={{
+          width: '50%',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          gap: '10px',
+        }}>
+        <Doughnut data={dataForDoughnut} />
+        <Bar options={HSEbarOptions} data={HSEbarData} />
+      </Box>
+      {/* <Divider />
+      <Box sx={{ mt: 5 }}>
+        <Bar options={HSEbarOptions} data={HSEbarData} />
+      </Box> */}
+    </Box>
   );
 }
 
