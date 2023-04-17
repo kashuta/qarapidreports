@@ -203,7 +203,7 @@ function ForkliftForm({ location }) {
     setOpen(false);
   };
 
-  console.log('render');
+  // console.log('render');
 
   return (
     <Container>
