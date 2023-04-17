@@ -1,8 +1,18 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from 'react';
-import { Button, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import {
+  Button,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from '@mui/material';
 import { Box } from '@mui/system';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -40,6 +50,14 @@ function RegForm() {
 
   const handleInput = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
+  };
+
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
   };
 
   return (
@@ -82,13 +100,25 @@ function RegForm() {
         required
         label="Password"
         name="password"
-        type="password"
+        type={showPassword ? 'text' : 'password'}
         variant="outlined"
         onChange={handleInput}
         value={form.password}
         sx={{
           marginBottom: '1rem',
           width: '100%',
+        }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}>
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          ),
         }}
       />
       <InputLabel id="demo-simple-select-label" required>
@@ -116,7 +146,7 @@ function RegForm() {
         sx={{
           width: '100%',
         }}>
-        Login
+        SignUp
       </Button>
     </Box>
   );

@@ -1,4 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
+import { Typography } from '@mui/material';
 
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -9,13 +10,10 @@ function ManagerNav() {
   return (
     <>
       <NavLink className={styles.link} to="/">
-        Home
-      </NavLink>
-      <NavLink className={styles.link} to="/dashboard">
-        Dashboard
+        <Typography>MAIN</Typography>
       </NavLink>
       <NavLink className={styles.link} to={`/manager/${user.id}`}>
-        Profile
+        <Typography>PROFILE</Typography>
       </NavLink>
     </>
   );
