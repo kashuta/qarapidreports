@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import TabPanel from './StatisticPages/Tabs';
 import {
   getInspectorsNamesAction,
+  getLocationsAction,
   setFormsNameAction,
 } from '../../Redux/report.action';
 
@@ -14,6 +15,7 @@ function Dashboard() {
   useEffect(() => {
     dispatch(setFormsNameAction(navigate));
     dispatch(getInspectorsNamesAction(navigate));
+    dispatch(getLocationsAction(navigate));
   }, []);
   return (
     <Container maxWidth="xl">
