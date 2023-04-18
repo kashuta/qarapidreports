@@ -1,6 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { Typography } from '@mui/material';
 import styles from './Navbar.module.css';
 
 function InspectorNav() {
@@ -8,10 +9,10 @@ function InspectorNav() {
   return (
     <>
       <NavLink className={styles.link} to="/">
-        Home
+        <Typography>MAIN</Typography>
       </NavLink>
       <NavLink className={styles.link} to={`/inspector/${user.id}`}>
-        Profile
+        <Typography>PROFILE</Typography>
       </NavLink>
     </>
   );

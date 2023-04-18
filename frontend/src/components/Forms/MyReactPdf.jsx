@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { Container } from '@mui/material';
 import Document0024 from '../Documents/Document0024';
@@ -8,21 +8,42 @@ import Document0176 from '../Documents/Document0176';
 import Document0320 from '../Documents/Document0320';
 
 function DownloadPDFButton() {
+  const [documentReady, setDocumentReady] = useState(false);
+
+  const handleClick = () => {
+    setDocumentReady(true);
+  };
   return (
     <Container>
       <Container>
-        <PDFDownloadLink
-          document={<Document0024 />}
-          fileName="0024.pdf"
-          style={{
-            textDecoration: 'none',
-            padding: '10px',
-            color: '#4a4a4a',
-            backgroundColor: '#f2f2f2',
-            border: '1px solid #4a4a4a',
-          }}>
-          {({ loading }) => (loading ? 'Загрузка документа...' : 'download 024')}
-        </PDFDownloadLink>
+        {documentReady ? (
+          <Container>
+            <PDFDownloadLink
+              document={<Document0024 />}
+              fileName="0024.pdf"
+              style={{
+                textDecoration: 'none',
+                padding: '10px',
+                color: '#4a4a4a',
+                backgroundColor: '#f2f2f2',
+                border: '1px solid #4a4a4a',
+              }}>
+              {({ loading }) => (loading ? 'Загрузка' : 'download 024')}
+            </PDFDownloadLink>
+          </Container>
+        ) : (
+          <button
+            onClick={handleClick}
+            style={{
+              textDecoration: 'none',
+              padding: '10px',
+              color: '#4a4a4a',
+              backgroundColor: '#f2f2f2',
+              border: '1px solid #4a4a4a',
+            }}>
+            download 024
+          </button>
+        )}
       </Container>
 
       <br />

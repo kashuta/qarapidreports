@@ -44,8 +44,16 @@ class FormController {
       const { from, to } = req.body;
       const date = { from, to };
       const obj = await formService.formDataForDashboard(date);
-      // return res.json(responseObject);
       res.status(200).json({ ...obj });
+    } catch (err) {
+      return next(ErrorHandler.BadRequestError(err, res));
+    }
+  }
+
+  async inspectorsNamesData(req, res, next) {
+    try {
+      const responseObject = await formService.getAllInspectorsNames();
+      return res.json(responseObject);
     } catch (err) {
       return next(ErrorHandler.BadRequestError(err, res));
     }

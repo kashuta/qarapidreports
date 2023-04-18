@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import { Avatar, Button } from '@mui/material';
+import { Avatar, Button, Typography } from '@mui/material';
 import { setUserAction } from '../../Redux/user.action';
 import InspectorNav from './InspectorNav';
 import ManagerNav from './ManagerNav';
@@ -37,7 +37,7 @@ export default function Navbar() {
       sx={{
         maxWidth: '100%',
       }}>
-      <AppBar position="static">
+      <AppBar position="static" color="primary">
         <Toolbar
           sx={{
             display: 'flex',
@@ -53,7 +53,7 @@ export default function Navbar() {
           {user?.role === 'admin' && <AdminNav />}
           {user && (
             <Button onClick={handleSignout} color="inherit">
-              Logout
+              <Typography>LOGOUT</Typography>
             </Button>
           )}
           {avatar && <Avatar alt="ava" src={`${avatar?.path}`} />}

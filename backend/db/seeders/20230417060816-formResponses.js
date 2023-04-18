@@ -5,9 +5,9 @@ function getRandomDate(start, end) {
 }
 
 function getRandomInspectorId() {
-  const inspectorIds = [3, 4, 5, 20, 25, 30];
-  // return inspectorIds[Math.floor(Math.random() * inspectorIds.length)];
-  return Math.ceil(Math.random() * 35);
+  const inspectorIds = [3, 4, 5];
+  return inspectorIds[Math.floor(Math.random() * inspectorIds.length)];
+  // return Math.ceil(Math.random() * 35);
 }
 
 module.exports = {

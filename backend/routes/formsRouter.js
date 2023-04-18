@@ -9,6 +9,8 @@ router.get('/form_names', formController.getAllFormNames);
 
 // Запрос, который сохраняет данные в форм
 router.post('/form_save_data', formController.saveFormData);
+// Запрос на имена инспекторов
+router.get('/inspectors_names_data', formController.inspectorsNamesData);
 
 // Запрос, который возвращает данные в форм
 router.post('/get_form_data', formController.getFormData);

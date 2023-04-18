@@ -51,7 +51,9 @@ class FormService {
   async saveFormData(userId, formId, status, formData) {
     try {
       const created = await FormResponse.create({
-        formId, inspectorId: userId, status,
+        formId,
+        inspectorId: userId,
+        status,
       });
       if (!created) {
         throw new Error(backendErrors.DATABASE_ERROR);
@@ -101,6 +103,15 @@ class FormService {
         }, {}),
       }));
       return { allInspectorNames, allReportCount, info };
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  async getAllInspectorsNames() {
+    try {
+      const inspectorsNames = await Users.findAll({ where: { roleId: 3 } });
+      return inspectorsNames;
     } catch (err) {
       throw new Error(err.message);
     }
