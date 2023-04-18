@@ -55,9 +55,9 @@ function BasicTable({ inspector }) {
               <TableCell component="th" scope="row">
                 <b>{row.nameForm}</b>
               </TableCell>
-              <TableCell align="right">{row.inspector}</TableCell>
-              <TableCell align="right">{row.location}</TableCell>
-              <TableCell align="right">{row.date}</TableCell>
+              <TableCell align="right">{inspector}</TableCell>
+              <TableCell align="right">{inspector}</TableCell>
+              <TableCell align="right">{inspector}</TableCell>
               <TableCell align="right"><button>download</button></TableCell>
               <TableCell align="right"><button>open</button></TableCell>
             </TableRow>

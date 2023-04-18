@@ -41,7 +41,7 @@ function FormTest() {
   const [htmlContent, setHtmlContent] = useState('');
 
   useEffect(() => {
-    fetch('/inspection.html')
+    ('/inspection.html')
       .then((response) => response.text())
       .then((text) => setHtmlContent(text));
   }, []);
