@@ -1,25 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { Box, Button } from '@mui/material';
 import WebcamCapture from '../WebCam/WebCam';
 import { setAvatarAction } from '../../Redux/file.action';
 import { refreshAccessToken } from '../../JWT/authActions';
 import authFetch from '../../JWT/authFetch';
+import PageNotFound from '../ProtectedRoute/PageNotFound';
 
 function InspectorProfile() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [showWebcam, setShowWebcam] = useState(false);
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.UserReducer.user);
+  const { userId } = useParams();
 
   const fetchData = async () => {
     try {
       const data = new FormData();
       data.append('avatar', selectedFile);
-      const response = await authFetch('http://localhost:3001/api/v3/form/upload', {
-        method: 'POST',
-        credentials: 'include',
-        body: data,
-      });
+      const response = await authFetch(
+        'http://localhost:3001/api/v2/form/upload',
+        {
+          method: 'POST',
+          credentials: 'include',
+          body: data,
+        },
+      );
       if (response.status === 401) {
         const newAccessToken = await dispatch(refreshAccessToken());
         if (!newAccessToken) {
@@ -41,7 +48,9 @@ function InspectorProfile() {
   useEffect(() => {
     fetchData();
   }, []); // Add dependencies if needed
-
+  if (+user.id !== +userId) {
+    return <PageNotFound />;
+  }
   return (
     <Box
       sx={{

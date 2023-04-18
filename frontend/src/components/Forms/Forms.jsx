@@ -7,7 +7,6 @@ import HSEObservationForm from './HSEObservationForm';
 
 function Forms({ location }) {
   const { formId } = useParams();
-  console.log(formId);
   return (
     <>
       {formId === '1' && <MonthSafCheck location={location} />}

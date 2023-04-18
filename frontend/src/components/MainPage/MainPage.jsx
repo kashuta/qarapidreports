@@ -7,7 +7,10 @@ import NoUserPage from './NoUserPage';
 
 function MainPage() {
   const user = useSelector((state) => state.UserReducer.user);
-
+  const loader = useSelector((state) => state.UserReducer.loader);
+  if (!loader) {
+    return <h2 style={{ margin: 300 }}>Loading...</h2>;
+  }
   if (user?.role === 'inspector') {
     return <InspectorMain />;
   }

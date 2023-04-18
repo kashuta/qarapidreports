@@ -4,7 +4,7 @@ const { ErrorHandler, backendErrors } = require('../exceptions/index');
 class FormController {
   async getFormData(req, res, next) {
     try {
-      const { formId } = req.body;
+      const { formId } = req.params;
       if (!formId) {
         return next(ErrorHandler.BadRequestError(backendErrors.VALIDATION_ERROR, res));
       }
@@ -33,7 +33,7 @@ class FormController {
         return next(ErrorHandler.UnprocessableEntityError(backendErrors.INCORRECT_DATA_ERROR, res));
       }
       await formService.saveFormData(userId, formId, status, formData);
-      return res.status(200).json({ message: 'Form saved successfully' });
+      return res.status(200).json({ message: 'Form submitted successfully' });
     } catch (err) {
       return next(ErrorHandler.BadRequestError(err, res));
     }
@@ -41,11 +41,11 @@ class FormController {
 
   async formDataForDashboard(req, res, next) {
     try {
-      const { dataS, dataE } = req.body;
-      if (!dataS || !dataE) {
-        return next(ErrorHandler.UnprocessableEntityError(backendErrors.INCORRECT_DATA_ERROR, res));
-      }
-      const formNames = await formService.getAllFormNames();
+      const { from, to } = req.body;
+      const date = { from, to };
+      const obj = await formService.formDataForDashboard(date);
+      // return res.json(responseObject);
+      res.status(200).json({ ...obj });
     } catch (err) {
       return next(ErrorHandler.BadRequestError(err, res));
     }

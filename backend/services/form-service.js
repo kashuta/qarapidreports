@@ -1,5 +1,9 @@
+/* eslint-disable no-unused-vars */
+const moment = require('moment');
+const Sequelize = require('sequelize');
 const {
   Form, FormSection, FormField, FormResponse, FormResponseAnswer,
+  Users,
 } = require('../db/models');
 const { backendErrors } = require('../exceptions');
 
@@ -17,6 +21,7 @@ class FormService {
 
       const responseObject = {
         formName: form.name,
+        formId: form.id,
         columnNames: formSections.map((el) => ({
           title: el.title,
           order: el.order,
@@ -58,6 +63,44 @@ class FormService {
       if (!createdAnswer) {
         throw new Error(backendErrors.DATABASE_ERROR);
       }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  async formDataForDashboard(date) {
+    try {
+      if (!date || !date.from || !date.to || !moment(date.from).isBefore(date.to)) {
+        // проверка, что дата date.from находится до date.to (с учетом указанной единицы измерения);
+        throw new Error(backendErrors.INCORRECT_DATA_ERROR);
+      }
+      const allFormNames = await this.getAllFormNames();
+      const qwer = await Users.findAll({
+        where: { roleId: 3 },
+        include: [{
+          model: FormResponse,
+          where: {
+            createdAt: {
+              [Sequelize.Op.between]: [date.from, date.to],
+            },
+          },
+          attributes: ['id'],
+          include: [{ model: Form, attributes: ['name'] }],
+        }],
+        attributes: ['userName'],
+      });
+      const r = qwer.map((el) => el.get({ plain: true })).map((el) => ({ userName: el.userName, FormName: el.FormResponses.map((el1) => el1.Form.name) }));
+      const allInspectorNames = r.map((el) => el.userName);
+      const allReportCount = r.reduce((prev, curr) => prev + curr.FormName.length, 0);
+      const info = r.map((el) => ({
+        inspectorName: el.userName,
+        allReportCountUser: el.FormName.length,
+        reports: el.FormName.reduce((acc, curr) => {
+          acc[curr] = (acc[curr] || 0) + 1;
+          return acc;
+        }, {}),
+      }));
+      return { allInspectorNames, allReportCount, info };
     } catch (err) {
       throw new Error(err.message);
     }
