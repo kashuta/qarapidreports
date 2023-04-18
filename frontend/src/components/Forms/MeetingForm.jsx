@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-param-reassign */
 /* eslint-disable max-len */
 /* eslint-disable no-restricted-syntax */
@@ -7,7 +8,7 @@
 /* eslint-disable react/prop-types */
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  FieldArray, Form, Formik, FormikProvider, useFormik,
+  FieldArray, Form, Formik,
 } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
@@ -25,6 +26,8 @@ import {
   Container,
   MenuItem,
   IconButton,
+  Grid,
+  Item,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -32,7 +35,9 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import styles from './Form.module.css';
 import DialogForm from './DialogForm';
-import { createReportAction, setReportFieldsAction } from '../../Redux/report.action';
+import { createReportAction } from '../../Redux/report.action';
+import FileUpload from '../FileUpload/FileUpload';
+import { setImageNamesAction, setImagesAction } from '../../Redux/file.action';
 
 function MeetingForm({ location }) {
   const [open, setOpen] = useState(false);
@@ -41,6 +46,9 @@ function MeetingForm({ location }) {
   const dispatch = useDispatch();
   const formId = useLocation().pathname.split('/').at(-1);
   const user = useSelector((state) => state.UserReducer.user);
+  const [singleFile, setSingleFile] = useState([]);
+  const [fileList, setFileList] = useState([]);
+  const files = useSelector((state) => state.FileReducer.images);
 
   const validationSchema = yup.object().shape({
     country: yup
@@ -144,6 +152,10 @@ function MeetingForm({ location }) {
   const handleConfirmClear = (formik) => {
     setOpen(false);
     formik.handleReset();
+    setFileList([]);
+    setSingleFile([]);
+    dispatch(setImageNamesAction([]));
+    dispatch(setImagesAction([]));
   };
 
   const handleConfirmSave = () => {
@@ -154,6 +166,11 @@ function MeetingForm({ location }) {
     setOpen(false);
   };
 
+  const getFormData = (object) => Object.keys(object).reduce((formData, key) => {
+    formData.append(key, object[key]);
+    return formData;
+  }, new FormData());
+
   return (
     <Container>
       <Formik
@@ -162,64 +179,78 @@ function MeetingForm({ location }) {
         validateOnChange
         validateOnBlur
         onSubmit={(values) => {
+          const imgNames = fileList.map((el) => el.name).join(', ');
           const obj = {
             formId,
             userId: user.id,
-            formData: values,
+            formData: JSON.stringify(values),
             status: 'submit',
+            images: imgNames,
           };
           console.log(JSON.stringify(obj, null, 2));
-          // dispatch(createReportAction(JSON.stringify(obj), navigate));
+          const data = getFormData(obj);
+          console.log(files.length);
+          if (files.length > 0) {
+            data.append('file', files[0]);
+          }
+          for (const entry of data.entries()) {
+            console.log(entry);
+          }
+          dispatch(createReportAction(data, navigate));
         }}
         >
         {(formik) => (
           <>
             <Form>
               <h1 className={`${styles.form_h1} ${styles.text_uppercase} ${styles.text_center}`}>TOOL BOX SAFETY MEETING FORM</h1>
-              <Box
-                sx={{ '& .MuiTextField-root': { m: 1, width: '30ch' } }}
-                mb={5}
-                align="center"
-        >
-                <TextField
-                  id="country"
-                  name="country"
-                  label="Country"
-                  value={formik.values.country}
-                  onChange={formik.handleChange}
-                  onBlur={(e) => formik.setFieldTouched(e.target.name)}
-                  error={formik.touched.country && Boolean(formik.errors.country)}
-                  helperText={formik.touched.country && formik.errors.country}
-          />
+              <Grid container spacing={1} mb={5}>
+                <Grid item xs={12} sm={6} md={4}>
+                  <TextField
+                    fullWidth
+                    id="country"
+                    name="country"
+                    label="Country"
+                    value={formik.values.country}
+                    onChange={formik.handleChange}
+                    onBlur={(e) => formik.setFieldTouched(e.target.name)}
+                    error={formik.touched.country && Boolean(formik.errors.country)}
+                    helperText={formik.touched.country && formik.errors.country}
+                    />
+                </Grid>
 
-                <DatePicker
-                  label="Date"
-                  name="date"
-                  value={formik.values.date}
-                  onChange={((value) => (formik.setValues({ ...formik.values, date: value })))}
-          />
+                <Grid item xs={12} sm={6} md={4}>
+                  <DatePicker
+                    label="Date"
+                    name="date"
+                    value={formik.values.date}
+                    onChange={((value) => (formik.setValues({ ...formik.values, date: value })))}
+                    sx={{ width: '100%' }}
+                />
+                </Grid>
 
-                <TextField
-                  select
-                  align="left"
-                  id="location"
-                  name="location"
-                  label="Location"
-                  value={formik.values.location}
-                  onChange={formik.handleChange}
-                  onBlur={(e) => formik.setFieldTouched(e.target.name)}
-                  error={formik.touched.location && Boolean(formik.errors.location)}
-                  helperText={formik.touched.location && formik.errors.location}
-          >
-                  {location.map((el, index) => (
-                    <MenuItem key={index + 1} value={el}>{el}</MenuItem>
-                  ))}
-                </TextField>
-
-              </Box>
+                <Grid item xs={12} sm={6} md={4}>
+                  <TextField
+                    fullWidth
+                    select
+                    align="left"
+                    id="location"
+                    name="location"
+                    label="Location"
+                    value={formik.values.location}
+                    onChange={formik.handleChange}
+                    onBlur={(e) => formik.setFieldTouched(e.target.name)}
+                    error={formik.touched.location && Boolean(formik.errors.location)}
+                    helperText={formik.touched.location && formik.errors.location}
+                  >
+                    {location.map((el, index) => (
+                      <MenuItem key={index + 1} value={el}>{el}</MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
+              </Grid>
 
               <Box mb={5}>
-                <p className={styles.text_center}>Description of the job</p>
+                <h4 className={`${styles.text_center} ${styles.form_h4}`} style={{ background: '#bfbfbf', marginBottom: '24px' }}>Description of the job</h4>
                 <TextField
                   fullWidth
                   multiline
@@ -232,11 +263,11 @@ function MeetingForm({ location }) {
                   onBlur={(e) => formik.setFieldTouched(e.target.name)}
                   error={formik.touched.description && Boolean(formik.errors.description)}
                   helperText={formik.touched.description && formik.errors.description}
-          />
+                />
               </Box>
 
               <Box mb={5}>
-                <p className={styles.text_center}>HSE points discussed</p>
+                <h4 className={`${styles.text_center} ${styles.form_h4}`} style={{ background: '#bfbfbf', marginBottom: '24px' }}>HSE points discussed</h4>
                 <TextField
                   fullWidth
                   multiline
@@ -249,57 +280,72 @@ function MeetingForm({ location }) {
                   onBlur={(e) => formik.setFieldTouched(e.target.name)}
                   error={formik.touched.points && Boolean(formik.errors.points)}
                   helperText={formik.touched.points && formik.errors.points}
-          />
+                />
 
               </Box>
 
-              <Box
-                sx={{ '& .MuiTextField-root': { m: 1, width: '30ch' } }}
-                mb={5}
-                align="center"
-        >
-                <p className={styles.text_center}>Supervisor</p>
-                <TextField
-                  id="supervisor.name"
-                  name="supervisor.name"
-                  label="First Name / Last Name"
-                  value={formik.values.supervisor.name}
-                  onChange={formik.handleChange}
-                  onBlur={(e) => formik.setFieldTouched(e.target.name)}
-                  error={formik.touched.supervisor?.name && Boolean(formik.errors.supervisor?.name)}
-                  helperText={formik.touched.supervisor?.name && formik.errors.supervisor?.name}
-          />
-                <TextField
-                  id="supervisor.company"
-                  name="supervisor.company"
-                  label="Company"
-                  value={formik.values.supervisor.company}
-                  onChange={formik.handleChange}
-                  onBlur={(e) => formik.setFieldTouched(e.target.name)}
-                  error={formik.touched.supervisor?.company && Boolean(formik.errors.supervisor?.company)}
-                  helperText={formik.touched.supervisor?.company && formik.errors.supervisor?.company}
-          />
-                <TextField
-                  id="supervisor.position"
-                  name="supervisor.position"
-                  label="Position"
-                  value={formik.values.supervisor.position}
-                  onChange={formik.handleChange}
-                  onBlur={(e) => formik.setFieldTouched(e.target.name)}
-                  error={formik.touched.supervisor?.position && Boolean(formik.errors.supervisor?.position)}
-                  helperText={formik.touched.supervisor?.position && formik.errors.supervisor?.position}
-          />
-              </Box>
+              <FileUpload multiple name="images" singleFile={singleFile} setSingleFile={setSingleFile} fileList={fileList} setFileList={setFileList} />
 
               <Box
                 mb={5}
                 align="center"
-        >
-                <p className={styles.text_center}>Staff who participated in the meeting</p>
+              >
+                <h4 className={`${styles.text_center} ${styles.form_h4}`} style={{ background: '#bfbfbf', marginBottom: '24px' }}>Supervisor</h4>
+
+                <Grid container spacing={1} mb={5}>
+                  <Grid item xs={12} sm={6} md={4}>
+                    <TextField
+                      fullWidth
+                      id="supervisor.name"
+                      name="supervisor.name"
+                      label="First Name / Last Name"
+                      value={formik.values.supervisor.name}
+                      onChange={formik.handleChange}
+                      onBlur={(e) => formik.setFieldTouched(e.target.name)}
+                      error={formik.touched.supervisor?.name && Boolean(formik.errors.supervisor?.name)}
+                      helperText={formik.touched.supervisor?.name && formik.errors.supervisor?.name}
+                  />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4}>
+                    <TextField
+                      fullWidth
+                      id="supervisor.company"
+                      name="supervisor.company"
+                      label="Company"
+                      value={formik.values.supervisor.company}
+                      onChange={formik.handleChange}
+                      onBlur={(e) => formik.setFieldTouched(e.target.name)}
+                      error={formik.touched.supervisor?.company && Boolean(formik.errors.supervisor?.company)}
+                      helperText={formik.touched.supervisor?.company && formik.errors.supervisor?.company}
+                  />
+
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={4}>
+                    <TextField
+                      fullWidth
+                      id="supervisor.position"
+                      name="supervisor.position"
+                      label="Position"
+                      value={formik.values.supervisor.position}
+                      onChange={formik.handleChange}
+                      onBlur={(e) => formik.setFieldTouched(e.target.name)}
+                      error={formik.touched.supervisor?.position && Boolean(formik.errors.supervisor?.position)}
+                      helperText={formik.touched.supervisor?.position && formik.errors.supervisor?.position}
+                  />
+                  </Grid>
+                </Grid>
+              </Box>
+
+              <Box
+                mb={5}
+                align="center"
+              >
+                <h4 className={`${styles.text_center} ${styles.form_h4}`} style={{ background: '#bfbfbf', border: '2px solid black', borderBottom: 0 }}>Staff who participated in the meeting</h4>
                 <FieldArray name="participants">
                   {(arrayHelpers) => (
                     <>
-                      <TableContainer component={Paper} sx={{ border: 1, alignContent: 'center' }}>
+                      <TableContainer component={Paper} sx={{ border: 1, alignContent: 'center', boxSizing: 'border-box' }}>
                         <Table>
                           <TableHead>
                             <TableRow sx={{ background: '#bfbfbf' }}>
@@ -407,15 +453,53 @@ function MeetingForm({ location }) {
                 </FieldArray>
               </Box>
 
-              <Box m={3} display="flex" justifyContent="center">
-                <Button sx={{ height: 80, width: 220, margin: 3 }} size="large" onClick={(e) => handleSubmit(e, formik)} type="submit" variant="contained" color="primary" value="submit">
+              <Box m="30px 0 30px 0" display="flex" justifyContent="center">
+                <Button
+                  sx={{
+                    height: 80, width: 250, margin: 3, ml: 0, mr: 1,
+                  }}
+                  size="large"
+                  onClick={(e) => handleSubmit(e, formik)}
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  value="submit">
                   <h2>Submit</h2>
                 </Button>
-                <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={(e) => handleSubmit(e, formik)} type="submit" variant="contained" color="warning" value="save">
+                <Button
+                  sx={{
+                    height: 80, width: 250, margin: 1, mb: 3, mt: 3,
+                  }}
+                  size="large"
+                  onClick={(e) => handleSubmit(e, formik)}
+                  type="submit"
+                  variant="outlined"
+                  color="primary"
+                  value="save">
                   <h2>Save</h2>
                 </Button>
-                <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={(e) => handleSubmit(e, formik)} type="submit" variant="contained" color="error" value="clear">
+                <Button
+                  sx={{
+                    height: 80, width: 250, margin: 1, mb: 3, mt: 3,
+                  }}
+                  size="large"
+                  onClick={(e) => handleSubmit(e, formik)}
+                  type="submit"
+                  variant="contained"
+                  color="error"
+                  value="clear">
                   <h2>Clear</h2>
+                </Button>
+                <Button
+                  sx={{
+                    height: 80, width: 250, margin: 3, ml: 1, mr: 0,
+                  }}
+                  size="large"
+                  type="button"
+                  variant="outlined"
+                  color="primary"
+                  value="print">
+                  <h2>Print</h2>
                 </Button>
               </Box>
             </Form>
