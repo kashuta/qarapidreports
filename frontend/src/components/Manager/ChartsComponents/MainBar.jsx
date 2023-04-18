@@ -1,5 +1,6 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
+import { faker } from '@faker-js/faker';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,22 +13,22 @@ import {
 import { useSelector } from 'react-redux';
 
 function MainBar() {
-  const totalForms = useSelector(
-    (state) => state.ReportReducer.formResponseData,
-  );
-  const MONTHLYSAFETYCHECKLIST = totalForms.filter(
-    (form) => form.formId === 1,
-  ).length;
-  const VEHICLESAFETYINSPECTION = totalForms.filter(
-    (form) => form.formId === 2,
-  ).length;
-  const FORKLIFTSAFETYINSPECTION = totalForms.filter(
-    (form) => form.formId === 3,
-  ).length;
-  const HSEOBSERVATION = totalForms.filter((form) => form.formId === 4).length;
-  const TOOLBOXSAFETYMEETINGFORM = totalForms.filter(
-    (form) => form.formId === 5,
-  ).length;
+  // const totalForms = useSelector(
+  //   (state) => state.ReportReducer.formResponseData,
+  // );
+  // const MONTHLYSAFETYCHECKLIST = totalForms.filter(
+  //   (form) => form.formId === 1,
+  // ).length;
+  // const VEHICLESAFETYINSPECTION = totalForms.filter(
+  //   (form) => form.formId === 2,
+  // ).length;
+  // const FORKLIFTSAFETYINSPECTION = totalForms.filter(
+  //   (form) => form.formId === 3,
+  // ).length;
+  // const HSEOBSERVATION = totalForms.filter((form) => form.formId === 4).length;
+  // const TOOLBOXSAFETYMEETINGFORM = totalForms.filter(
+  //   (form) => form.formId === 5,
+  // ).length;
   const inspectorsNames = useSelector(
     (state) => state.ReportReducer.inspectorsNames,
   );
@@ -72,27 +73,27 @@ function MainBar() {
     datasets: [
       {
         label: 'MONTHLYSAFETYCHECKLIST',
-        data: labels.map(() => MONTHLYSAFETYCHECKLIST),
+        data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
         backgroundColor: 'rgb(255, 99, 132)',
       },
       {
         label: 'VEHICLESAFETYINSPECTION',
-        data: labels.map(() => VEHICLESAFETYINSPECTION),
+        data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
         backgroundColor: 'rgb(75, 192, 192)',
       },
       {
         label: 'FORKLIFTSAFETYINSPECTION',
-        data: labels.map(() => FORKLIFTSAFETYINSPECTION),
+        data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
         backgroundColor: 'rgb(255, 206, 86)',
       },
       {
         label: 'HSEOBSERVATION',
-        data: labels.map(() => HSEOBSERVATION),
+        data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
         backgroundColor: 'rgb(53, 162, 235)',
       },
       {
         label: 'TOOLBOXSAFETYMEETINGFORM',
-        data: labels.map(() => TOOLBOXSAFETYMEETINGFORM),
+        data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
         backgroundColor: 'rgb(153, 102, 255)',
       },
     ],

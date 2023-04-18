@@ -3,6 +3,7 @@ import {
   SET_REPORT_FIELDS,
   GET_INSPECTORS_NAMES,
   GET_FORMRESPONSE_DATA,
+  GET_LOCATIONS,
 } from './type.redux';
 
 const initialState = {
@@ -10,6 +11,7 @@ const initialState = {
   reportFields: [],
   inspectorsNames: [],
   formResponseData: [],
+  locations: [],
 };
 
 // eslint-disable-next-line default-param-last
@@ -25,6 +27,8 @@ const ReportReducer = (state = initialState, action) => {
       return { ...state, inspectorsNames: payload };
     case GET_FORMRESPONSE_DATA:
       return { ...state, formResponseData: payload };
+    case GET_LOCATIONS:
+      return { ...state, locations: payload };
 
     default:
       return state;

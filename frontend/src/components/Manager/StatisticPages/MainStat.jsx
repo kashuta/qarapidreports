@@ -30,8 +30,13 @@ function MainStat() {
   const totalForms = useSelector(
     (state) => state.ReportReducer.formResponseData,
   );
-  const totalFormsCount = totalForms.length;
+  const locations = useSelector(
+    (state) => state.ReportReducer.locations,
+  );
+  console.log(locations);
+  const allRepCount = totalForms.allReportCount;
 
+  console.log(totalForms);
   return (
     <Box
       sx={{
@@ -81,8 +86,7 @@ function MainStat() {
         }}>
         <h2>
           Total Reports:
-          {totalFormsCount}
-          {' '}
+          {allRepCount}
         </h2>
         <Divider orientation="vertical" flexItem />
         <h2>HSE Observation Unsafe: </h2>
