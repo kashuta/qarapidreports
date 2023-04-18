@@ -15,20 +15,8 @@ module.exports = {
           key: 'id',
         },
       },
-      formFieldId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'FormFields',
-          key: 'id',
-        },
-      },
       answer: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      comment: {
-        type: DataTypes.STRING,
+        type: DataTypes.JSON,
         allowNull: true,
       },
       createdAt: {

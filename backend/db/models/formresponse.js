@@ -5,15 +5,14 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // Связи между моделями
       this.belongsTo(models.Users, {
-        as: 'inspector',
+        // as: 'inspector',
         foreignKey: 'inspectorId',
-      });
-      this.belongsTo(models.Users, {
-        as: 'manager',
-        foreignKey: 'managerId',
       });
       this.hasMany(models.FormResponseAnswer, {
         foreignKey: 'formResponseId',
+      });
+      this.belongsTo(models.Form, {
+        foreignKey: 'formId',
       });
     }
   }
@@ -36,17 +35,18 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
-    managerId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'Users',
-        key: 'id',
-      },
-    },
     status: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    isSafe: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+      allowNull: false,
+    },
+    images: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     createdAt: {
       type: DataTypes.DATE,

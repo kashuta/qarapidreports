@@ -23,17 +23,18 @@ module.exports = {
           key: 'id',
         },
       },
-      managerId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'Users',
-          key: 'id',
-        },
-      },
       status: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      isSafe: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+        allowNull: false,
+      },
+      images: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       createdAt: {
         type: DataTypes.DATE,

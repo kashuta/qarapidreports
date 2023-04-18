@@ -1,17 +1,15 @@
 /* eslint-disable jsx-a11y/aria-role */
 /* eslint-disable import/no-extraneous-dependencies */
-import React from 'react';
-// import { useDispatch } from 'react-redux';
-// import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Container from '@mui/material/Container';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import SignInForm from './components/Auth/SignInForm';
 import Navbar from './components/Navbar/Navbar';
 import './App.css';
 
-import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import ProtectedRoleRoute from './components/ProtectedRoute/ProtectedRoleRoute';
 
 import InspectorProfile from './components/Inspector/InspectorProfile';
@@ -20,51 +18,66 @@ import ManagerProfile from './components/Manager/ManagerProfile';
 import Dashboard from './components/Manager/Dashboard';
 import PageNotFound from './components/ProtectedRoute/PageNotFound';
 import MainPage from './components/MainPage/MainPage';
-import MonthSafCheck from './components/Forms/MonthSafCheck';
-import ForkliftForm from './components/ForkliftForm/ForkliftForm';
-import VechSafInspCheckForm from './components/Forms/VechSafInspCheckForm';
+import RegForm from './components/Auth/RegForm';
+import { refreshAccessToken } from './JWT/authActions';
+import Forms from './components/Forms/Forms';
+import FormTest from './components/Forms/FormTest';
+import MyReactPdf from './components/Forms/MyReactPdf';
+import TestPdf from './components/Forms/TestPdf';
 
 // import { setUserAction } from './components/Redux/user.action';
 
-
 function App() {
-  // const user = useSelector((state) => state.UserReducer.user);
+  const user = useSelector((state) => state.UserReducer.user);
+  const loader = useSelector((state) => state.UserReducer.loader);
 
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   dispatch(setUserAction());
-  // }, []);
+  useEffect(() => {
+    dispatch(refreshAccessToken(navigate));
+  }, []); // Add dependencies if needed
 
   const locations = ['Moscow', 'Tbilisi', 'Dubai'];
 
-  return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-
+  // if (!loader) {
+  //   return <h2 style={{ margin: 300 }}>Loading...</h2>;
+  // }
+  if (!user) {
+    return (
       <Container maxWidth="xl">
         <Navbar />
         <Routes>
-          <Route element={<ProtectedRoute isLogged={false} />}>
-            <Route path="/login" element={<SignInForm />} />
+          <Route path="/" element={<MainPage />} />
+          <Route path="/reg" element={<RegForm />} />
+          <Route path="/login" element={<SignInForm />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </Container>
+    );
+  }
+
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Container maxWidth="xl">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route element={<ProtectedRoleRoute role="inspector" />}>
+            <Route path="/:formId" element={<Forms location={locations} />} />
+            <Route path="/inspector/:userId" element={<InspectorProfile />} />
           </Route>
-          <Route element={<ProtectedRoute isLogged redirectTo="/login" />}>
-            <Route path="/" element={<MainPage />} />
-            <Route element={<ProtectedRoleRoute role="Inspector" />}>
-              <Route path="/profile/:surname" element={<InspectorProfile />} />
-            </Route>
-            <Route element={<ProtectedRoleRoute role="Manager" />}>
-              <Route path="/profile/:surname" element={<ManagerProfile />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-            </Route>
+          <Route element={<ProtectedRoleRoute role="manager" />}>
+            <Route path="/manager/:userId" element={<ManagerProfile />} />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Route>
-          <Route path="/FormGME0144" element={<MonthSafCheck location={locations} />} />
-          <Route path="/FormGME0024" element={<VechSafInspCheckForm location={locations} />} />
-          <Route path="/form1" element={<ForkliftForm location={locations} />} />
+          <Route path="/FormTest" element={<FormTest />} />
+          <Route path="/MyReactPdf" element={<MyReactPdf />} />
+          <Route path="/TestPdf" element={<TestPdf />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Container>
     </LocalizationProvider>
-
   );
 }
 

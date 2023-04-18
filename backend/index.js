@@ -9,10 +9,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
+const path = require('path');
 const { authMiddleware } = require('./middlewares');
-// const router = require('./routes/index');
-const authRouter = require('./routes/authRouter');
-const dataRouter = require('./routes/dataRouter');
+const { authRoutes, locationRoutes, formRoutes } = require('./routes/index');
 
 const app = express();
 
@@ -30,35 +29,22 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('public'));
 app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'public'));
 
 // add swagger api doc
 if (envFile === '.env.development') {
   const swaggerUi = require('swagger-ui-express');
-  const swaggerJSDoc = require('swagger-jsdoc');
   const swaggerOptions = require('./utils/swagger/swaggerOptions');
 
-  const swaggerSpec = swaggerJSDoc(swaggerOptions);
-  app.use(process.env.SWAGGER_API_DOC, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-}
-
-// add swagger api doc
-if (envFile === '.env.development') {
-  const swaggerUi = require('swagger-ui-express');
-  const swaggerJSDoc = require('swagger-jsdoc');
-  const swaggerOptions = require('./utils/swagger/swaggerOptions');
-
-  const swaggerSpec = swaggerJSDoc(swaggerOptions);
-  app.use(process.env.SWAGGER_API_DOC, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.use(process.env.SWAGGER_API_DOC, swaggerUi.serve, swaggerUi.setup(swaggerOptions));
 }
 
 // Routes
-// app.use('/api/v1/', router);
-app.use('/api/v2/', authRouter);
-app.use('/api/v3/', authMiddleware, dataRouter);
-// app.use(handleErrorsMiddleware);
+app.use('/api/v2/auth', authRoutes);
+app.use('/api/v2/locations', authMiddleware, locationRoutes);
+app.use('/api/v2/form', formRoutes);
 
-
-// Server
+// Serverч
 
 const port = process.env.PORT || 5001;
 app.listen(port, () => {

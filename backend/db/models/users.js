@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId',
       });
       this.hasMany(models.FormResponse, {
-        foreignKey: 'userId',
+        foreignKey: 'inspectorId',
       });
     }
   }

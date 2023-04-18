@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import {
   DialogActions,
@@ -9,15 +10,19 @@ import {
 } from '@mui/material';
 
 function DialogForm({
-  open, handleClose, handleConfirm, statusBtn, handleConfirmSave, handleConfirmClear,
+  open,
+  handleClose,
+  handleConfirm,
+  statusBtn,
+  handleConfirmSave,
+  handleConfirmClear,
 }) {
   return (
     <Dialog
       open={open}
       onClose={handleClose}
       aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
+      aria-describedby="alert-dialog-description">
       <DialogTitle id="alert-dialog-title">
         {
           statusBtn === 'submit' ? 'Submit'
@@ -30,7 +35,7 @@ function DialogForm({
           {
           statusBtn === 'submit' ? 'Are you sure you want to Submit'
             : statusBtn === 'save' ? 'Are you sure you want to Save?'
-              : statusBtn === 'validation-error' ? 'Please, fill all required fields correctly before submit' : 'Are you sure you want to Clear?'
+              : statusBtn === 'validation-error' ? 'Please, fill all required fields correctly before submitting' : 'Are you sure you want to Clear?'
           }
         </DialogContentText>
       </DialogContent>
