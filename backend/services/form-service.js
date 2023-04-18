@@ -1,5 +1,11 @@
+const { Op } = require('sequelize');
 const {
-  Form, FormSection, FormField, FormResponse, FormResponseAnswer,
+  Form,
+  FormSection,
+  FormField,
+  FormResponse,
+  FormResponseAnswer,
+  Users
 } = require('../db/models');
 const { backendErrors } = require('../exceptions');
 
@@ -20,13 +26,13 @@ class FormService {
         formId: form.id,
         columnNames: formSections.map((el) => ({
           title: el.title,
-          order: el.order,
+          order: el.order
         })),
         questionFields: formFields.map((el) => ({
           question: el.label,
           type: el.type,
-          order: el.order,
-        })),
+          order: el.order
+        }))
       };
 
       return responseObject;
@@ -47,18 +53,48 @@ class FormService {
   async saveFormData(userId, formId, status, formData) {
     try {
       const created = await FormResponse.create({
-        formId, inspectorId: userId, status,
+        formId,
+        inspectorId: userId,
+        status
       });
       if (!created) {
         throw new Error(backendErrors.DATABASE_ERROR);
       }
       const createdAnswer = await FormResponseAnswer.create({
         formResponseId: created.dataValues.id,
-        answer: formData,
+        answer: formData
       });
       if (!createdAnswer) {
         throw new Error(backendErrors.DATABASE_ERROR);
       }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  async getAllInspectorsNames() {
+    try {
+      const inspectorsNames = await Users.findAll({ where: { roleId: 3 } });
+      return inspectorsNames;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  async getFormDataForPeriod(data) {
+    const { from, to } = data;
+    // const startDate = new Date(from.setHours(0, 0, 0, 0));
+    // console.log(startDate, '000000');
+    // const endDate = new Date(to.setHours(23, 59, 59, 999));
+    try {
+      const result = await FormResponse.findAll({
+        where: {
+          createdAt: {
+            [Op.between]: [from, to]
+          }
+        }
+      });
+      return result;
     } catch (err) {
       throw new Error(err.message);
     }
