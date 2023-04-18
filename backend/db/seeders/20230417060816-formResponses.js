@@ -1,5 +1,3 @@
-'use strict';
-
 const { faker } = require('@faker-js/faker');
 
 function getRandomDate(start, end) {
@@ -9,6 +7,7 @@ function getRandomDate(start, end) {
 function getRandomInspectorId() {
   const inspectorIds = [3, 4, 5];
   return inspectorIds[Math.floor(Math.random() * inspectorIds.length)];
+  // return Math.ceil(Math.random() * 35);
 }
 
 module.exports = {
@@ -23,7 +22,7 @@ module.exports = {
         inspectorId: getRandomInspectorId(),
         status: faker.helpers.arrayElement(['save', 'submit']),
         createdAt,
-        updatedAt: createdAt
+        updatedAt: createdAt,
       };
 
       formResponses.push(formResponse);
@@ -34,5 +33,5 @@ module.exports = {
 
   down: async (queryInterface, Sequelize) => {
     await queryInterface.bulkDelete('FormResponses', null, {});
-  }
+  },
 };

@@ -23,7 +23,7 @@ function MainStat() {
   const dispatch = useDispatch();
   const data = { from: value1, to: value2 };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     dispatch(getFormResponseDataAction(data, navigate));
   };
