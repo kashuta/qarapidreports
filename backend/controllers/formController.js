@@ -41,10 +41,19 @@ class FormController {
 
   async formDataForDashboard(req, res, next) {
     try {
-      const { data } = req.body;
-      // const date = { from, to };
-      const obj = await formService.formDataForDashboard(data);
+      const { date } = req.body;
+      const obj = await formService.formDataForDashboard(date);
       res.status(200).json({ ...obj });
+    } catch (err) {
+      return next(ErrorHandler.BadRequestError(err, res));
+    }
+  }
+
+  async getFormDataForInspectorDashboard(req, res, next) {
+    try {
+      const { email } = req.body;
+      const responseObject = await formService.getFormDataForInspectorDashboard(email);
+      res.status(200).json(responseObject);
     } catch (err) {
       return next(ErrorHandler.BadRequestError(err, res));
     }
@@ -53,7 +62,8 @@ class FormController {
   async inspectorsNamesData(req, res, next) {
     try {
       const responseObject = await formService.getAllInspectorsNames();
-      return res.json(responseObject);
+      const locations = responseObject.map((el) => el.name);
+      return res.json(locations);
     } catch (err) {
       return next(ErrorHandler.BadRequestError(err, res));
     }
