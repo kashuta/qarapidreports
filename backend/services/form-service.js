@@ -3,7 +3,7 @@ const moment = require('moment');
 const Sequelize = require('sequelize');
 const {
   Form, FormSection, FormField, FormResponse, FormResponseAnswer,
-  Users,
+  Users, Locations,
 } = require('../db/models');
 const { backendErrors } = require('../exceptions');
 
@@ -91,10 +91,10 @@ class FormService {
         }],
         attributes: ['userName'],
       });
-      const r = qwer.map((el) => el.get({ plain: true })).map((el) => ({ userName: el.userName, FormName: el.FormResponses.map((el1) => el1.Form.name) }));
-      const allInspectorNames = r.map((el) => el.userName);
-      const allReportCount = r.reduce((prev, curr) => prev + curr.FormName.length, 0);
-      const info = r.map((el) => ({
+      const objectUserFormName = qwer.map((el) => el.get({ plain: true })).map((el) => ({ userName: el.userName, FormName: el.FormResponses.map((el1) => el1.Form.name) }));
+      const allInspectorNames = objectUserFormName.map((el) => el.userName);
+      const allReportCount = objectUserFormName.reduce((prev, curr) => prev + curr.FormName.length, 0);
+      const info = objectUserFormName.map((el) => ({
         inspectorName: el.userName,
         allReportCountUser: el.FormName.length,
         reports: el.FormName.reduce((acc, curr) => {
@@ -102,7 +102,15 @@ class FormService {
           return acc;
         }, {}),
       }));
-      return { allInspectorNames, allReportCount, info };
+      const allReportFormCount = objectUserFormName.reduce((acc, curr) => {
+        curr.FormName.forEach((name) => {
+          acc[name] = (acc[name] || 0) + 1;
+        });
+        return acc;
+      }, {});
+      return {
+        allInspectorNames, allReportCount, allReportFormCount, info,
+      };
     } catch (err) {
       throw new Error(err.message);
     }
@@ -111,7 +119,17 @@ class FormService {
   async getAllInspectorsNames() {
     try {
       const inspectorsNames = await Users.findAll({ where: { roleId: 3 } });
-      return inspectorsNames;
+      const ret = inspectorsNames.map((el) => ({ userName: el.userName, email: el.email }));
+      return ret;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  async getAllLocations() {
+    try {
+      const locations = await Locations.findAll();
+      return locations;
     } catch (err) {
       throw new Error(err.message);
     }

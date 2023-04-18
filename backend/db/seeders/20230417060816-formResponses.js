@@ -1,10 +1,12 @@
 const { faker } = require('@faker-js/faker');
+const { Users } = require('../models');
 
 function getRandomDate(start, end) {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
 
-function getRandomInspectorId() {
+async function getRandomInspectorId() {
+  const inspectors = await Users.findAll({ where: { roleId: 3 } });
   const inspectorIds = [3, 4, 5];
   return inspectorIds[Math.floor(Math.random() * inspectorIds.length)];
   // return Math.ceil(Math.random() * 35);
