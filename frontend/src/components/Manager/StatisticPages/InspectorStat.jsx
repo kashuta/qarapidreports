@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
-  Divider,
   FormControl,
   InputLabel,
   MenuItem,
@@ -12,12 +11,9 @@ import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { Bar, Doughnut } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import InspectorTable from './InspectorTable';
-
-import { dataForDoughnut } from '../ChartsComponents/Doughnut';
-import { barData, barOptions } from '../ChartsComponents/Bar';
-import { HSEbarData, HSEbarOptions } from '../ChartsComponents/HSE.Bar';
+import InspectorBar from '../ChartsComponents/Inspector.Bar';
 
 function InspectorStat() {
   const [value1, setValue1] = useState('');
@@ -70,7 +66,7 @@ function InspectorStat() {
             </Button>
           </DemoItem>
           <Box sx={{ width: '800px' }}>
-            <Bar options={barOptions} data={barData} />
+            <InspectorBar />
           </Box>
 
         </DemoContainer>
