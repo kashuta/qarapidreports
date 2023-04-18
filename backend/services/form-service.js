@@ -86,12 +86,12 @@ class FormService {
               [Sequelize.Op.between]: [date.from, date.to],
             },
           },
-          attributes: ['id'],
+          attributes: ['id', 'isSafe'],
           include: [{ model: Form, attributes: ['name'] }],
         }],
         attributes: ['userName'],
       });
-      const objectUserFormName = qwer.map((el) => el.get({ plain: true })).map((el) => ({ userName: el.userName, FormName: el.FormResponses.map((el1) => el1.Form.name) }));
+      const objectUserFormName = qwer.map((el) => el.get({ plain: true })).map((el) => ({ userName: el.userName, FormName: el.FormResponses.map((el1) => el1.Form.name), isSafe: el.FormResponses.map((el1) => el1.isSafe) }));
       const allInspectorNames = objectUserFormName.map((el) => el.userName);
       const allReportCount = objectUserFormName.reduce((prev, curr) => prev + curr.FormName.length, 0);
       const info = objectUserFormName.map((el) => ({
@@ -108,8 +108,17 @@ class FormService {
         });
         return acc;
       }, {});
+      // console.log(objectUserFormName);
+      const isSafe = objectUserFormName.reduce((acc, item) => {
+        const countTrue = item.isSafe.filter((i) => i === true).length;
+        const countFalse = item.isSafe.filter((i) => i === false).length;
+        return {
+          true: acc.true + countTrue,
+          false: acc.false + countFalse,
+        };
+      }, { true: 0, false: 0 });
       return {
-        allInspectorNames, allReportCount, allReportFormCount, info,
+        allInspectorNames, allReportCount, allReportFormCount, isSafe, info,
       };
     } catch (err) {
       throw new Error(err.message);

@@ -44,7 +44,7 @@ app.use('/api/v2/auth', authRoutes);
 app.use('/api/v2/locations', authMiddleware, locationRoutes);
 app.use('/api/v2/form', formRoutes);
 
-// Serverч
+// Server
 
 const port = process.env.PORT || 5001;
 app.listen(port, () => {
