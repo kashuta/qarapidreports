@@ -7,22 +7,22 @@ import { useSelector } from 'react-redux';
 function MyDoughnut() {
   ChartJS.register(ArcElement, Tooltip, Legend);
 
-  const totalForms = useSelector(
-    (state) => state.ReportReducer.formResponseData,
-  );
-  const MONTHLYSAFETYCHECKLIST = totalForms.filter(
-    (form) => form.formId === 1,
-  ).length;
-  const VEHICLESAFETYINSPECTION = totalForms.filter(
-    (form) => form.formId === 2,
-  ).length;
-  const FORKLIFTSAFETYINSPECTION = totalForms.filter(
-    (form) => form.formId === 3,
-  ).length;
-  const HSEOBSERVATION = totalForms.filter((form) => form.formId === 4).length;
-  const TOOLBOXSAFETYMEETINGFORM = totalForms.filter(
-    (form) => form.formId === 5,
-  ).length;
+  // const totalForms = useSelector(
+  //   (state) => state.ReportReducer.formResponseData,
+  // );
+  // const MONTHLYSAFETYCHECKLIST = totalForms.filter(
+  //   (form) => form.formId === 1,
+  // ).length;
+  // const VEHICLESAFETYINSPECTION = totalForms.filter(
+  //   (form) => form.formId === 2,
+  // ).length;
+  // const FORKLIFTSAFETYINSPECTION = totalForms.filter(
+  //   (form) => form.formId === 3,
+  // ).length;
+  // const HSEOBSERVATION = totalForms.filter((form) => form.formId === 4).length;
+  // const TOOLBOXSAFETYMEETINGFORM = totalForms.filter(
+  //   (form) => form.formId === 5,
+  // ).length;
 
   const formsName = useSelector((state) => state.ReportReducer.formsName);
   const labels = formsName.map((item) => item.name);
@@ -33,11 +33,12 @@ function MyDoughnut() {
       {
         label: ['Count'],
         data: [
-          MONTHLYSAFETYCHECKLIST,
-          VEHICLESAFETYINSPECTION,
-          FORKLIFTSAFETYINSPECTION,
-          HSEOBSERVATION,
-          TOOLBOXSAFETYMEETINGFORM,
+          2, 13, 8, 10, 11,
+          // MONTHLYSAFETYCHECKLIST,
+          // VEHICLESAFETYINSPECTION,
+          // FORKLIFTSAFETYINSPECTION,
+          // HSEOBSERVATION,
+          // TOOLBOXSAFETYMEETINGFORM,
         ],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
