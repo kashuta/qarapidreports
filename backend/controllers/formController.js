@@ -41,10 +41,7 @@ class FormController {
 
   async formDataForDashboard(req, res, next) {
     try {
-      // const { date } = req.body;
-      const { from, to } = req.body;
-      const date = { from, to };
-      console.log(date);
+      const { date } = req.body;
       const obj = await formService.formDataForDashboard(date);
       res.status(200).json({ ...obj });
     } catch (err) {

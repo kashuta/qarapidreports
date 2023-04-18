@@ -108,7 +108,6 @@ class FormService {
         });
         return acc;
       }, {});
-      // console.log(objectUserFormName);
       const isSafe = objectUserFormName.reduce((acc, item) => {
         const countTrue = item.isSafe.filter((i) => i === true).length;
         const countFalse = item.isSafe.filter((i) => i === false).length;
