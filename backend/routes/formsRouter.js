@@ -12,7 +12,6 @@ router.post('/form_save_data', formController.saveFormData);
 // Запрос на имена инспекторов
 router.get('/inspectors_names_data', formController.inspectorsNamesData);
 
-router.post('/form_data_period', formController.formDataForPeriod);
 
 // Запрос, который сохраняет фотографию
 router.post('/upload', multerMiddleware.single('avatar'), async (req, res) => {

@@ -80,25 +80,6 @@ class FormService {
       throw new Error(err.message);
     }
   }
-
-  async getFormDataForPeriod(data) {
-    const { from, to } = data;
-    // const startDate = new Date(from.setHours(0, 0, 0, 0));
-    // console.log(startDate, '000000');
-    // const endDate = new Date(to.setHours(23, 59, 59, 999));
-    try {
-      const result = await FormResponse.findAll({
-        where: {
-          createdAt: {
-            [Op.between]: [from, to]
-          }
-        }
-      });
-      return result;
-    } catch (err) {
-      throw new Error(err.message);
-    }
-  }
 }
 
 module.exports = new FormService();

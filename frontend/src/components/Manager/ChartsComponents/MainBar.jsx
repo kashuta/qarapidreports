@@ -1,5 +1,4 @@
 import React from 'react';
-import { faker } from '@faker-js/faker';
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -13,6 +12,22 @@ import {
 import { useSelector } from 'react-redux';
 
 function MainBar() {
+  const totalForms = useSelector(
+    (state) => state.ReportReducer.formResponseData,
+  );
+  const MONTHLYSAFETYCHECKLIST = totalForms.filter(
+    (form) => form.formId === 1,
+  ).length;
+  const VEHICLESAFETYINSPECTION = totalForms.filter(
+    (form) => form.formId === 2,
+  ).length;
+  const FORKLIFTSAFETYINSPECTION = totalForms.filter(
+    (form) => form.formId === 3,
+  ).length;
+  const HSEOBSERVATION = totalForms.filter((form) => form.formId === 4).length;
+  const TOOLBOXSAFETYMEETINGFORM = totalForms.filter(
+    (form) => form.formId === 5,
+  ).length;
   const inspectorsNames = useSelector(
     (state) => state.ReportReducer.inspectorsNames,
   );
@@ -56,28 +71,28 @@ function MainBar() {
     labels,
     datasets: [
       {
-        label: 'Report 1',
-        data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
+        label: 'MONTHLYSAFETYCHECKLIST',
+        data: labels.map(() => MONTHLYSAFETYCHECKLIST),
         backgroundColor: 'rgb(255, 99, 132)',
       },
       {
-        label: 'Report 2',
-        data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
+        label: 'VEHICLESAFETYINSPECTION',
+        data: labels.map(() => VEHICLESAFETYINSPECTION),
         backgroundColor: 'rgb(75, 192, 192)',
       },
       {
-        label: 'Report 3',
-        data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
+        label: 'FORKLIFTSAFETYINSPECTION',
+        data: labels.map(() => FORKLIFTSAFETYINSPECTION),
         backgroundColor: 'rgb(255, 206, 86)',
       },
       {
-        label: 'Report 4',
-        data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
+        label: 'HSEOBSERVATION',
+        data: labels.map(() => HSEOBSERVATION),
         backgroundColor: 'rgb(53, 162, 235)',
       },
       {
-        label: 'Report 5',
-        data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
+        label: 'TOOLBOXSAFETYMEETINGFORM',
+        data: labels.map(() => TOOLBOXSAFETYMEETINGFORM),
         backgroundColor: 'rgb(153, 102, 255)',
       },
     ],

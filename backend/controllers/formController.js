@@ -45,16 +45,6 @@ class FormController {
       return next(ErrorHandler.BadRequestError(err, res));
     }
   }
-
-  async formDataForPeriod(req, res, next) {
-    const { data } = req.body;
-    try {
-      const responseObject = await formService.getFormDataForPeriod(data);
-      return res.json(responseObject);
-    } catch (err) {
-      return next(ErrorHandler.BadRequestError(err, res));
-    }
-  }
 }
 
 module.exports = new FormController();

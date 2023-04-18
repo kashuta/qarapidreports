@@ -31,7 +31,7 @@ function MainStat() {
     (state) => state.ReportReducer.formResponseData,
   );
   const totalFormsCount = totalForms.length;
-  const MONTHLYSAFETYCHECKLIST = totalForms.filter((form) => form.id === 1);
+
   return (
     <Box
       sx={{
@@ -81,7 +81,8 @@ function MainStat() {
         }}>
         <h2>
           Total Reports:
-          {totalFormsCount}{' '}
+          {totalFormsCount}
+          {' '}
         </h2>
         <Divider orientation="vertical" flexItem />
         <h2>HSE Observation Unsafe: </h2>
