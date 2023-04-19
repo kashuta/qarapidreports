@@ -41,8 +41,8 @@ class FormController {
 
   async formDataForDashboard(req, res, next) {
     try {
-      const { date } = req.body;
-      const obj = await formService.formDataForDashboard(date);
+      const { data } = req.body;
+      const obj = await formService.formDataForDashboard(data);
       res.status(200).json({ ...obj });
     } catch (err) {
       return next(ErrorHandler.BadRequestError(err, res));
@@ -52,6 +52,7 @@ class FormController {
   async getFormDataForInspectorDashboard(req, res, next) {
     try {
       const { email } = req.body;
+      console.log(email);
       const responseObject = await formService.getFormDataForInspectorDashboard(email);
       res.status(200).json(responseObject);
     } catch (err) {
@@ -62,8 +63,7 @@ class FormController {
   async inspectorsNamesData(req, res, next) {
     try {
       const responseObject = await formService.getAllInspectorsNames();
-      const locations = responseObject.map((el) => el.name);
-      return res.json(locations);
+      return res.json(responseObject);
     } catch (err) {
       return next(ErrorHandler.BadRequestError(err, res));
     }

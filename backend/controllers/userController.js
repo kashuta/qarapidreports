@@ -63,7 +63,7 @@ class UserController {
     try {
       const { link } = req.params;
       const resp = await userService.activate(link);
-      if (resp) { res.render('viewError'); } else { res.render('view'); }
+      if (resp.isActive) { res.render('viewError'); } else { res.render('view'); }
     } catch (err) {
       return next(ErrorHandler.BadRequestError(err, res));
     }

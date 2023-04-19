@@ -70,10 +70,60 @@ class FormService {
     }
   }
 
-  async formDataForDashboard(date) {
+  async safe(data) {
+    const qwer = await Users.findAll({
+      where: { roleId: 3 },
+      include: [{
+        model: FormResponse,
+        where: {
+          createdAt: {
+            [Sequelize.Op.between]: [data.from, data.to],
+          },
+        },
+        attributes: ['id', 'isSafe'],
+        include: [
+          {
+            model: FormResponseAnswer,
+            attributes: ['answer'],
+          },
+          { model: Form, where: { name: 'HSE OBSERVATION (STOP) CARD' }, attributes: ['name'] }],
+      }],
+      attributes: ['userName'],
+    });
+    const countByFormAndIsSafe = [];
+    let i = 0;
+    // Проходим по каждому элементу массива
+    qwer.forEach((element) => {
+      // Проходим по каждому FormResponse внутри элемента
+      element.FormResponses.forEach((formResponse) => {
+        // Получаем название формы и значение isSafe
+        const formName = formResponse.Form.name;
+        console.log(formName);
+        const { isSafe } = formResponse;
+
+        // Проверяем, что форма является 'HSE OBSERVATION (STOP) CARD'
+        if (formName === 'HSE OBSERVATION (STOP) CARD') {
+          i++;
+          // Если элемент с данным названием формы и значением isSafe уже есть в объекте, увеличиваем его счетчик
+          if (countByFormAndIsSafe[formName] && countByFormAndIsSafe[formName][isSafe]) { countByFormAndIsSafe[formName][isSafe]++; } else {
+            countByFormAndIsSafe.push({ [isSafe]: 1 });
+          }
+        }
+      });
+    });
+    const result = countByFormAndIsSafe.reduce((acc, obj) => {
+      const key = Object.keys(obj)[0];
+      const value = obj[key];
+      acc[key] = (acc[key] || 0) + value;
+      return acc;
+    }, {});
+    return { hseForm: { count: i, ...result } };
+  }
+
+  async formDataForDashboard(data) {
     try {
-      if (!date || !date.from || !date.to || !moment(date.from).isBefore(date.to)) {
-        // проверка, что дата date.from находится до date.to (с учетом указанной единицы измерения);
+      if (!data || !data.from || !data.to || !moment(data.from).isBefore(data.to)) {
+        // проверка, что дата data.from находится до data.to (с учетом указанной единицы измерения);
         throw new Error(backendErrors.INCORRECT_DATA_ERROR);
       }
       const allFormNames = await this.getAllFormNames();
@@ -83,11 +133,12 @@ class FormService {
           model: FormResponse,
           where: {
             createdAt: {
-              [Sequelize.Op.between]: [date.from, date.to],
+              [Sequelize.Op.between]: [data.from, data.to],
             },
           },
           attributes: ['id', 'isSafe'],
-          include: [{ model: Form, attributes: ['name'] }],
+          include: [
+            { model: Form, attributes: ['name'] }],
         }],
         attributes: ['userName'],
       });
@@ -108,16 +159,9 @@ class FormService {
         });
         return acc;
       }, {});
-      const isSafe = objectUserFormName.reduce((acc, item) => {
-        const countTrue = item.isSafe.filter((i) => i === true).length;
-        const countFalse = item.isSafe.filter((i) => i === false).length;
-        return {
-          true: acc.true + countTrue,
-          false: acc.false + countFalse,
-        };
-      }, { true: 0, false: 0 });
+      const hseForm = await this.safe(data);
       return {
-        allInspectorNames, allReportCount, allReportFormCount, isSafe, info,
+        allInspectorNames, allReportCount, allReportFormCount, ...hseForm, info,
       };
     } catch (err) {
       throw new Error(err.message);
@@ -133,11 +177,27 @@ class FormService {
       throw new Error(err.message);
     }
   }
+  // {
+  // allreports - все отчеты по юзеру
+  // отдельная ручка для сортировки по дате
+  // имя формы: количество
+  // все локации
+  // }
 
-  async getAllLocations() {
+  async getFormDataForInspectorDashboard(email) {
     try {
-      const locations = await Locations.findAll();
-      return locations;
+      const allFormNames = await Users.findOne({ where: { email } });
+      const qwer = await Users.findOne({
+        where: { email },
+        include: [{
+          model: FormResponse,
+          attributes: ['id'],
+          include: [{ model: Form, attributes: ['name'] }],
+        }],
+        attributes: ['userName'],
+      });
+      console.log(qwer);
+      return {};
     } catch (err) {
       throw new Error(err.message);
     }
