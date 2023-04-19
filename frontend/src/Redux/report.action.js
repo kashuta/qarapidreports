@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 import { refreshAccessToken } from '../JWT/authActions';
 import authFetch from '../JWT/authFetch';
 import {
@@ -128,38 +129,42 @@ export const getInspectorsNamesAction = (navigate) => async (dispatch) => {
   }
 };
 
-export const getFormResponseDataAction = (data, navigate) => async (dispatch) => {
-  try {
-    const response = await authFetch(
-      'http://localhost:3001/api/v2/form/form_data_for_dashboard',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+export const getFormResponseDataAction =
+  (data, navigate) => async (dispatch) => {
+    try {
+      const response = await authFetch(
+        'http://localhost:3001/api/v2/form/form_data_for_dashboard',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ data }),
+          credentials: 'include',
         },
-        body: JSON.stringify({ data }),
-        credentials: 'include',
-      },
-    );
-    if (response.status === 401) {
-      const newAccessToken = await dispatch(refreshAccessToken());
-      if (!newAccessToken) {
-        navigate('/login');
-        return;
-        // Handle error, for example, redirect to the login page or show an error message
+      );
+      if (response.status === 401) {
+        const newAccessToken = await dispatch(refreshAccessToken());
+        if (!newAccessToken) {
+          navigate('/login');
+          return;
+          // Handle error, for example, redirect to the login page or show an error message
+        }
+        // Retry the request with the new access token
+        await dispatch(getFormResponseDataAction());
       }
-      // Retry the request with the new access token
-      await dispatch(getFormResponseDataAction());
-    } else if (response.ok) {
-      // navigate('/');
-      const result = await response.json();
-      // alert(result.message);
-      dispatch({ type: GET_FORMRESPONSE_DATA, payload: result });
+      if (response.message) {
+        alert(response.message);
+      } else if (response.ok) {
+        // navigate('/');
+        const result = await response.json();
+        // alert(result.message);
+        dispatch({ type: GET_FORMRESPONSE_DATA, payload: result });
+      }
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
-  }
-};
+  };
 
 export const getLocationsAction = (navigate) => async (dispatch) => {
   try {

@@ -1,8 +1,7 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from 'react';
-import {
-  Button, IconButton, InputAdornment, TextField,
-} from '@mui/material';
+import { Button, IconButton, InputAdornment, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -64,16 +63,18 @@ function SignInForm() {
   return (
     <Box
       component="form"
-      sx={{
-        width: '40%',
-
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        marginLeft: 35,
-        marginTop: 10,
-      }}>
+      container
+      display="flex"
+      alignItems="center"
+      justify="center"
+      minHeight="100vh"
+      flexDirection="column"
+      margin="100px 400px"
+      // sx={{
+      //   left: '50%',
+      //   top: '50%',
+      // }}
+    >
       <TextField
         required
         label="Email"
