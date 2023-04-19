@@ -27,16 +27,11 @@ function MainStat() {
     event.preventDefault();
     dispatch(getFormResponseDataAction(data, navigate));
   };
+  //   общий объект с базы
   const totalForms = useSelector(
     (state) => state.ReportReducer.formResponseData,
   );
-  const locations = useSelector(
-    (state) => state.ReportReducer.locations,
-  );
-  console.log(locations);
-  const allRepCount = totalForms.allReportCount;
-
-  console.log(totalForms);
+console.log(totalForms?.allRepCount);
   return (
     <Box
       sx={{
@@ -86,7 +81,7 @@ function MainStat() {
         }}>
         <h2>
           Total Reports:
-          {allRepCount}
+          {totalForms?.allReportCount || 0}
         </h2>
         <Divider orientation="vertical" flexItem />
         <h2>HSE Observation Unsafe: </h2>
