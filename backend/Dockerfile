@@ -14,6 +14,7 @@ FROM node:18.15-alpine
 
 WORKDIR /app
 
+COPY .env.development .env
 # Copy only the production dependencies and the built application from the build stage
 COPY --from=build /app/node_modules /app/node_modules
 COPY --from=build /app/package*.json /app/
