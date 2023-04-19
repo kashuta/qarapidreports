@@ -103,6 +103,7 @@ function VechSafInspCheckForm({ location }) {
         userId: user.id,
         formData: values,
         status: 'submit',
+        images: '',
       };
       dispatch(createReportAction(JSON.stringify(obj), navigate));
     },
@@ -266,7 +267,11 @@ function VechSafInspCheckForm({ location }) {
           sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
           mb={5}
           align="left">
-          <p>Field service manager Name & Sign: __________________</p>
+          <p>
+            Field service manager Name & Sign:
+            {' '}
+            {user.userName}
+          </p>
         </Box>
         <Box m={3} display="flex" justifyContent="center">
           <Button
@@ -298,6 +303,16 @@ function VechSafInspCheckForm({ location }) {
             color="error"
             value="clear">
             <h2>Clear</h2>
+          </Button>
+          <Button
+            sx={{ height: 80, width: 250, margin: 3 }}
+            size="large"
+            onClick={handleSubmit}
+            type="submit"
+            variant="outlined"
+            color="primary"
+            value="Print">
+            <h2>Print</h2>
           </Button>
         </Box>
       </form>

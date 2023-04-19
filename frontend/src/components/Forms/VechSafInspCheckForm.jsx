@@ -31,51 +31,10 @@ import {
 import { DatePicker } from '@mui/x-date-pickers';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
+import moment from 'moment';
 import styles from './Form.module.css';
 import DialogForm from './DialogForm';
-import { createReportAction, setReportFieldsAction } from '../../Redux/report.action';
-
-// const questions = [
-//   'All vehicle lights are functioning',
-//   'Vehicle monitoring system (IVMS) is ok',
-//   'Brake fluid level is ok',
-//   'Engine oil level is ok',
-//   'Radiator coolant level is ok',
-//   'Windshield wiper/Washer fluid is ok',
-//   'Drinking water available inside',
-//   'Tire Pressure (including spare) is ok',
-//   'Fire extinguisher is available and pressurized',
-//   'First aid kit is available and contents not expired',
-//   'Reflective jacket is available',
-//   'Reflective triangle is available',
-//   'Jack and wheel wrench are available',
-//   'OXY inspection sticker is valid',
-//   'Maintenance status is ok',
-// ];
-
-// const schema = yup.object().shape({
-//   date: yup.date(),
-//   nextDate: yup.date().when('date', {
-//     is: (date) => !!date,
-//     then: yup.date().test(
-//       'is-greater-than-or-equal-to-date',
-//       'Next date must be greater than or equal to the current date',
-//       (value, context) => {
-//         const { date } = context.parent;
-//         return !date || !value || value >= date;
-//       },
-//     ),
-//   }),
-// });
-
-// Проверка данных формы
-// schema.validate(nextDate)
-//   .then((validData) => {
-//     // Данные формы валидны
-//   })
-//   .catch((error) => {
-//     // Данные формы не валидны
-//   });
+import { createReportAction, setReportFieldsAction, setInspectLocationAction } from '../../Redux/report.action';
 
 function VechSafInspCheckForm({ location }) {
   const [open, setOpen] = useState(false);
@@ -84,18 +43,28 @@ function VechSafInspCheckForm({ location }) {
   const dispatch = useDispatch();
   const formId = useLocation().pathname.split('/').at(-1);
   const reportsFields = useSelector((state) => state.ReportReducer.reportFields);
+  const inspectLocation = useSelector((state) => state.ReportReducer.inspectLocation);
   const user = useSelector((state) => state.UserReducer.user);
 
   useEffect(() => {
     dispatch(setReportFieldsAction(formId, navigate));
   }, []);
 
- const formFields = reportsFields.find((el) => el.formId === +formId);
+
+
+  console.log('!!!!!!!!!!!!!!!!', inspectLocation);
+
+  // const nameLocation = inspectLocation[0].map((el) => el.name);
+  // console.log('!!!!!!!!!!!!!!!!nameloc', nameLocation);
+
+  const formFields = reportsFields.find((el) => el.formId === +formId);
+  console.log('!!!!!!!!!!!!!!!!formFields', formFields);
 
   const checklist = [];
   formFields?.questionFields.forEach((el) => {
     checklist.push(el);
-  }); 
+  });
+  
 
   const questionsValues = {};
   for (const item of checklist) {
@@ -140,20 +109,17 @@ function VechSafInspCheckForm({ location }) {
       .typeError('Value must be a number')
       .positive('Enter positive number')
       .required('Please, fill this field'),
-    // nextDate: yup.date().when('date', {
-    //   is: (date) => !!date,
-    //   then: yup.date().test(
-    //     'is-greater-than-or-equal-to-date',
-    //     'Next date must be greater than or equal to the current date',
-    //     (value, context) => {
-    //       console.log('nextDate', value.getTime());
-    //       const { date } = context.parent;
-    //       console.log('curDate', date.$d.getTime());
-    //       console.log('test', date.$d > value);
-    //       return !date || !value || value >= date;
-    //     },
-    //   ),
-    // }),
+    nextDate: yup.date().test(
+      'less-to-date',
+      'Next date must be greater than the current date',
+      (value, context) => {
+        const { date } = context.parent;
+        if (moment(value).isBefore(date.$d)) {
+          return false;
+        }
+        return true;
+      },
+    ),
   });
 
   const formik = useFormik({
@@ -175,6 +141,7 @@ function VechSafInspCheckForm({ location }) {
         userId: user.id,
         formData: values,
         status: 'submit',
+        images: '',
       };
       dispatch(createReportAction(JSON.stringify(obj), navigate));
     },
@@ -303,6 +270,12 @@ function VechSafInspCheckForm({ location }) {
             name="nextDate"
             value={formik.values.nextDate}
             onChange={((value) => (formik.setValues({ ...formik.values, nextDate: value })))}
+            minDate={formik.values.date}
+            slotProps={{
+              textField: {
+                helperText: formik.errors.nextDate,
+              },
+            }}
           />
         </Box>
         <Box mb={5}>
@@ -367,17 +340,39 @@ function VechSafInspCheckForm({ location }) {
           mb={5}
           align="left"
         >
-          <p>Inspected by Name & Sign:  __________________</p>
+          <p>
+            Inspected by Name & Sign:
+            {' '}
+            {user.userName}
+            {' '}
+          </p>
         </Box>
         <Box m={3} display="flex" justifyContent="center">
           <Button sx={{ height: 80, width: 220, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="primary" value="submit">
             <h2>Submit</h2>
           </Button>
-          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="warning" value="save">
+          <Button
+            sx={{ height: 80, width: 250, margin: 3 }}
+            size="large"
+            onClick={handleSubmit}
+            type="submit"
+            variant="outlined"
+            color="primary"
+            value="save">
             <h2>Save</h2>
           </Button>
           <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="error" value="clear">
             <h2>Clear</h2>
+          </Button>
+          <Button
+            sx={{ height: 80, width: 250, margin: 3 }}
+            size="large"
+            onClick={handleSubmit}
+            type="submit"
+            variant="outlined"
+            color="primary"
+            value="Print">
+            <h2>Print</h2>
           </Button>
         </Box>
       </form>
