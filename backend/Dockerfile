@@ -14,12 +14,12 @@ FROM node:18.15-alpine
 
 WORKDIR /app
 
-COPY .env.development .env
-# Copy only the production dependencies and the built application from the build stage
+COPY backend/.env.development .env
+
 COPY --from=build /app/node_modules /app/node_modules
 COPY --from=build /app/package*.json /app/
 COPY --from=build /app/ /app/
 
 EXPOSE 3001
 
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start:dev-docker"]

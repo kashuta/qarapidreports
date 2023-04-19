@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon index.js",
     "dev": "NODE_ENV=development nodemon index.js",
+    "start:dev-docker": "NODE_ENV=development nodemon index.js",
     "start:prod": "NODE_ENV=production nodemon index.js",
     "lint": "eslint --ext .js --ext .jsx .",
     "lint:fix": "eslint --ext .js --ext .jsx . --fix",
