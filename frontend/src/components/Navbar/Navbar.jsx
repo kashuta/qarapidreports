@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import * as React from 'react';
+import React from 'react';
 
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -37,11 +37,8 @@ export default function Navbar() {
   };
 
   return (
-    <Box
-      sx={{
-        maxWidth: '100%',
-      }}>
-      <AppBar position="static" color="primary">
+    <Box sx={{ maxWidth: '100%' }}>
+      <AppBar color="primary">
         <Toolbar
           sx={{
             display: 'flex',
@@ -67,7 +64,8 @@ export default function Navbar() {
             </IconButton>
           )}
           {!user && (
-            <>
+
+            <Box>
               <NavLink className={styles.link} to="/reg">
                 <IconButton color="inherit" aria-label="add an alarm">
                   <HowToRegOutlinedIcon sx={{ mr: 1 }} />
@@ -84,7 +82,7 @@ export default function Navbar() {
                   </Typography>
                 </IconButton>
               </NavLink>
-            </>
+            </Box>
           )}
 
           {avatar && <Avatar alt="ava" src={`${avatar?.path}`} />}

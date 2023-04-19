@@ -31,9 +31,9 @@ function InspectorStat() {
     (state) => state.ReportReducer.inspectorsNames,
   );
 
-  const FormsDate = useSelector(
-    (state) => state.ReportReducer.getFormResponseDataAction,
-  );
+  // const FormsDate = useSelector(
+  //   (state) => state.ReportReducer.getFormResponseDataAction,
+  // );
 
   inspectorsNames.forEach((el) => {
     inspectors.push(el.userName);
@@ -88,7 +88,7 @@ function InspectorStat() {
   };
   console.log(value1);
   console.log(value2);
-  console.log('FormsDateFormsDateFormsDateFormsDateFormsDateFormsDateFormsDateFormsDateFormsDateFormsDate', FormsDate);
+
   console.log('inspectorinspectorinspectorinspectorinspectorinspectorinspectorinspecorinspectorinspectorin', inspector);
   return (
     <Box sx={{

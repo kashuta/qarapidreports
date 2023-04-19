@@ -37,7 +37,7 @@ function App() {
 
   if (!user) {
     return (
-      <Container >
+      <Container>
         <Navbar />
         <Routes>
           <Route path="/" element={<MainPage />} />
@@ -54,8 +54,8 @@ function App() {
   }
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Navbar />
       <Container>
-        <Navbar />
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route element={<ProtectedRoleRoute role="inspector" />}>
