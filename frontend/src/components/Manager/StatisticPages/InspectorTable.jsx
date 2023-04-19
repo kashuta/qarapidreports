@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,60 +6,54 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { pdf } from '@react-pdf/renderer';
+import Document0024 from '../../Documents/Document0024';
 
-function createData(nameForm, inspector, location, date) {
-  return {
-    nameForm, inspector, location, date,
-  };
+async function openPdf(document) {
+  const pdfBlob = await pdf(document).toBlob();
+  const pdfUrl = URL.createObjectURL(pdfBlob);
+  window.open(pdfUrl, '_blank');
 }
 
-const rows = [
-  createData('MONTHLY SAFETY CHECKLIST - FIELD SERVICES', 'inspector1', 'Dubai', '24/04/23'),
-  createData('VEHICLE SAFETY INSPECTION - CHECKLIST', 'inspector2', 'Abu Dhabi', '04/04/23'),
-  createData('FORKLIFT SAFETY INSPECTION CHECKLIST', 'inspector3', 'Sharjah', '04/02/23'),
-  createData('HSE OBSERVATION (STOP) CARD', 'inspector4', 'Sharjah', '02/04/23'),
-  createData('TOOL BOX SAFETY MEETING FORM', 'inspector5', 'Abu Dhabi', '04/02/23'),
-];
+async function downloadPdf(document, fileName) {
+  const pdfBlob = await pdf(document).toBlob();
+  const pdfUrl = URL.createObjectURL(pdfBlob);
+  const link = window.document.createElement('a');
+  link.href = pdfUrl;
+  link.download = fileName;
+  link.click();
+}
 
-function BasicTable({ inspector }) {
-  if (inspector === 'All Inspectors') {
-    console.log(inspector);
-  }
-  if (inspector === 'Inspector1') {
-    console.log(inspector);
-  }
-  if (inspector === 'Inspector2') {
-    console.log(inspector);
-  }
-  if (inspector === 'Inspector3') {
-    console.log(inspector);
-  }
-
+function BasicTable({ Data }) {
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell><b>Form</b></TableCell>
-            <TableCell align="right"><b>Inspector</b></TableCell>
-            <TableCell align="right"><b>Location</b></TableCell>
-            <TableCell align="right"><b>Date</b></TableCell>
+            <TableCell sx={{ fontSize: 20 }}><b>Form</b></TableCell>
+            <TableCell align="right" sx={{ fontSize: 20 }}><b>Inspector</b></TableCell>
+            <TableCell align="right" sx={{ fontSize: 20 }}><b>Location</b></TableCell>
+            <TableCell align="right" sx={{ fontSize: 20 }}><b>Date</b></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {Data.map((el) => (
             <TableRow
-              key={row.nameForm}
+              key={el.Form_id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
-                <b>{row.nameForm}</b>
+              <TableCell component="th" scope="row"><b>{el.FormName}</b></TableCell>
+              <TableCell align="right" sx={{ fontSize: 17 }}>{el.InspectorName}</TableCell>
+              <TableCell align="right" sx={{ fontSize: 17 }}>{el.Location}</TableCell>
+              <TableCell align="right" sx={{ fontSize: 17 }}>{el.Date}</TableCell>
+              <TableCell align="right">
+                <button onClick={() => openPdf(<Document0024 />)}>open</button>
               </TableCell>
-              <TableCell align="right">{inspector}</TableCell>
-              <TableCell align="right">{inspector}</TableCell>
-              <TableCell align="right">{inspector}</TableCell>
-              <TableCell align="right"><button>download</button></TableCell>
-              <TableCell align="right"><button>open</button></TableCell>
+              <TableCell align="right">
+                <button onClick={() => downloadPdf(<Document0024 />, `form_${el.Form_id}.pdf`)}>
+                  download
+                </button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -17,6 +17,7 @@
     "@testing-library/user-event": "^13.5.0",
     "chart.js": "^4.2.1",
     "chartjs-adapter-date-fns": "^3.0.0",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "dayjs": "^1.11.7",
     "formik": "^2.2.9",
     "html-to-pdfmake": "^2.4.16",
