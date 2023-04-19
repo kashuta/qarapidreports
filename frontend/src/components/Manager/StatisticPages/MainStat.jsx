@@ -11,14 +11,15 @@ import Divider from '@mui/material/Divider';
 
 import { useDispatch, useSelector } from 'react-redux';
 
+import dayjs from 'dayjs';
 import HseBar from '../ChartsComponents/HSE.Bar';
 import MyDoughnut from '../ChartsComponents/MyDoughnut';
 import MainBar from '../ChartsComponents/MainBar';
 import { getFormResponseDataAction } from '../../../Redux/report.action';
 
 function MainStat() {
-  const [value1, setValue1] = useState([]);
-  const [value2, setValue2] = useState([]);
+  const [value1, setValue1] = useState(dayjs(new Date()));
+  const [value2, setValue2] = useState(dayjs(new Date()));
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const data = { from: value1, to: value2 };
@@ -31,7 +32,7 @@ function MainStat() {
   const totalForms = useSelector(
     (state) => state.ReportReducer.formResponseData,
   );
-console.log(totalForms?.allRepCount);
+  console.log(totalForms?.allRepCount);
   return (
     <Box
       sx={{
@@ -80,13 +81,25 @@ console.log(totalForms?.allRepCount);
           gap: '30px',
         }}>
         <h2>
-          Total Reports:
-          {totalForms?.allReportCount || 0}
+          Total Reports
+          <p style={{ color: '#911a1f', textAlign: 'center' }}>
+            {totalForms?.allReportCount || 0}
+          </p>
         </h2>
         <Divider orientation="vertical" flexItem />
-        <h2>HSE Observation Unsafe: </h2>
+        <h2>
+          HSE Observation Unsafe
+          <p style={{ color: '#911a1f', textAlign: 'center' }}>
+            {totalForms?.allReportCount || 0}
+          </p>
+        </h2>
         <Divider orientation="vertical" flexItem />
-        <h2>HSE Observation Safe: </h2>
+        <h2>
+          HSE Observation Safe
+          <p style={{ color: '#911a1f', textAlign: 'center' }}>
+            {totalForms?.allReportCount || 0}
+          </p>
+        </h2>
       </Box>
       <Divider />
       <Box sx={{ width: '800px' }}>
