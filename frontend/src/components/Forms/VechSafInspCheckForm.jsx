@@ -34,37 +34,30 @@ import dayjs from 'dayjs';
 import moment from 'moment';
 import styles from './Form.module.css';
 import DialogForm from './DialogForm';
-import { createReportAction, setReportFieldsAction, setInspectLocationAction } from '../../Redux/report.action';
+import { createReportAction, setReportFieldsAction } from '../../Redux/report.action';
 
-function VechSafInspCheckForm({ location }) {
+function VechSafInspCheckForm() {
   const [open, setOpen] = useState(false);
   const [statusBtn, setStatusBtn] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const formId = useLocation().pathname.split('/').at(-1);
   const reportsFields = useSelector((state) => state.ReportReducer.reportFields);
-  const inspectLocation = useSelector((state) => state.ReportReducer.inspectLocation);
+  const inspectLocation = useSelector((state) => state.ReportReducer.locations);
   const user = useSelector((state) => state.UserReducer.user);
 
   useEffect(() => {
     dispatch(setReportFieldsAction(formId, navigate));
   }, []);
 
-
-
-  console.log('!!!!!!!!!!!!!!!!', inspectLocation);
-
-  // const nameLocation = inspectLocation[0].map((el) => el.name);
-  // console.log('!!!!!!!!!!!!!!!!nameloc', nameLocation);
+  const nameLocation = inspectLocation.map((el) => el.name);
 
   const formFields = reportsFields.find((el) => el.formId === +formId);
-  console.log('!!!!!!!!!!!!!!!!formFields', formFields);
 
   const checklist = [];
   formFields?.questionFields.forEach((el) => {
     checklist.push(el);
   });
-  
 
   const questionsValues = {};
   for (const item of checklist) {
@@ -216,13 +209,13 @@ function VechSafInspCheckForm({ location }) {
             id="location"
             name="location"
             label="Location"
-            value={formik.values.location}
+            value={formik.values.nameLocation}
             onChange={formik.handleChange}
             onBlur={(e) => formik.setFieldTouched(e.target.name)}
-            error={formik.touched.location && Boolean(formik.errors.location)}
-            helperText={formik.touched.location && formik.errors.location}
+            error={formik.touched.nameLocation && Boolean(formik.errors.nameLocation)}
+            helperText={formik.touched.nameLocation && formik.errors.nameLocation}
           >
-            {location.map((el, index) => (
+            {nameLocation.map((el, index) => (
               <MenuItem key={index + 1} value={el}>
                 {el}
               </MenuItem>

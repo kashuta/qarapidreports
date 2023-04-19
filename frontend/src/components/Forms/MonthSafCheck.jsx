@@ -33,21 +33,23 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import styles from './Form.module.css';
 import DialogForm from './DialogForm';
-import InspectorMain from '../Inspector/InspectorMain';
 import { createReportAction, setReportFieldsAction } from '../../Redux/report.action';
 
-function VechSafInspCheckForm({ location }) {
+function VechSafInspCheckForm() {
   const [open, setOpen] = useState(false);
   const [statusBtn, setStatusBtn] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const formId = useLocation().pathname.split('/').at(-1);
   const reportsFields = useSelector((state) => state.ReportReducer.reportFields);
+  const inspectLocation = useSelector((state) => state.ReportReducer.locations);
   const user = useSelector((state) => state.UserReducer.user);
 
   useEffect(() => {
     dispatch(setReportFieldsAction(formId, navigate));
   }, []);
+
+  const nameLocation = inspectLocation.map((el) => el.name);
 
   const formFields = reportsFields.find((el) => el.formId === +formId);
 
@@ -179,12 +181,12 @@ function VechSafInspCheckForm({ location }) {
             id="location"
             name="location"
             label="Location"
-            value={formik.values.location}
+            value={formik.values.nameLocation}
             onChange={formik.handleChange}
             onBlur={(e) => formik.setFieldTouched(e.target.name)}
-            error={formik.touched.location && Boolean(formik.errors.location)}
-            helperText={formik.touched.location && formik.errors.location}>
-            {location.map((el, index) => (
+            error={formik.touched.nameLocation && Boolean(formik.errors.nameLocation)}
+            helperText={formik.touched.nameLocation && formik.errors.nameLocation}>
+            {nameLocation.map((el, index) => (
               <MenuItem key={index + 1} value={el}>
                 {el}
               </MenuItem>
