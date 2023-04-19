@@ -5,7 +5,6 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // Связи между моделями
       this.belongsTo(models.Users, {
-        // as: 'inspector',
         foreignKey: 'inspectorId',
       });
       this.hasMany(models.FormResponseAnswer, {
@@ -46,6 +45,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     images: {
       type: DataTypes.STRING,
+      defaultValue: '',
       allowNull: true,
     },
     createdAt: {

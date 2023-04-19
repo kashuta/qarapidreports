@@ -52,6 +52,7 @@ class FormController {
   async getFormDataForInspectorDashboard(req, res, next) {
     try {
       const { email } = req.body;
+      console.log(email);
       const responseObject = await formService.getFormDataForInspectorDashboard(email);
       res.status(200).json(responseObject);
     } catch (err) {
