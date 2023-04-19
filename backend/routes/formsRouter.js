@@ -18,7 +18,9 @@ router.post('/get_form_data', formController.getFormData);
 // Запрос, который возвращает данные в форм
 router.post('/form_data_for_dashboard', formController.formDataForDashboard);
 
-router.post('/get_form_data_for_inspector_dashboard', formController.getFormDataForInspectorDashboard);
+router.post('/get_all_data_for_one_inspector', formController.getAllDataForOneInspector);
+
+router.post('/get_by_date_data_for_one_inspector', formController.getByDateDataForOneInspector);
 
 // Запрос, который сохраняет фотографию
 router.post('/upload', multerMiddleware.single('avatar'), async (req, res) => {
