@@ -139,15 +139,15 @@ function ForkliftForm({ location }) {
     validationSchema,
     validateOnChange: true,
     validateOnBlur: true,
-    onSubmit: (values) => {
-      const obj = {
-        formId,
-        userId: user.id,
-        formData: values,
-        status: 'submit',
-      };
-      // console.log(JSON.stringify(obj, null, 2));
-      dispatch(createReportAction(JSON.stringify(obj), navigate));
+    onSubmit: (values, { resetForm }) => {
+      const data = new FormData();
+      data.append('formData', JSON.stringify(values));
+      data.append('formId', formId);
+      data.append('userId', user.id);
+      data.append('status', 'submit');
+      data.append('images', '');
+      dispatch(createReportAction(data, navigate));
+      resetForm();
     },
   });
 
@@ -168,7 +168,14 @@ function ForkliftForm({ location }) {
             if (typeof errors[key] === 'object') {
               touched[key] = {};
               for (const nested of Object.keys(errors[key])) {
-                touched[key][nested] = true;
+                if (typeof errors[key][nested] === 'object') {
+                  touched[key][nested] = {};
+                  for (const el of Object.keys(errors[key][nested])) {
+                    touched[key][nested][el] = true;
+                  }
+                } else {
+                  touched[key][nested] = true;
+                }
               }
             } else {
               touched[key] = true;
@@ -341,7 +348,7 @@ function ForkliftForm({ location }) {
                           },
                         }}
                         name={`${elem.item}.actionsNeeded`}
-                        value={formik.values[elem.item]?.actionsNeeded}
+                        value={formik.values[elem.item]?.actionsNeeded ?? ''}
                         onChange={formik.handleChange}
                         onBlur={(e) => formik.setFieldTouched(e.target.name)}
                         error={formik.touched[`${elem.item}`]?.actionsNeeded && Boolean(formik.errors[`${elem.item}`]?.actionsNeeded)}
@@ -384,7 +391,7 @@ function ForkliftForm({ location }) {
                           },
                         }}
                         name={`${elem.item}.actionsNeeded`}
-                        value={formik.values[elem.item]?.actionsNeeded}
+                        value={formik.values[elem.item]?.actionsNeeded ?? ''}
                         onChange={formik.handleChange}
                         onBlur={(e) => formik.setFieldTouched(e.target.name)}
                         error={formik.touched[`${elem.item}`]?.actionsNeeded && Boolean(formik.errors[`${elem.item}`]?.actionsNeeded)}
@@ -407,15 +414,53 @@ function ForkliftForm({ location }) {
             </div>
           </div>
         </Box>
-        <Box m={3} display="flex" justifyContent="center">
-          <Button sx={{ height: 80, width: 220, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="primary" value="submit">
+        <Box m="30px 0 30px 0" display="flex" justifyContent="center">
+          <Button
+            sx={{
+              height: 80, width: 250, margin: 3, ml: 0, mr: 1,
+            }}
+            size="large"
+            onClick={(e) => handleSubmit(e)}
+            type="submit"
+            variant="contained"
+            color="primary"
+            value="submit">
             <h2>Submit</h2>
           </Button>
-          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="warning" value="save">
+          <Button
+            sx={{
+              height: 80, width: 250, margin: 1, mb: 3, mt: 3,
+            }}
+            size="large"
+            onClick={(e) => handleSubmit(e)}
+            type="submit"
+            variant="outlined"
+            color="primary"
+            value="save">
             <h2>Save</h2>
           </Button>
-          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="error" value="clear">
+          <Button
+            sx={{
+              height: 80, width: 250, margin: 1, mb: 3, mt: 3,
+            }}
+            size="large"
+            onClick={(e) => handleSubmit(e)}
+            type="submit"
+            variant="contained"
+            color="error"
+            value="clear">
             <h2>Clear</h2>
+          </Button>
+          <Button
+            sx={{
+              height: 80, width: 250, margin: 3, ml: 1, mr: 0,
+            }}
+            size="large"
+            type="button"
+            variant="outlined"
+            color="primary"
+            value="print">
+            <h2>Print</h2>
           </Button>
         </Box>
       </form>

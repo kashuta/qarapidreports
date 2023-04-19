@@ -27,17 +27,15 @@ import {
   MenuItem,
   IconButton,
   Grid,
-  Item,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DatePicker } from '@mui/x-date-pickers';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import styles from './Form.module.css';
 import DialogForm from './DialogForm';
 import { createReportAction } from '../../Redux/report.action';
 import FileUpload from '../FileUpload/FileUpload';
-import { setImageNamesAction, setImagesAction } from '../../Redux/file.action';
 
 function MeetingForm({ location }) {
   const [open, setOpen] = useState(false);
@@ -48,7 +46,6 @@ function MeetingForm({ location }) {
   const user = useSelector((state) => state.UserReducer.user);
   const [singleFile, setSingleFile] = useState([]);
   const [fileList, setFileList] = useState([]);
-  const files = useSelector((state) => state.FileReducer.images);
 
   const validationSchema = yup.object().shape({
     country: yup
@@ -154,8 +151,6 @@ function MeetingForm({ location }) {
     formik.handleReset();
     setFileList([]);
     setSingleFile([]);
-    dispatch(setImageNamesAction([]));
-    dispatch(setImagesAction([]));
   };
 
   const handleConfirmSave = () => {
@@ -166,11 +161,6 @@ function MeetingForm({ location }) {
     setOpen(false);
   };
 
-  // const getFormData = (object) => Object.keys(object).reduce((formData, key) => {
-  //   formData.append(key, object[key]);
-  //   return formData;
-  // }, new FormData());
-
   return (
     <Container>
       <Formik
@@ -178,30 +168,24 @@ function MeetingForm({ location }) {
         validationSchema={validationSchema}
         validateOnChange
         validateOnBlur
-        onSubmit={(values) => {
+        onSubmit={(values, { resetForm }) => {
           const imgNames = fileList.map((el) => el.name).join(', ');
-          const obj = {
-            formId,
-            userId: user.id,
-            formData: values,
-            status: 'submit',
-            images: imgNames,
-          };
-          // console.log(JSON.stringify(obj, null, 2));
           const data = new FormData();
           data.append('formData', JSON.stringify(values));
           data.append('formId', formId);
           data.append('userId', user.id);
           data.append('status', 'submit');
           data.append('images', imgNames);
-          console.log(files[0]);
-          if (files.length > 0) {
-            data.append('file', files[0]);
-          }
-          for (const entry of data.entries()) {
-            console.log(entry);
+
+          if (fileList.length > 0) {
+            fileList.forEach((file) => {
+              data.append('file', file);
+            });
           }
           dispatch(createReportAction(data, navigate));
+          resetForm();
+          setFileList([]);
+          setSingleFile([]);
         }}
         >
         {(formik) => (
@@ -287,9 +271,8 @@ function MeetingForm({ location }) {
                   helperText={formik.touched.points && formik.errors.points}
                 />
 
+                <FileUpload multiple name="images" singleFile={singleFile} setSingleFile={setSingleFile} fileList={fileList} setFileList={setFileList} />
               </Box>
-
-              <FileUpload multiple name="images" singleFile={singleFile} setSingleFile={setSingleFile} fileList={fileList} setFileList={setFileList} />
 
               <Box
                 mb={5}

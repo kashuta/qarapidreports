@@ -22,9 +22,13 @@ import {
   Checkbox,
 } from '@mui/material';
 import { DatePicker, TimeField } from '@mui/x-date-pickers';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import styles from './Form.module.css';
 import DialogForm from './DialogForm';
+import FileUpload from '../FileUpload/FileUpload';
+import { createReportAction } from '../../Redux/report.action';
 
 const validationSchema = yup.object().shape({
   location: yup
@@ -77,6 +81,12 @@ const validationSchema = yup.object().shape({
 function HSEObservationForm({ location }) {
   const [open, setOpen] = useState(false);
   const [statusBtn, setStatusBtn] = useState('');
+  const formId = useLocation().pathname.split('/').at(-1);
+  const user = useSelector((state) => state.UserReducer.user);
+  const [singleFile, setSingleFile] = useState([]);
+  const [fileList, setFileList] = useState([]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -95,8 +105,27 @@ function HSEObservationForm({ location }) {
     validationSchema,
     validateOnChange: true,
     validateOnBlur: true,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: (values, { resetForm }) => {
+      const isSafe = values.observationType === 'Safe observation';
+      const imgNames = fileList.map((el) => el.name).join(', ');
+
+      const data = new FormData();
+      data.append('formData', JSON.stringify(values));
+      data.append('formId', formId);
+      data.append('userId', user.id);
+      data.append('status', 'submit');
+      data.append('images', imgNames);
+      data.append('isSafe', isSafe);
+
+      if (fileList.length > 0) {
+        fileList.forEach((file) => {
+          data.append('file', file);
+        });
+      }
+      dispatch(createReportAction(data, navigate));
+      resetForm();
+      setFileList([]);
+      setSingleFile([]);
     },
   });
 
@@ -109,8 +138,16 @@ function HSEObservationForm({ location }) {
           formik.setErrors(errors);
           const touchedFields = Object.keys(errors).reduce((touched, key) => {
             if (typeof errors[key] === 'object') {
+              touched[key] = {};
               for (const nested of Object.keys(errors[key])) {
-                touched[key] = { [nested]: true };
+                if (typeof errors[key][nested] === 'object') {
+                  touched[key][nested] = {};
+                  for (const el of Object.keys(errors[key][nested])) {
+                    touched[key][nested][el] = true;
+                  }
+                } else {
+                  touched[key][nested] = true;
+                }
               }
             } else {
               touched[key] = true;
@@ -137,6 +174,8 @@ function HSEObservationForm({ location }) {
   const handleConfirmClear = () => {
     setOpen(false);
     formik.handleReset();
+    setFileList([]);
+    setSingleFile([]);
   };
 
   const handleConfirmSave = () => {
@@ -275,6 +314,7 @@ function HSEObservationForm({ location }) {
             error={formik.touched.description && Boolean(formik.errors.description)}
             helperText={formik.touched.description && formik.errors.description}
           />
+          <FileUpload multiple name="images" singleFile={singleFile} setSingleFile={setSingleFile} fileList={fileList} setFileList={setFileList} />
         </Box>
 
         <Box mb={5} fullWidth>
@@ -315,15 +355,63 @@ function HSEObservationForm({ location }) {
 
         </Box>
 
-        <Box m={3} display="flex" justifyContent="center">
-          <Button sx={{ height: 80, width: 220, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="primary" value="submit">
+        <Box mb={5}>
+          <h2 className={styles.form_h2}>C.&ensp;Guide</h2>
+          <div className={styles.form_image}>
+            <div className={styles.img_container}>
+              <div className={styles.img_wrapper}>
+                <img src="../img/forklift.jpg" alt="guide" />
+              </div>
+            </div>
+          </div>
+        </Box>
+        <Box m="30px 0 30px 0" display="flex" justifyContent="center">
+          <Button
+            sx={{
+              height: 80, width: 250, margin: 3, ml: 0, mr: 1,
+            }}
+            size="large"
+            onClick={(e) => handleSubmit(e)}
+            type="submit"
+            variant="contained"
+            color="primary"
+            value="submit">
             <h2>Submit</h2>
           </Button>
-          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="warning" value="save">
+          <Button
+            sx={{
+              height: 80, width: 250, margin: 1, mb: 3, mt: 3,
+            }}
+            size="large"
+            onClick={(e) => handleSubmit(e)}
+            type="submit"
+            variant="outlined"
+            color="primary"
+            value="save">
             <h2>Save</h2>
           </Button>
-          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="error" value="clear">
+          <Button
+            sx={{
+              height: 80, width: 250, margin: 1, mb: 3, mt: 3,
+            }}
+            size="large"
+            onClick={(e) => handleSubmit(e)}
+            type="submit"
+            variant="contained"
+            color="error"
+            value="clear">
             <h2>Clear</h2>
+          </Button>
+          <Button
+            sx={{
+              height: 80, width: 250, margin: 3, ml: 1, mr: 0,
+            }}
+            size="large"
+            type="button"
+            variant="outlined"
+            color="primary"
+            value="print">
+            <h2>Print</h2>
           </Button>
         </Box>
       </form>
