@@ -59,7 +59,12 @@ function InspectorMain() {
                   borderRadius: 2,
                   marginBottom: '20px',
                 }}>
-                <Typography sx={{ fontSize: '25px', fontWeight: 'bold' }}>
+                <Typography
+                  sx={{
+                    fontSize: '25px',
+                    fontWeight: 'bold',
+                    textDecoration: 'none',
+                  }}>
                   {form.name}
                 </Typography>
               </Button>
