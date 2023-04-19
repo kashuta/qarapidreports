@@ -32,7 +32,8 @@ class FormController {
       if (!formId || !status || !formData || !userId) {
         return next(ErrorHandler.UnprocessableEntityError(backendErrors.INCORRECT_DATA_ERROR, res));
       }
-      await formService.saveFormData(userId, formId, status, formData);
+      const answer = JSON.parse(formData);
+      await formService.saveFormData(userId, formId, status, answer);
       return res.status(200).json({ message: 'Form submitted successfully' });
     } catch (err) {
       return next(ErrorHandler.BadRequestError(err, res));

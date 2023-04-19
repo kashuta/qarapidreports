@@ -166,10 +166,10 @@ function MeetingForm({ location }) {
     setOpen(false);
   };
 
-  const getFormData = (object) => Object.keys(object).reduce((formData, key) => {
-    formData.append(key, object[key]);
-    return formData;
-  }, new FormData());
+  // const getFormData = (object) => Object.keys(object).reduce((formData, key) => {
+  //   formData.append(key, object[key]);
+  //   return formData;
+  // }, new FormData());
 
   return (
     <Container>
@@ -183,13 +183,18 @@ function MeetingForm({ location }) {
           const obj = {
             formId,
             userId: user.id,
-            formData: JSON.stringify(values),
+            formData: values,
             status: 'submit',
             images: imgNames,
           };
-          console.log(JSON.stringify(obj, null, 2));
-          const data = getFormData(obj);
-          console.log(files.length);
+          // console.log(JSON.stringify(obj, null, 2));
+          const data = new FormData();
+          data.append('formData', JSON.stringify(values));
+          data.append('formId', formId);
+          data.append('userId', user.id);
+          data.append('status', 'submit');
+          data.append('images', imgNames);
+          console.log(files[0]);
           if (files.length > 0) {
             data.append('file', files[0]);
           }
