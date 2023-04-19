@@ -42,7 +42,7 @@ function App() {
 
   if (!user) {
     return (
-      <Container maxWidth="xl">
+      <Container >
         <Navbar />
         <Routes>
           <Route path="/" element={<MainPage />} />
@@ -59,7 +59,7 @@ function App() {
   }
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Container maxWidth="xl">
+      <Container>
         <Navbar />
         <Routes>
           <Route path="/" element={<MainPage />} />
