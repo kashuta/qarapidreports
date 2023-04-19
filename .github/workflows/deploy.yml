@@ -63,6 +63,10 @@ jobs:
 
       - name: Copy files to remote server
         run: |
+          export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+          export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          export POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+          export POSTGRES_DIALECT=${{ secrets.POSTGRES_DIALECT }}
           envsubst < docker-compose.dev.yml > docker-compose.dev.subst.yml
           scp -o StrictHostKeyChecking=no -i id_rsa_no_passphrase -r -P ${{ secrets.SSH_PORT }} docker-compose.dev.subst.yml ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }}:/var/www/qarapidreports/dev/docker-compose.dev.yml
       - name: Deploy to remote server
