@@ -14,7 +14,7 @@ FROM node:18.15-alpine
 
 WORKDIR /app
 
-COPY backend/.env.development .env
+COPY .env.development .env
 
 COPY --from=build /app/node_modules /app/node_modules
 COPY --from=build /app/package*.json /app/
