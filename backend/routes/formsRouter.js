@@ -8,7 +8,7 @@ router.get('/form_data/:formId', formController.getFormData);
 router.get('/form_names', formController.getAllFormNames);
 
 // Запрос, который сохраняет данные в форм
-router.post('/form_save_data', formController.saveFormData);
+router.post('/form_save_data', multerMiddleware.any('file'), formController.saveFormData);
 // Запрос на имена инспекторов
 router.get('/inspectors_names_data', formController.inspectorsNamesData);
 

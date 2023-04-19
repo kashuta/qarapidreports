@@ -38,8 +38,6 @@ function App() {
     dispatch(refreshAccessToken(navigate));
   }, []); // Add dependencies if needed
 
-  const locations = ['Moscow', 'Tbilisi', 'Dubai'];
-
   if (!user) {
     return (
       <Container >
@@ -64,7 +62,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route element={<ProtectedRoleRoute role="inspector" />}>
-            <Route path="/:formId" element={<Forms location={locations} />} />
+            <Route path="/:formId" element={<Forms />} />
             <Route path="/inspector/:userId" element={<InspectorProfile />} />
           </Route>
           <Route element={<ProtectedRoleRoute role="manager" />}>

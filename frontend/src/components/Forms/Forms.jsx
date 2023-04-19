@@ -4,16 +4,17 @@ import MonthSafCheck from './MonthSafCheck';
 import VechSafInspCheckForm from './VechSafInspCheckForm';
 import ForkliftForm from './ForkliftForm';
 import HSEObservationForm from './HSEObservationForm';
+import MeetingForm from './MeetingForm';
 
-function Forms({ location }) {
+function Forms() {
   const { formId } = useParams();
   return (
     <>
-      {formId === '1' && <MonthSafCheck location={location} />}
-      {formId === '2' && <VechSafInspCheckForm location={location} />}
-      {formId === '3' && <ForkliftForm location={location} />}
-      {formId === '4' && <HSEObservationForm location={location} />}
-      {/* {id === 5 && <ToolBox location={location} />} */}
+      {formId === '1' && <MonthSafCheck />}
+      {formId === '2' && <VechSafInspCheckForm />}
+      {formId === '3' && <ForkliftForm />}
+      {formId === '4' && <HSEObservationForm />}
+      {formId === '5' && <MeetingForm />}
       {/* <Outlet /> */}
     </>
   );
