@@ -78,7 +78,7 @@ const validationSchema = yup.object().shape({
   }),
 });
 
-function HSEObservationForm({ location }) {
+function HSEObservationForm() {
   const [open, setOpen] = useState(false);
   const [statusBtn, setStatusBtn] = useState('');
   const formId = useLocation().pathname.split('/').at(-1);
@@ -87,6 +87,8 @@ function HSEObservationForm({ location }) {
   const [fileList, setFileList] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const locations = useSelector((state) => state.ReportReducer.locations);
+  const locationsNames = locations.map((el) => el.name);
 
   const formik = useFormik({
     initialValues: {
@@ -222,7 +224,7 @@ function HSEObservationForm({ location }) {
             error={formik.touched.location && Boolean(formik.errors.location)}
             helperText={formik.touched.location && formik.errors.location}
           >
-            {location.map((el, index) => (
+            {locationsNames.map((el, index) => (
               <MenuItem key={index + 1} value={el}>{el}</MenuItem>
             ))}
           </TextField>
@@ -355,16 +357,6 @@ function HSEObservationForm({ location }) {
 
         </Box>
 
-        <Box mb={5}>
-          <h2 className={styles.form_h2}>C.&ensp;Guide</h2>
-          <div className={styles.form_image}>
-            <div className={styles.img_container}>
-              <div className={styles.img_wrapper}>
-                <img src="../img/forklift.jpg" alt="guide" />
-              </div>
-            </div>
-          </div>
-        </Box>
         <Box m="30px 0 30px 0" display="flex" justifyContent="center">
           <Button
             sx={{

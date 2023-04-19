@@ -34,6 +34,7 @@ class FormController {
       await formService.saveFormData(userId, formId, status, answer);
       return res.status(200).json({ message: 'Form submitted successfully' });
     } catch (err) {
+      console.log(err);
       return next(ErrorHandler.BadRequestError(err, res));
     }
   }

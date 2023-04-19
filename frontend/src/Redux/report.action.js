@@ -1,4 +1,3 @@
-import { useSelector } from 'react-redux';
 /* eslint-disable operator-linebreak */
 import { refreshAccessToken } from '../JWT/authActions';
 import authFetch from '../JWT/authFetch';

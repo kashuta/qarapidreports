@@ -35,7 +35,7 @@ import styles from './Form.module.css';
 import DialogForm from './DialogForm';
 import { createReportAction, setReportFieldsAction } from '../../Redux/report.action';
 
-function ForkliftForm({ location }) {
+function ForkliftForm() {
   const [open, setOpen] = useState(false);
   const [statusBtn, setStatusBtn] = useState('');
   const navigate = useNavigate();
@@ -43,6 +43,8 @@ function ForkliftForm({ location }) {
   const formId = useLocation().pathname.split('/').at(-1);
   const reportsFields = useSelector((state) => state.ReportReducer.reportFields);
   const user = useSelector((state) => state.UserReducer.user);
+  const locations = useSelector((state) => state.ReportReducer.locations);
+  const locationsNames = locations.map((el) => el.name);
 
   useEffect(() => {
     dispatch(setReportFieldsAction(formId, navigate));
@@ -236,7 +238,7 @@ function ForkliftForm({ location }) {
             error={formik.touched.location && Boolean(formik.errors.location)}
             helperText={formik.touched.location && formik.errors.location}
           >
-            {location.map((el, index) => (
+            {locationsNames.map((el, index) => (
               <MenuItem key={index + 1} value={el}>{el}</MenuItem>
             ))}
           </TextField>

@@ -37,13 +37,16 @@ import DialogForm from './DialogForm';
 import { createReportAction } from '../../Redux/report.action';
 import FileUpload from '../FileUpload/FileUpload';
 
-function MeetingForm({ location }) {
+function MeetingForm() {
   const [open, setOpen] = useState(false);
   const [statusBtn, setStatusBtn] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const formId = useLocation().pathname.split('/').at(-1);
   const user = useSelector((state) => state.UserReducer.user);
+  const locations = useSelector((state) => state.ReportReducer.locations);
+  const locationsNames = locations.map((el) => el.name);
+
   const [singleFile, setSingleFile] = useState([]);
   const [fileList, setFileList] = useState([]);
 
@@ -231,7 +234,7 @@ function MeetingForm({ location }) {
                     error={formik.touched.location && Boolean(formik.errors.location)}
                     helperText={formik.touched.location && formik.errors.location}
                   >
-                    {location.map((el, index) => (
+                    {locationsNames.map((el, index) => (
                       <MenuItem key={index + 1} value={el}>{el}</MenuItem>
                     ))}
                   </TextField>

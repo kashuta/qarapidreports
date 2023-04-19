@@ -11,10 +11,6 @@ const store = configureStore({
     FileReducer,
     ReportReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-    serializableCheck: false,
-    immutableCheck: false,
-  }),
 });
 
 export default store;
