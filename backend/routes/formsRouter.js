@@ -9,6 +9,16 @@ router.get('/form_names', formController.getAllFormNames);
 
 // Запрос, который сохраняет данные в форм
 router.post('/form_save_data', multerMiddleware.any('file'), formController.saveFormData);
+// Запрос на имена инспекторов
+router.get('/inspectors_names_data', formController.inspectorsNamesData);
+
+// Запрос, который возвращает данные в форм
+router.post('/get_form_data', formController.getFormData);
+
+// Запрос, который возвращает данные в форм
+router.post('/form_data_for_dashboard', formController.formDataForDashboard);
+
+router.post('/get_form_data_for_inspector_dashboard', formController.getFormDataForInspectorDashboard);
 
 // Запрос, который сохраняет фотографию
 router.post('/upload', multerMiddleware.single('avatar'), async (req, res) => {

@@ -62,10 +62,14 @@ export default function VerticalTabs() {
         value={value}
         onChange={handleChange}
         aria-label="Vertical tabs example"
-        sx={{ borderRight: 1, borderColor: 'divider' }}>
+        sx={{
+          borderRight: 1,
+          borderColor: 'divider',
+          minWidth: '100px',
+        }}>
         <Tab label="Main Stat" {...a11yProps(0)} />
         <Tab label="Inspector Stat" {...a11yProps(1)} />
-        <Tab label="Range Stat" {...a11yProps(2)} />
+        {/* <Tab label="Range Stat" {...a11yProps(2)} /> */}
       </Tabs>
       <TabPanel value={value} index={0}>
         <MainStat />
@@ -73,9 +77,9 @@ export default function VerticalTabs() {
       <TabPanel value={value} index={1}>
         <InspectorStat />
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      {/* <TabPanel value={value} index={2}>
         Item Three
-      </TabPanel>
+      </TabPanel> */}
     </Box>
   );
 }

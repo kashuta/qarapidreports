@@ -27,6 +27,15 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      isSafe: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+        allowNull: false,
+      },
+      images: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,

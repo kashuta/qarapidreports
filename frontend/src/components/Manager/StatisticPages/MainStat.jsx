@@ -1,27 +1,55 @@
 import React, { useState } from 'react';
 import { Box, Button } from '@mui/material';
 
+import { useNavigate } from 'react-router-dom';
+
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Divider from '@mui/material/Divider';
 
-import { Bar, Doughnut } from 'react-chartjs-2';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { dataForDoughnut } from '../ChartsComponents/Doughnut';
-import { barData, barOptions } from '../ChartsComponents/Bar';
+import dayjs from 'dayjs';
+import HseBar from '../ChartsComponents/HSE.Bar';
+import MyDoughnut from '../ChartsComponents/MyDoughnut';
+import MainBar from '../ChartsComponents/MainBar';
+import { getFormResponseDataAction } from '../../../Redux/report.action';
 
 function MainStat() {
-  const [value1, setValue1] = useState([]);
-  const [value2, setValue2] = useState([]);
+  const [value1, setValue1] = useState(dayjs(new Date()));
+  const [value2, setValue2] = useState(dayjs(new Date()));
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const data = { from: value1, to: value2 };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log({ from: value1, to: value2 });
+    dispatch(getFormResponseDataAction(data, navigate));
   };
+  //   общий объект с базы
+  const totalForms = useSelector(
+    (state) => state.ReportReducer.formResponseData,
+  );
+  console.log(totalForms?.allRepCount);
   return (
-    <>
-      <Box>
+    <Box
+      sx={{
+        width: 1,
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+        gap: '20px',
+      }}>
+      <Box
+        sx={{
+          width: 1,
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column',
+          gap: '20px',
+        }}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={['DatePicker', 'DatePicker']}>
             <DemoItem label="Date Range">
@@ -38,29 +66,58 @@ function MainStat() {
                 onChange={(newValue) => setValue2(newValue)}
               />
             </DemoItem>
-            <Button
-              onClick={handleSubmit}
-              variant="contained"
-              type="submit"
-              sx={{
-                width: '100%',
-              }}>
-              Submit
-            </Button>
           </DemoContainer>
+          <Button onClick={handleSubmit} variant="contained" type="submit">
+            Submit
+          </Button>
         </LocalizationProvider>
       </Box>
-      <Box>
-        <h2>Total Reports: </h2>
-        <h2>HSE Observation Unsafe: </h2>
-        <h2>HSE Observation Safe: </h2>
+      <Box
+        sx={{
+          width: 1,
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          gap: '30px',
+        }}>
+        <h2>
+          Total Reports
+          <p style={{ color: '#911a1f', textAlign: 'center' }}>
+            {totalForms?.allReportCount || 0}
+          </p>
+        </h2>
+        <Divider orientation="vertical" flexItem />
+        <h2>
+          HSE Observation Unsafe
+          <p style={{ color: '#911a1f', textAlign: 'center' }}>
+            {totalForms?.allReportCount || 0}
+          </p>
+        </h2>
+        <Divider orientation="vertical" flexItem />
+        <h2>
+          HSE Observation Safe
+          <p style={{ color: '#911a1f', textAlign: 'center' }}>
+            {totalForms?.allReportCount || 0}
+          </p>
+        </h2>
       </Box>
-
-      <Box sx={{ width: 600 }}>
-        <Bar options={barOptions} data={barData} />
-        <Doughnut data={dataForDoughnut} width="300px" />
+      <Divider />
+      <Box sx={{ width: '800px' }}>
+        <MainBar />
       </Box>
-    </>
+      <Divider />
+      <Box
+        sx={{
+          width: '50%',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          gap: '10px',
+        }}>
+        <MyDoughnut />
+        <HseBar />
+      </Box>
+    </Box>
   );
 }
 

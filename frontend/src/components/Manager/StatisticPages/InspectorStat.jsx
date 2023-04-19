@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -7,37 +7,43 @@ import {
   MenuItem,
   Select,
 } from '@mui/material';
-
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Bar } from 'react-chartjs-2';
+import InspectorTable from './InspectorTable';
+import InspectorBar from '../ChartsComponents/Inspector.Bar';
 
 function InspectorStat() {
   const [value1, setValue1] = useState('');
   const [value2, setValue2] = useState('');
+  const [inspector, setInspector] = useState('All Inspectors');
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-  };
-
-  const [inspector, setInspector] = useState('');
-
-  const handleChange = (event) => {
-    event.preventDefault();
-    setInspector(event.target.value);
-    console.log(inspector);
-  };
-
-  const inspectors = [];
+  const inspectors = ['All Inspectors'];
 
   for (let i = 1; i <= 10; i += 1) {
     inspectors.push(`Inspector${i}`);
   }
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  };
+
+  const handleChange = (event) => {
+    event.preventDefault();
+    setInspector(event.target.value);
+  };
+
   return (
-    <Box>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <Box sx={{
+      width: 1,
+      display: 'flex',
+      alignItems: 'center',
+      flexDirection: 'column',
+      gap: '20px',
+    }}>
+      <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ maxWidth: 100 }}>
         <DemoContainer components={['DatePicker', 'DatePicker']}>
           <DemoItem label="Date Range">
             <DatePicker
@@ -52,20 +58,21 @@ function InspectorStat() {
               value={value2}
               onChange={(newValue) => setValue2(newValue)}
             />
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              type="submit">
+              Submit
+            </Button>
           </DemoItem>
-          <Button
-            onClick={handleSubmit}
-            variant="contained"
-            type="submit"
-            sx={{
-              width: '100%',
-            }}>
-            Submit
-          </Button>
+          <Box sx={{ width: '800px' }}>
+            <InspectorBar />
+          </Box>
+
         </DemoContainer>
       </LocalizationProvider>
       <Box sx={{ minWidth: 120, marginTop: 10 }}>
-        <FormControl fullWidth>
+        <FormControl sx={{ m: 1, width: 500 }}>
           <InputLabel id="demo-simple-select-label">Inspectors</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -79,6 +86,7 @@ function InspectorStat() {
           </Select>
         </FormControl>
       </Box>
+      <InspectorTable inspector={inspector} />
     </Box>
   );
 }
