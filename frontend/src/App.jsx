@@ -40,12 +40,9 @@ function App() {
 
   const locations = ['Moscow', 'Tbilisi', 'Dubai'];
 
-  // if (!loader) {
-  //   return <h2 style={{ margin: 300 }}>Loading...</h2>;
-  // }
   if (!user) {
     return (
-      <Container maxWidth="xl">
+      <Container >
         <Navbar />
         <Routes>
           <Route path="/" element={<MainPage />} />
@@ -57,9 +54,12 @@ function App() {
     );
   }
 
+  if (!loader && !user) {
+    return <h2 style={{ margin: 300 }}>Loading...</h2>;
+  }
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Container maxWidth="xl">
+      <Container>
         <Navbar />
         <Routes>
           <Route path="/" element={<MainPage />} />

@@ -63,15 +63,23 @@ function RegForm() {
   return (
     <Box
       component="form"
-      sx={{
-        width: '40%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        marginLeft: 35,
-        marginTop: 10,
-      }}>
+      container
+      display="flex"
+      alignItems="center"
+      justify="center"
+      minHeight="100vh"
+      flexDirection="column"
+      margin="100px 400px"
+      // sx={{
+      //   width: '40%',
+      //   display: 'flex',
+      //   justifyContent: 'center',
+      //   alignItems: 'center',
+      //   flexDirection: 'column',
+      //   marginLeft: 35,
+      //   marginTop: 10,
+      // }}
+    >
       <TextField
         required
         label="First and Last Name"
@@ -97,6 +105,7 @@ function RegForm() {
         }}
       />
       <TextField
+        helperText="More than six characters"
         required
         label="Password"
         name="password"

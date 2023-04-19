@@ -10,7 +10,7 @@ const initialState = {
   formsName: [],
   reportFields: [],
   inspectorsNames: [],
-  formResponseData: [],
+  formResponseData: null,
   locations: [],
 };
 

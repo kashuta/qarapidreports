@@ -26,9 +26,7 @@ class FormController {
 
   async saveFormData(req, res, next) {
     try {
-      const {
-        formId, status, formData, userId,
-      } = req.body;
+      const { formId, status, formData, userId } = req.body;
       if (!formId || !status || !formData || !userId) {
         return next(ErrorHandler.UnprocessableEntityError(backendErrors.INCORRECT_DATA_ERROR, res));
       }
