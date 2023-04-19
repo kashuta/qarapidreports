@@ -6,6 +6,9 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.FormSection, {
         foreignKey: 'formId',
       });
+      this.hasMany(models.FormResponse, {
+        foreignKey: 'formId',
+      });
     }
   }
   Form.init(

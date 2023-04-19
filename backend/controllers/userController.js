@@ -24,11 +24,10 @@ class UserController {
         }
       }
       const { userName, email, password } = req.body;
-      console.log(req.body);
       const userData = await userService.registration(userName, email, password);
       return res.json(userData);
     } catch (err) {
-      return next(ErrorHandler.BadRequestError(err));
+      return next(ErrorHandler.BadRequestError(err, res));
     }
   }
 
@@ -63,8 +62,8 @@ class UserController {
   async activate(req, res, next) {
     try {
       const { link } = req.params;
-      await userService.activate(link);
-      res.render('view');
+      const resp = await userService.activate(link);
+      if (resp) { res.render('viewError'); } else { res.render('view'); }
     } catch (err) {
       return next(ErrorHandler.BadRequestError(err, res));
     }

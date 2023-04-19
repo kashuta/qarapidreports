@@ -1,63 +1,42 @@
 import React, { useState } from 'react';
 import { Box, Button } from '@mui/material';
 
+import { useNavigate } from 'react-router-dom';
+
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Divider from '@mui/material/Divider';
 
-import { Bar, Doughnut } from 'react-chartjs-2';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { dataForDoughnut } from '../ChartsComponents/Doughnut';
-import { barData, barOptions } from '../ChartsComponents/Bar';
-import { HSEbarData, HSEbarOptions } from '../ChartsComponents/HSE.Bar';
-import authFetch from '../../../JWT/authFetch';
-import { refreshAccessToken } from '../../../JWT/authActions';
+import HseBar from '../ChartsComponents/HSE.Bar';
+import MyDoughnut from '../ChartsComponents/MyDoughnut';
+import MainBar from '../ChartsComponents/MainBar';
+import { getFormResponseDataAction } from '../../../Redux/report.action';
 
 function MainStat() {
   const [value1, setValue1] = useState([]);
   const [value2, setValue2] = useState([]);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const data = { from: value1, to: value2 };
 
-  const fetchData = async () => {
-    try {
-      const data = { date: { from: value1, to: value2 } };
-      const response = await authFetch(
-        'http://localhost:3001/api/v2/form/upload',
-        {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: data,
-        },
-      );
-      if (response.status === 401) {
-        const newAccessToken = await dispatch(refreshAccessToken());
-        if (!newAccessToken) {
-          return;
-          // Handle error, for example, redirect to the login page or show an error message
-        }
-        // Retry the request with the new access token
-        fetchData();
-      } else if (response.ok) {
-        const result = await response.json();
-        console.log(result);
-        // Process the data
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    fetchData();
-    console.log({ date: { from: value1, to: value2 } });
+    dispatch(getFormResponseDataAction(data, navigate));
   };
+  const totalForms = useSelector(
+    (state) => state.ReportReducer.formResponseData,
+  );
+  const locations = useSelector(
+    (state) => state.ReportReducer.locations,
+  );
+  console.log(locations);
+  const allRepCount = totalForms.allReportCount;
+
+  console.log(totalForms);
   return (
     <Box
       sx={{
@@ -105,7 +84,10 @@ function MainStat() {
           justifyContent: 'center',
           gap: '30px',
         }}>
-        <h2>Total Reports: </h2>
+        <h2>
+          Total Reports:
+          {allRepCount}
+        </h2>
         <Divider orientation="vertical" flexItem />
         <h2>HSE Observation Unsafe: </h2>
         <Divider orientation="vertical" flexItem />
@@ -113,7 +95,7 @@ function MainStat() {
       </Box>
       <Divider />
       <Box sx={{ width: '800px' }}>
-        <Bar options={barOptions} data={barData} />
+        <MainBar />
       </Box>
       <Divider />
       <Box
@@ -124,13 +106,9 @@ function MainStat() {
           justifyContent: 'center',
           gap: '10px',
         }}>
-        <Doughnut data={dataForDoughnut} />
-        <Bar options={HSEbarOptions} data={HSEbarData} />
+        <MyDoughnut />
+        <HseBar />
       </Box>
-      {/* <Divider />
-      <Box sx={{ mt: 5 }}>
-        <Bar options={HSEbarOptions} data={HSEbarData} />
-      </Box> */}
     </Box>
   );
 }

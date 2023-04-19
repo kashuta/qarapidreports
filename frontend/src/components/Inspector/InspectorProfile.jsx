@@ -44,7 +44,7 @@ function InspectorProfile() {
       console.log(error);
     }
   };
-
+  console.log(selectedFile);
   useEffect(() => {
     fetchData();
   }, []); // Add dependencies if needed

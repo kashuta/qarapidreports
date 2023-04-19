@@ -1,4 +1,6 @@
+import React from 'react';
 import { faker } from '@faker-js/faker';
+import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,45 +11,51 @@ import {
   Legend,
 } from 'chart.js';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-);
+function HseBar() {
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+  );
 
-export const HSEbarOptions = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'top',
+  const HSEbarOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Unsafe HSE',
+      },
     },
-    title: {
-      display: true,
-      text: 'Unsafe HSE',
-    },
-  },
-};
+  };
 
-// const labels = [
-//   'Inspector1',
-//   'Inspector2',
-//   'Inspector3',
-//   'Inspector4',
-//   'Inspector5',
-//   'Inspector6',
-// ];
-const labels = ['Health HAZARD', 'Enviromental Risk', 'Unsafe Condition'];
+  // const labels = [
+  //   'Inspector1',
+  //   'Inspector2',
+  //   'Inspector3',
+  //   'Inspector4',
+  //   'Inspector5',
+  //   'Inspector6',
+  // ];
+  const labels = ['Health HAZARD', 'Enviromental Risk', 'Unsafe Condition'];
 
-export const HSEbarData = {
-  labels,
-  datasets: [
-    {
-      label: 'Total for period',
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
-      backgroundColor: 'rgb(255, 99, 132)',
-    },
-  ],
-};
+  const HSEbarData = {
+    labels,
+    datasets: [
+      {
+        label: 'Total for period',
+        data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
+        backgroundColor: 'rgb(255, 99, 132)',
+      },
+    ],
+  };
+
+  return <Bar options={HSEbarOptions} data={HSEbarData} />;
+}
+
+export default HseBar;

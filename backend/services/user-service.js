@@ -17,7 +17,7 @@ class UserService {
    * @returns {Promise<Object>} Returns an object containing access token, refresh token, and user details.
    * @throws {Error} Throws an error if user creation fails or if there's an issue with sending the activation email.
    */
-  async registration(userName, email, password, role) {
+  async registration(userName, email, password, role = 'manager') {
     try {
       const [roleFind, createdRole] = await Roles.findOrCreate({ where: { [role]: true } });
       const [newUser, createdUser] = await Users.findOrCreate({
@@ -54,16 +54,12 @@ class UserService {
         throw backendErrors.USER_NOT_FOUND;
       }
       if (user.isActive) {
-        throw backendErrors.USER_ALREADY_ACTIVATED;
+        return { isActive: true };
       }
       await Users.update({ isActive: true }, { where: { id: user.dataValues.id } });
-      const userUpdated = await Users.findOne({ where: { id: user.dataValues.id } });
-      const userFront = {
-        userName: userUpdated.userName,
-      };
-      const tokens = await tokenService.generateTokens({ ...userFront });
+      const tokens = await tokenService.generateTokens(user.dataValuse.userName);
       await tokenService.saveToken(user, tokens.refreshToken);
-      return { ...tokens, userFront };
+      return { isActive: false };
     } catch (err) {
       throw new Error(err.message);
     }

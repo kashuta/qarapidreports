@@ -12,9 +12,6 @@ import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const theme = createTheme({
-  typography: {
-    fontFamily: 'Arial',
-  },
   palette: {
     primary: {
       main: '#15315b',

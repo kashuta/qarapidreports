@@ -8,22 +8,22 @@ module.exports = {
           name: 'Dubai',
           managerId: 2,
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           name: 'Abu Dhabi',
           managerId: 2,
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           name: 'Sharjah',
           managerId: 2,
           createdAt: new Date(),
-          updatedAt: new Date()
-        }
+          updatedAt: new Date(),
+        },
       ],
-      {}
+      {},
     );
   },
 
@@ -31,7 +31,7 @@ module.exports = {
     await queryInterface.bulkDelete('Locations', null, {
       truncate: true,
       cascade: true,
-      restartIdentity: true
+      restartIdentity: true,
     });
-  }
+  },
 };
