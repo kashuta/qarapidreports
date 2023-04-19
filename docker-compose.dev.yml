@@ -10,6 +10,11 @@ services:
       - db
     ports:
       - "5001:3001"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_DIALECT: ${POSTGRES_DIALECT}
 
   frontend:
     build:

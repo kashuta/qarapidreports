@@ -55,12 +55,6 @@ class FormController {
     } catch (err) {
       return next(ErrorHandler.BadRequestError(err, res));
     }
-    // {
-    // allreports - все отчеты по юзеру
-    // отдельная ручка для сортировки по дате
-    //  имя формы: количество
-    // все локации
-    // }
   }
 
   async inspectorsNamesData(req, res, next) {

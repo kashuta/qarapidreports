@@ -39,7 +39,6 @@ jobs:
           push: true
           tags: kashuta/frontend:${{ github.ref == 'refs/heads/main' && 'latest' || 'dev' }}
 
-
   deploy-develop:
     runs-on: ubuntu-latest
     needs: build-push
@@ -64,7 +63,12 @@ jobs:
 
       - name: Copy files to remote server
         run: |
-          scp -o StrictHostKeyChecking=no -i id_rsa_no_passphrase -r -P ${{ secrets.SSH_PORT }} docker-compose.dev.yml ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }}:/var/www/qarapidreports/dev
+          export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+          export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          export POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+          export POSTGRES_DIALECT=${{ secrets.POSTGRES_DIALECT }}
+          envsubst < docker-compose.dev.yml > docker-compose.dev.subst.yml
+          scp -o StrictHostKeyChecking=no -i id_rsa_no_passphrase -r -P ${{ secrets.SSH_PORT }} docker-compose.dev.subst.yml ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }}:/var/www/qarapidreports/dev/docker-compose.dev.yml
       - name: Deploy to remote server
         run: |
           ssh -o StrictHostKeyChecking=no -i id_rsa_no_passphrase -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }} "cd /var/www/qarapidreports/dev && docker-compose -f docker-compose.dev.yml pull && docker-compose -f docker-compose.dev.yml down && docker-compose -f docker-compose.dev.yml up -d"
@@ -93,7 +97,9 @@ jobs:
 
       - name: Copy files to remote server
         run: |
-          scp -o StrictHostKeyChecking=no -i id_rsa_no_passphrase -r -P ${{ secrets.SSH_PORT }} docker-compose.prod.yml ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }}:/var/www/qarapidreports/prod
+          envsubst < docker-compose.prod.yml > docker-compose.prod.subst.yml
+          scp -o StrictHostKeyChecking=no -i id_rsa_no_passphrase -r -P ${{ secrets.SSH_PORT }} docker-compose.prod.subst.yml ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }}:/var/www/qarapidreports/prod/docker-compose.prod.yml
+
       - name: Deploy to remote server
         run: |
           ssh -o StrictHostKeyChecking=no -i id_rsa_no_passphrase -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.DROPLET_HOST }} "cd /var/www/qarapidreports/prod && docker-compose -f docker-compose.prod.yml pull && docker-compose -f docker-compose.prod.yml down && docker-compose -f docker-compose.prod.yml up -d"
