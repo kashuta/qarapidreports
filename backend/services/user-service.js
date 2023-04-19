@@ -57,8 +57,6 @@ class UserService {
         return { isActive: true };
       }
       await Users.update({ isActive: true }, { where: { id: user.dataValues.id } });
-      const tokens = await tokenService.generateTokens(user.dataValuse.userName);
-      await tokenService.saveToken(user, tokens.refreshToken);
       return { isActive: false };
     } catch (err) {
       throw new Error(err.message);

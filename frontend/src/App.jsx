@@ -21,9 +21,6 @@ import MainPage from './components/MainPage/MainPage';
 import RegForm from './components/Auth/RegForm';
 import { refreshAccessToken } from './JWT/authActions';
 import Forms from './components/Forms/Forms';
-import FormTest from './components/Forms/FormTest';
-import MyReactPdf from './components/Forms/MyReactPdf';
-import TestPdf from './components/Forms/TestPdf';
 
 // import { setUserAction } from './components/Redux/user.action';
 
@@ -37,8 +34,6 @@ function App() {
   useEffect(() => {
     dispatch(refreshAccessToken(navigate));
   }, []); // Add dependencies if needed
-
-  const locations = ['Moscow', 'Tbilisi', 'Dubai'];
 
   if (!user) {
     return (
@@ -64,16 +59,13 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route element={<ProtectedRoleRoute role="inspector" />}>
-            <Route path="/:formId" element={<Forms location={locations} />} />
+            <Route path="/:formId" element={<Forms />} />
             <Route path="/inspector/:userId" element={<InspectorProfile />} />
           </Route>
           <Route element={<ProtectedRoleRoute role="manager" />}>
             <Route path="/manager/:userId" element={<ManagerProfile />} />
             <Route path="/dashboard" element={<Dashboard />} />
           </Route>
-          <Route path="/FormTest" element={<FormTest />} />
-          <Route path="/MyReactPdf" element={<MyReactPdf />} />
-          <Route path="/TestPdf" element={<TestPdf />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Container>

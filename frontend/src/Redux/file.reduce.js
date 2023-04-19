@@ -3,6 +3,8 @@ import { UPLOAD_AVATAR_PHOTO } from './type.redux';
 const initialState = {
   avatar: null,
   photo: null,
+  images: [],
+  imageNames: [],
 };
 
 // eslint-disable-next-line default-param-last

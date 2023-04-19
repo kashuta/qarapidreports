@@ -30,9 +30,11 @@ class FormController {
       if (!formId || !status || !formData || !userId) {
         return next(ErrorHandler.UnprocessableEntityError(backendErrors.INCORRECT_DATA_ERROR, res));
       }
-      await formService.saveFormData(userId, formId, status, formData);
+      const answer = JSON.parse(formData);
+      await formService.saveFormData(userId, formId, status, answer);
       return res.status(200).json({ message: 'Form submitted successfully' });
     } catch (err) {
+      console.log(err);
       return next(ErrorHandler.BadRequestError(err, res));
     }
   }
@@ -50,6 +52,7 @@ class FormController {
   async getFormDataForInspectorDashboard(req, res, next) {
     try {
       const { email } = req.body;
+      console.log(email);
       const responseObject = await formService.getFormDataForInspectorDashboard(email);
       res.status(200).json(responseObject);
     } catch (err) {
