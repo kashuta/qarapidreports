@@ -27,6 +27,7 @@ function InspectorBar({ inspector, count }) {
         text: 'Number of reports by form',
       },
     },
+    responsive: true,
     scales: {
       x: {
         ticks: {
@@ -50,14 +51,14 @@ function InspectorBar({ inspector, count }) {
   };
   return (
     <Box sx={{
-      display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2, mt: 5,
+      display: 'flex', alignItems: 'center', gap: 1, mb: 7, width: '100%',
     }}>
-      <Box>
-        <Bar options={options} data={data} width={600} height={300} />
+      <Box width="60%">
+        <Bar options={options} data={data} height={200} />
       </Box>
 
-      <Box sx={{ flex: 1, marginRight: 5 }}>
-        <TableContainer component={Paper} elevation={10}>
+      <Box sx={{ flex: 1, marginRight: 0 }}>
+        <TableContainer component={Paper} elevation={5}>
           <Table sx={{ minWidth: 50 }} size="small" aria-label="a dense table">
             <TableHead>
               <TableRow>

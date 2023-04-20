@@ -198,6 +198,15 @@ function MeetingForm() {
               <Grid container spacing={1} mb={5}>
                 <Grid item xs={12} sm={6} md={4}>
                   <TextField
+                    sx={{
+                      '& .MuiFormHelperText-root.Mui-error': {
+                        position: 'absolute',
+                        bottom: '-25px',
+                        left: 0,
+                        width: '100%',
+                      },
+                    }}
+                    style={{ marginBottom: '15px', marginTop: '15px' }}
                     fullWidth
                     id="country"
                     name="country"
@@ -212,16 +221,32 @@ function MeetingForm() {
 
                 <Grid item xs={12} sm={6} md={4}>
                   <DatePicker
+                    sx={{
+                      '&.MuiTextField-root': {
+                        mb: '15px',
+                        mt: '15px',
+                      },
+                      width: '100%',
+                    }}
                     label="Date"
                     name="date"
                     value={formik.values.date}
                     onChange={((value) => (formik.setValues({ ...formik.values, date: value })))}
-                    sx={{ width: '100%' }}
+                    // sx={{ width: '100%' }}
                 />
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={4}>
                   <TextField
+                    sx={{
+                      '& .MuiFormHelperText-root.Mui-error': {
+                        position: 'absolute',
+                        bottom: '-25px',
+                        left: 0,
+                        width: '100%',
+                      },
+                    }}
+                    style={{ marginBottom: '15px', marginTop: '15px' }}
                     fullWidth
                     select
                     align="left"
@@ -244,6 +269,14 @@ function MeetingForm() {
               <Box mb={5}>
                 <h4 className={`${styles.text_center} ${styles.form_h4}`} style={{ background: '#bfbfbf', marginBottom: '24px' }}>Description of the job</h4>
                 <TextField
+                  sx={{
+                    '& .MuiFormHelperText-root.Mui-error': {
+                      position: 'absolute',
+                      bottom: '-25px',
+                      left: 0,
+                      width: '100%',
+                    },
+                  }}
                   fullWidth
                   multiline
                   rows={2}
@@ -261,6 +294,14 @@ function MeetingForm() {
               <Box mb={5}>
                 <h4 className={`${styles.text_center} ${styles.form_h4}`} style={{ background: '#bfbfbf', marginBottom: '24px' }}>HSE points discussed</h4>
                 <TextField
+                  sx={{
+                    '& .MuiFormHelperText-root.Mui-error': {
+                      position: 'absolute',
+                      bottom: '-25px',
+                      left: 0,
+                      width: '100%',
+                    },
+                  }}
                   fullWidth
                   multiline
                   rows={5}
@@ -286,6 +327,15 @@ function MeetingForm() {
                 <Grid container spacing={1} mb={5}>
                   <Grid item xs={12} sm={6} md={4}>
                     <TextField
+                      sx={{
+                        '& .MuiFormHelperText-root.Mui-error': {
+                          position: 'absolute',
+                          bottom: '-25px',
+                          left: 0,
+                          width: '100%',
+                        },
+                      }}
+                      style={{ marginBottom: '20px', marginTop: '5px' }}
                       fullWidth
                       id="supervisor.name"
                       name="supervisor.name"
@@ -299,6 +349,15 @@ function MeetingForm() {
                   </Grid>
                   <Grid item xs={12} sm={6} md={4}>
                     <TextField
+                      sx={{
+                        '& .MuiFormHelperText-root.Mui-error': {
+                          position: 'absolute',
+                          bottom: '-25px',
+                          left: 0,
+                          width: '100%',
+                        },
+                      }}
+                      style={{ marginBottom: '20px', marginTop: '5px' }}
                       fullWidth
                       id="supervisor.company"
                       name="supervisor.company"
@@ -314,6 +373,15 @@ function MeetingForm() {
 
                   <Grid item xs={12} sm={6} md={4}>
                     <TextField
+                      sx={{
+                        '& .MuiFormHelperText-root.Mui-error': {
+                          position: 'absolute',
+                          bottom: '-25px',
+                          left: 0,
+                          width: '100%',
+                        },
+                      }}
+                      style={{ marginBottom: '20px', marginTop: '5px' }}
                       fullWidth
                       id="supervisor.position"
                       name="supervisor.position"
@@ -360,6 +428,15 @@ function MeetingForm() {
                                 <TableCell sx={{ border: 1, padding: '10px' }} align="center">{index + 1}</TableCell>
                                 <TableCell sx={{ border: 1, padding: '10px' }}>
                                   <TextField
+                                    sx={{
+                                      '& .MuiFormHelperText-root.Mui-error': {
+                                        position: 'absolute',
+                                        bottom: '-25px',
+                                        left: 0,
+                                        width: '100%',
+                                      },
+                                    }}
+                                    style={{ marginBottom: '20px', marginTop: '20px' }}
                                     fullWidth
                                     inputProps={{
                                       style: {
@@ -376,6 +453,15 @@ function MeetingForm() {
                                 </TableCell>
                                 <TableCell sx={{ border: 1, padding: '10px' }}>
                                   <TextField
+                                    sx={{
+                                      '& .MuiFormHelperText-root.Mui-error': {
+                                        position: 'absolute',
+                                        bottom: '-25px',
+                                        left: 0,
+                                        width: '100%',
+                                      },
+                                    }}
+                                    style={{ marginBottom: '20px', marginTop: '20px' }}
                                     fullWidth
                                     inputProps={{
                                       style: {
@@ -394,6 +480,15 @@ function MeetingForm() {
                                   border: 1, borderRight: 0, padding: '10px',
                                 }}>
                                   <TextField
+                                    sx={{
+                                      '& .MuiFormHelperText-root.Mui-error': {
+                                        position: 'absolute',
+                                        bottom: '-25px',
+                                        left: 0,
+                                        width: '100%',
+                                      },
+                                    }}
+                                    style={{ marginBottom: '20px', marginTop: '20px' }}
                                     inputProps={{
                                       style: {
                                         padding: '5px',
@@ -457,7 +552,7 @@ function MeetingForm() {
                   value="submit">
                   <h2>Submit</h2>
                 </Button>
-                <Button
+                {/* <Button
                   sx={{
                     height: 80, width: 250, margin: 1, mb: 3, mt: 3,
                   }}
@@ -468,7 +563,7 @@ function MeetingForm() {
                   color="primary"
                   value="save">
                   <h2>Save</h2>
-                </Button>
+                </Button> */}
                 <Button
                   sx={{
                     height: 80, width: 250, margin: 1, mb: 3, mt: 3,
@@ -480,17 +575,6 @@ function MeetingForm() {
                   color="error"
                   value="clear">
                   <h2>Clear</h2>
-                </Button>
-                <Button
-                  sx={{
-                    height: 80, width: 250, margin: 3, ml: 1, mr: 0,
-                  }}
-                  size="large"
-                  type="button"
-                  variant="outlined"
-                  color="primary"
-                  value="print">
-                  <h2>Print</h2>
                 </Button>
               </Box>
             </Form>

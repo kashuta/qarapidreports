@@ -217,7 +217,7 @@ function ForkliftForm() {
   return (
     <Container>
       <form onSubmit={formik.handleSubmit}>
-        <h1 className={styles.form_h1}>Forklift safety inspection checklist</h1>
+        <h1 className={`${styles.form_h1} ${styles.text_uppercase} ${styles.text_center}`}>Forklift safety inspection checklist</h1>
         <Box
           sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
           mb={5}
@@ -494,7 +494,7 @@ function ForkliftForm() {
             value="submit">
             <h2>Submit</h2>
           </Button>
-          <Button
+          {/* <Button
             sx={{
               height: 80, width: 250, margin: 1, mb: 3, mt: 3,
             }}
@@ -505,7 +505,7 @@ function ForkliftForm() {
             color="primary"
             value="save">
             <h2>Save</h2>
-          </Button>
+          </Button> */}
           <Button
             sx={{
               height: 80, width: 250, margin: 1, mb: 3, mt: 3,

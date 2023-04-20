@@ -22,7 +22,7 @@ import RegForm from './components/Auth/RegForm';
 import { refreshAccessToken } from './JWT/authActions';
 import Forms from './components/Forms/Forms';
 import Footer from './components/Footer/Footer';
-import { Box } from '@mui/system';
+import { Box } from '@mui/material';
 import { getLocationsAction } from './Redux/report.action';
 
 // import { setUserAction } from './components/Redux/user.action';
