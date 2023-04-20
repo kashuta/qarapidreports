@@ -7,6 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { pdf } from '@react-pdf/renderer';
+import { Button } from '@mui/material';
 import Document0024 from '../../Documents/Document0024';
 
 async function openPdf(document) {
@@ -47,12 +48,12 @@ function BasicTable({ Data }) {
               <TableCell align="right" sx={{ fontSize: 17 }}>{el.Location}</TableCell>
               <TableCell align="right" sx={{ fontSize: 17 }}>{el.Date}</TableCell>
               <TableCell align="right">
-                <button onClick={() => openPdf(<Document0024 />)}>open</button>
+                <Button variant="contained" onClick={() => openPdf(<Document0024 />)}>open</Button>
               </TableCell>
               <TableCell align="right">
-                <button onClick={() => downloadPdf(<Document0024 />, `form_${el.Form_id}.pdf`)}>
+                <Button variant="contained" onClick={() => downloadPdf(<Document0024 />, `form_${el.Form_id}.pdf`)}>
                   download
-                </button>
+                </Button>
               </TableCell>
             </TableRow>
           ))}

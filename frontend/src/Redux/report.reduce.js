@@ -4,6 +4,8 @@ import {
   GET_INSPECTORS_NAMES,
   GET_FORMRESPONSE_DATA,
   GET_LOCATIONS,
+  GET_FORM_ALL_PROFILE_INSPECTOR,
+  GET_FORM_DATE_PROFILE_INSPECTOR,
 } from './type.redux';
 
 const initialState = {
@@ -12,6 +14,8 @@ const initialState = {
   inspectorsNames: [],
   formResponseData: null,
   locations: [],
+  FormAllProfileInspector: null,
+  FormDateProfileInspector: null,
 };
 
 // eslint-disable-next-line default-param-last
@@ -29,7 +33,10 @@ const ReportReducer = (state = initialState, action) => {
       return { ...state, formResponseData: payload };
     case GET_LOCATIONS:
       return { ...state, locations: payload };
-
+    case GET_FORM_ALL_PROFILE_INSPECTOR:
+      return { ...state, FormAllProfileInspector: payload };
+    case GET_FORM_DATE_PROFILE_INSPECTOR:
+      return { ...state, FormDateProfileInspector: payload };
     default:
       return state;
   }

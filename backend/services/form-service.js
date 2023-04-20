@@ -202,7 +202,7 @@ class FormService {
     }
   }
 
-  async getByDateDataForOneInspector(refresh, date) {
+  async getByDateDataForOneInspector(refresh, data) {
     try {
       const valid = await RefreshToken.findOne({ where: { token: refresh }, raw: true });
       const response = await Users.findOne({
@@ -213,7 +213,7 @@ class FormService {
           attributes: ['formId'],
           where: {
             createdAt: {
-              [Sequelize.Op.between]: [date.from, date.to],
+              [Sequelize.Op.between]: [data.from, data.to],
             },
           },
           include: [{
