@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Container } from '@mui/material';
+import { Box, Container, Grid } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import TabPanel from './StatisticPages/Tabs';
@@ -18,9 +18,11 @@ function Dashboard() {
     dispatch(getLocationsAction(navigate));
   }, []);
   return (
-    <Container>
-      <TabPanel />
-    </Container>
+    <Grid container>
+      <Grid item>
+        <TabPanel />
+      </Grid>
+    </Grid>
   );
 }
 

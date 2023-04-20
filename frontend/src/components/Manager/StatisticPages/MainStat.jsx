@@ -107,13 +107,12 @@ function MainStat() {
       <Grid
         spacing={1}
         container
-        direction="row"
-        justifyContent="flex-start"
-        alignItems="center">
-        <Grid item xs={6}>
+        direction="column"
+        // justifyContent="flex-start"
+        // alignItems="center"
+        >
+        <Grid item>
           <MainHorizontBar />
-        </Grid>
-        <Grid item xs={6}>
           <HseBar />
         </Grid>
       </Grid>

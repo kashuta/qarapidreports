@@ -1,5 +1,6 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
+import { faker } from '@faker-js/faker';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -71,10 +72,10 @@ function MainBar() {
 
   const barData = {
     labels,
-    datasets: reportLabels.map((item) => ({
+    datasets: reportLabels.map((item, index) => ({
       label: item.toLocaleLowerCase(),
       data: infoPerInspector?.map((inspector) => inspector.reports[item] || 0),
-      backgroundColor: colors.map((color) => color),
+      backgroundColor: colors[index],
       // faker.color.rgb(),
     })),
   };
