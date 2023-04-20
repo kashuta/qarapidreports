@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
-import { faker } from '@faker-js/faker';
 import { useSelector } from 'react-redux';
 
 import Table from '@mui/material/Table';
@@ -57,7 +56,7 @@ function InspectorBar({ inspector, count }) {
         <Bar options={options} data={data} width={600} height={300} />
       </Box>
 
-      <Box sx={{ flex: 1, marginRight: 1 }}>
+      <Box sx={{ flex: 1, marginRight: 5 }}>
         <TableContainer component={Paper} elevation={10}>
           <Table sx={{ minWidth: 50 }} size="small" aria-label="a dense table">
             <TableHead>

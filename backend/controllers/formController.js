@@ -62,7 +62,7 @@ class FormController {
 
   async getAllDataForOneInspector(req, res, next) {
     try {
-      const { refreshToken } = req.cookieы;
+      const { refreshToken } = req.cookies;
       const responseObject = await formService.getAllDataForOneInspector(refreshToken);
       res.status(200).json({ responseObject });
     } catch (err) {
@@ -78,6 +78,7 @@ class FormController {
       if (!data) {
         return next(ErrorHandler.UnprocessableEntityError(backendErrors.INCORRECT_DATA_ERROR, res));
       }
+
       const responseObject = await formService.getByDateDataForOneInspector(refreshToken, data);
       res.status(200).json({ responseObject });
     } catch (err) {
