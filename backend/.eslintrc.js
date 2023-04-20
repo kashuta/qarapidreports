@@ -18,5 +18,6 @@ module.exports = {
     'consistent-return': 0,
     'no-restricted-syntax': 0,
     'no-plusplus': 0,
+    'guard-for-in': 0,
   },
 };
