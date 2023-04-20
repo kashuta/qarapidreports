@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   Box,
@@ -18,23 +18,61 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 import Document0024 from '../Documents/Document0024';
+import Document0109 from '../Documents/Document0109';
+import Document0144 from '../Documents/Document0144';
+import Document0176 from '../Documents/Document0176';
+import Document0320 from '../Documents/Document0320';
 import PageNotFound from '../ProtectedRoute/PageNotFound';
-import { getFormsAllProfileInspectorAction } from '../../Redux/report.action';
+import { getFormsAllProfileInspectorAction, getFormsByDateProfileInspectorAction } from '../../Redux/report.action';
 
-async function openPdf(document) {
-  const pdfBlob = await pdf(document).toBlob();
-  const pdfUrl = URL.createObjectURL(pdfBlob);
-  window.open(pdfUrl, '_blank');
-}
+async function OpenOrDownloadPdf(answer, name, status, username) {
+  let DocumentComponent;
 
-async function downloadPdf(document, fileName) {
-  const pdfBlob = await pdf(document).toBlob();
+  // Выбираем соответствующий документ на основе данных в объекте el
+  switch (name) { // Замените 'type' на соответствующее свойство объекта el
+    case '0144':
+    case 'Form One':
+    case 'MONTHLY SAFETY CHECKLIST - FIELD SERVICES':
+      DocumentComponent = Document0144;
+      break;
+    case '0024':
+    case 'Form Two':
+    case 'VEHICLE SAFETY INSPECTION - CHECKLIST':
+      DocumentComponent = Document0024;
+      break;
+    case '0176':
+    case 'Form Three':
+    case 'FORKLIFT SAFETY INSPECTION CHECKLIST':
+      DocumentComponent = Document0176;
+      break;
+    case '0109':
+    case 'Form Four':
+    case 'HSE OBSERVATION (STOP) CARD':
+      DocumentComponent = Document0109;
+      break;
+    case '0320':
+    case 'Form Five':
+    case 'TOOL BOX SAFETY MEETING FORM':
+      DocumentComponent = Document0320;
+      break;
+
+    default:
+      console.error('Unknown document type');
+      return;
+  }
+
+  const pdfBlob = await pdf(<DocumentComponent data={answer} username={username} />).toBlob();
   const pdfUrl = URL.createObjectURL(pdfBlob);
-  const link = window.document.createElement('a');
-  link.href = pdfUrl;
-  link.download = fileName;
-  link.click();
+  if (status === 'open') {
+    window.open(pdfUrl, '_blank');
+  } else {
+    const link = window.document.createElement('a');
+    link.href = pdfUrl;
+    link.download = `form_${moment(answer.date).format('MM/DD/YYYY HH:mm')}.pdf`;
+    link.click();
+  }
 }
 
 function InspectorProfile() {
@@ -42,52 +80,29 @@ function InspectorProfile() {
   const navigate = useNavigate();
 
   const user = useSelector((state) => state.UserReducer.user);
+  console.log('useruseruseruseruseruseruser', user);
   const { userId } = useParams();
   if (+user.id !== +userId) {
     return <PageNotFound />;
   }
 
-  const [value1, setValue1] = useState(dayjs(new Date()));
+  const [value1, setValue1] = useState(dayjs(new Date()).subtract(17, 'day'));
   const [value2, setValue2] = useState(dayjs(new Date()));
+  console.log(value1);
+
+  const data = { from: value1, to: value2 };
+  useEffect(() => {
+    dispatch(getFormsByDateProfileInspectorAction(navigate, data));
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(getFormsAllProfileInspectorAction(navigate));
+    dispatch(getFormsByDateProfileInspectorAction(navigate, data));
   };
+  console.log('datadatadatadatadatadatadatadatadatadatadata', data);
 
-  const totalForms = useSelector(
-    (state) => state.ReportReducer.FormAllProfileInspector,
-  );
-
-  const Data = [[
-    {
-      FormName: 'MONTHLY SAFETY CHECKLIST',
-      Location: 'Dubai',
-      Date: '12/04/23',
-      Form_id: 13,
-    },
-    {
-      FormName: 'VEHICLE SAFETY INSPECTION',
-      Location: 'Oman',
-      Date: '10/04/23',
-      Form_id: 11,
-    },
-    {
-      FormName: 'FORKLIFT SAFETY INSPECTION',
-      Location: 'Dubai',
-      Date: '7/04/23',
-      Form_id: 22,
-    },
-
-    {
-      FormName: 'TOOL BOX SAFETY MEETING',
-      Location: 'Miami',
-      Date: '3/04/23',
-      Form_id: 43,
-    }],
-  [15, 19, 10, 5, 11, 60],
-  ];
-
+  const totalForms = useSelector((state) => state.ReportReducer.FormAllProfileInspector);
+  console.log('totalFormstotalFormstotalFormstotalFormstotalFormstotalForms', totalForms);
   return (
     <Box>
       <Box sx={{ alignContent: 'center', marginLeft: 30, marginTop: 15 }}>
@@ -131,19 +146,19 @@ function InspectorProfile() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {Data[0].map((el) => (
+              {totalForms && totalForms.responseObject?.map((el, index) => (
                 <TableRow
-                  key={el.Form_id}
+                  key={`${index}1`}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-                  <TableCell component="th" scope="row"><b>{el.FormName}</b></TableCell>
-                  <TableCell align="right" sx={{ fontSize: 17 }}>{el.Location}</TableCell>
-                  <TableCell align="right" sx={{ fontSize: 17 }}>{el.Date}</TableCell>
+                  <TableCell component="th" scope="row"><b>{el.name}</b></TableCell>
+                  <TableCell align="right" sx={{ fontSize: 17 }}>{el.answer.location}</TableCell>
+                  <TableCell align="right" sx={{ fontSize: 17 }}>{moment(el.createdAt).format('MM/DD/YYYY HH:mm')}</TableCell>
                   <TableCell align="right">
-                    <Button variant="contained" onClick={() => openPdf(<Document0024 />)}>open</Button>
+                    <Button variant="contained" onClick={() => OpenOrDownloadPdf(el.answer, el.name, 'open', user.userName)}>open</Button>
                   </TableCell>
                   <TableCell align="right">
-                    <Button variant="contained" onClick={() => downloadPdf(<Document0024 />, `form_${el.Form_id}.pdf`)}>
+                    <Button variant="contained" onClick={() => OpenOrDownloadPdf(el.answer, el.name, 'download', user.userName)}>
                       download
                     </Button>
                   </TableCell>

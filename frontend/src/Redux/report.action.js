@@ -17,6 +17,7 @@ export const getFormsAllProfileInspectorAction = (navigate) => async (dispatch) 
       'http://localhost:3001/api/v2/form/get_all_data_for_one_inspector',
       {
         credentials: 'include',
+        method: 'POST',
       },
     );
     if (response.status === 401) {
@@ -46,9 +47,12 @@ export const getFormsByDateProfileInspectorAction = (navigate, data) => async (d
     const response = await authFetch(
       'http://localhost:3001/api/v2/form/get_by_date_data_for_one_inspector',
       {
-        credentials: 'include',
         method: 'POST',
-        body: data,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ data }),
+        credentials: 'include',
       },
     );
     console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', response);
