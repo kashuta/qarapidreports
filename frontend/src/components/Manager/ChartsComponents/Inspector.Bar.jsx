@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
-import { faker } from '@faker-js/faker';
+// import { faker } from '@faker-js/faker';
 import { useSelector } from 'react-redux';
 
 import Table from '@mui/material/Table';

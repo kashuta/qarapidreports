@@ -1,3 +1,4 @@
+const { faker } = require('@faker-js/faker');
 const bcrypt = require('bcrypt');
 
 module.exports = {
@@ -9,401 +10,156 @@ module.exports = {
         manager: false,
         inspector: false,
         createdAt: new Date(),
-        updatedAt: new Date(),
+        updatedAt: new Date()
       },
       {
         admin: false,
         manager: true,
         inspector: false,
         createdAt: new Date(),
-        updatedAt: new Date(),
+        updatedAt: new Date()
       },
       {
         admin: false,
         manager: false,
         inspector: true,
         createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+        updatedAt: new Date()
+      }
     ]);
 
     // Find created roles
     const adminRole = await queryInterface.rawSelect('Roles', { where: { admin: true } }, ['id']);
     const managerRole = await queryInterface.rawSelect('Roles', { where: { manager: true } }, [
-      'id',
+      'id'
     ]);
     const inspectorRole = await queryInterface.rawSelect('Roles', { where: { inspector: true } }, [
-      'id',
+      'id'
     ]);
 
     // Create users
-    await queryInterface.bulkInsert(
-      'Users',
-      [
-        {
-          userName: 'admin',
-          email: 'admin@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: adminRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'manager',
-          email: 'manager@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: managerRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector1',
-          email: 'inspector1@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector2',
-          email: 'inspector2@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector3',
-          email: 'inspector3@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector4',
-          email: 'inspector4@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector5',
-          email: 'inspector5@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector6',
-          email: 'inspector6@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector7',
-          email: 'inspector7@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector8',
-          email: 'inspector8@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector9',
-          email: 'inspector9@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector10',
-          email: 'inspector10@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector11',
-          email: 'inspector11@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector12',
-          email: 'inspector12@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector13',
-          email: 'inspector13@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector14',
-          email: 'inspector14@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector15',
-          email: 'inspector15@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector16',
-          email: 'inspector16@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector17',
-          email: 'inspector17@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector718',
-          email: 'inspector718@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector719',
-          email: 'inspector719@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector720',
-          email: 'inspector720@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector721',
-          email: 'inspector721@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector722',
-          email: 'inspector722@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector723',
-          email: 'inspector723@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        }, {
-          userName: 'inspector6',
-          email: 'inspector6@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector7',
-          email: 'inspector7@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector8',
-          email: 'inspector8@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector9',
-          email: 'inspector9@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector10',
-          email: 'inspector10@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector11',
-          email: 'inspector11@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector12',
-          email: 'inspector12@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector13',
-          email: 'inspector13@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector14',
-          email: 'inspector14@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector15',
-          email: 'inspector15@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector16',
-          email: 'inspector16@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector17',
-          email: 'inspector17@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector718',
-          email: 'inspector718@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector719',
-          email: 'inspector719@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userName: 'inspector720',
-          email: 'inspector720@example.com',
-          password: await bcrypt.hash('password', 10),
-          isActive: true,
-          roleId: inspectorRole,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ],
-    );
+    await queryInterface.bulkInsert('Users', [
+      {
+        userName: 'admin',
+        email: 'admin@example.com',
+        password: await bcrypt.hash('password', 10),
+        isActive: true,
+        roleId: adminRole,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        userName: 'manager',
+        email: 'manager@example.com',
+        password: await bcrypt.hash('password', 10),
+        isActive: true,
+        roleId: managerRole,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        userName: faker.internet.userName(),
+        email: 'inspector1@example.com',
+        password: await bcrypt.hash('password', 10),
+        isActive: true,
+        roleId: inspectorRole,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        userName: faker.internet.userName(),
+        email: 'inspector2@example.com',
+        password: await bcrypt.hash('password', 10),
+        isActive: true,
+        roleId: inspectorRole,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        userName: faker.internet.userName(),
+        email: 'inspector3@example.com',
+        password: await bcrypt.hash('password', 10),
+        isActive: true,
+        roleId: inspectorRole,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        userName: faker.internet.userName(),
+        email: 'inspector4@example.com',
+        password: await bcrypt.hash('password', 10),
+        isActive: true,
+        roleId: inspectorRole,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        userName: faker.internet.userName(),
+        email: 'inspector5@example.com',
+        password: await bcrypt.hash('password', 10),
+        isActive: true,
+        roleId: inspectorRole,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        userName: faker.internet.userName(),
+        email: 'inspector6@example.com',
+        password: await bcrypt.hash('password', 10),
+        isActive: true,
+        roleId: inspectorRole,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        userName: faker.internet.userName(),
+        email: 'inspector7@example.com',
+        password: await bcrypt.hash('password', 10),
+        isActive: true,
+        roleId: inspectorRole,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        userName: faker.internet.userName(),
+        email: 'inspector8@example.com',
+        password: await bcrypt.hash('password', 10),
+        isActive: true,
+        roleId: inspectorRole,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        userName: faker.internet.userName(),
+        email: 'inspector9@example.com',
+        password: await bcrypt.hash('password', 10),
+        isActive: true,
+        roleId: inspectorRole,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        userName: faker.internet.userName(),
+        email: 'inspector10@example.com',
+        password: await bcrypt.hash('password', 10),
+        isActive: true,
+        roleId: inspectorRole,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        userName: faker.internet.userName(),
+        email: 'inspector11@example.com',
+        password: await bcrypt.hash('password', 10),
+        isActive: true,
+        roleId: inspectorRole,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    ]);
     // Get created users
     const users = await queryInterface.sequelize.query('SELECT id, email FROM "Users";', {
-      type: queryInterface.sequelize.QueryTypes.SELECT,
+      type: queryInterface.sequelize.QueryTypes.SELECT
     });
 
     // Create email verification tokens
@@ -414,8 +170,8 @@ module.exports = {
         token: `some_token_${user.email.split('@')[0]}`,
         expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
         createdAt: new Date(),
-        updatedAt: new Date(),
-      })),
+        updatedAt: new Date()
+      }))
     );
   },
 
@@ -423,17 +179,17 @@ module.exports = {
     await queryInterface.bulkDelete('EmailVerificationTokens', null, {
       truncate: true,
       cascade: true,
-      restartIdentity: true,
+      restartIdentity: true
     });
     await queryInterface.bulkDelete('Users', null, {
       truncate: true,
       cascade: true,
-      restartIdentity: true,
+      restartIdentity: true
     });
     await queryInterface.bulkDelete('Roles', null, {
       truncate: true,
       cascade: true,
-      restartIdentity: true,
+      restartIdentity: true
     });
-  },
+  }
 };

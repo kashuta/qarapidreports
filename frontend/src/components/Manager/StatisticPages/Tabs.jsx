@@ -29,7 +29,7 @@ function TabPanel(props) {
 }
 
 TabPanel.propTypes = {
-  //   children: PropTypes.node,
+  // children: PropTypes.node,
   index: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired,
 };
@@ -67,8 +67,12 @@ export default function VerticalTabs() {
           borderColor: 'divider',
           minWidth: '100px',
         }}>
-        <Tab label="Main Stat" {...a11yProps(0)} />
-        <Tab label="Inspector Stat" {...a11yProps(1)} />
+        <Tab label="Main Stat" sx={{ fontWeight: 'bold' }} {...a11yProps(0)} />
+        <Tab
+          label="Inspector Stat"
+          sx={{ fontWeight: 'bold' }}
+          {...a11yProps(1)}
+        />
         {/* <Tab label="Range Stat" {...a11yProps(2)} /> */}
       </Tabs>
       <TabPanel value={value} index={0}>

@@ -30,6 +30,10 @@ function HseBar() {
       title: {
         display: true,
         text: 'Unsafe HSE',
+        font: {
+          size: 30,
+          weight: 'bold', // or any other font size you prefer
+        },
       },
     },
   };
