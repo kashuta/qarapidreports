@@ -14,8 +14,8 @@ const initialState = {
   inspectorsNames: [],
   formResponseData: null,
   locations: [],
-  FormAllProfileInspector: null,
-  FormDateProfileInspector: null,
+  FormAllProfileInspector: [],
+  FormDateProfileInspector: [],
 };
 
 // eslint-disable-next-line default-param-last
@@ -36,7 +36,7 @@ const ReportReducer = (state = initialState, action) => {
     case GET_FORM_ALL_PROFILE_INSPECTOR:
       return { ...state, FormAllProfileInspector: payload };
     case GET_FORM_DATE_PROFILE_INSPECTOR:
-      return { ...state, FormDateProfileInspector: payload };
+      return { ...state, FormAllProfileInspector: payload };
     default:
       return state;
   }
