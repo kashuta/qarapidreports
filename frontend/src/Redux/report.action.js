@@ -13,69 +13,72 @@ import {
   SET_NEW_LOCATION,
 } from './type.redux';
 
-export const getFormsAllProfileInspectorAction =
-  (navigate) => async (dispatch) => {
-    try {
-      const response = await authFetch(
-        'http://localhost:3001/api/v2/form/get_all_data_for_one_inspector',
-        {
-          credentials: 'include',
-        },
-      );
-      if (response.status === 401) {
-        const newAccessToken = await dispatch(refreshAccessToken());
-        if (!newAccessToken) {
-          navigate('/login');
-          return;
-          // Handle error, for example, redirect to the login page or show an error message
-        }
-        // Retry the request with the new access token
-        await dispatch(getFormsAllProfileInspectorAction());
-      } else if (response.ok) {
-        const result = await response.json();
-        dispatch({
-          type: GET_FORM_ALL_PROFILE_INSPECTOR,
-          payload: result,
-        });
-        // Process the data
+export const getFormsAllProfileInspectorAction = (navigate) => async (dispatch) => {
+  try {
+    const response = await authFetch(
+      'http://localhost:3001/api/v2/form/get_all_data_for_one_inspector',
+      {
+        credentials: 'include',
+        method: 'POST',
+      },
+    );
+    if (response.status === 401) {
+      const newAccessToken = await dispatch(refreshAccessToken());
+      if (!newAccessToken) {
+        navigate('/login');
+        return;
+        // Handle error, for example, redirect to the login page or show an error message
       }
-    } catch (error) {
-      console.log(error);
+      // Retry the request with the new access token
+      await dispatch(getFormsAllProfileInspectorAction());
+    } else if (response.ok) {
+      const result = await response.json();
+      dispatch({
+        type: GET_FORM_ALL_PROFILE_INSPECTOR,
+        payload: result,
+      });
+      // Process the data
     }
-  };
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-export const getFormsByDateProfileInspectorAction =
-  (navigate, data) => async (dispatch) => {
-    try {
-      const response = await authFetch(
-        'http://localhost:3001/api/v2/form/get_by_date_data_for_one_inspector',
-        {
-          credentials: 'include',
-          method: 'POST',
-          body: data,
+export const getFormsByDateProfileInspectorAction = (navigate, data) => async (dispatch) => {
+  try {
+    const response = await authFetch(
+      'http://localhost:3001/api/v2/form/get_by_date_data_for_one_inspector',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
-      if (response.status === 401) {
-        const newAccessToken = await dispatch(refreshAccessToken());
-        if (!newAccessToken) {
-          navigate('/login');
-          return;
-          // Handle error, for example, redirect to the login page or show an error message
-        }
-        // Retry the request with the new access token
-        await dispatch(getFormsByDateProfileInspectorAction());
-      } else if (response.ok) {
-        const result = await response.json();
-        dispatch({
-          type: GET_FORM_DATE_PROFILE_INSPECTOR,
-          payload: result,
-        });
-        // Process the data
+        body: JSON.stringify({ data }),
+        credentials: 'include',
+      },
+    );
+    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', response);
+    if (response.status === 401) {
+      const newAccessToken = await dispatch(refreshAccessToken());
+      if (!newAccessToken) {
+        navigate('/login');
+        return;
+        // Handle error, for example, redirect to the login page or show an error message
       }
-    } catch (error) {
-      console.log(error);
+      // Retry the request with the new access token
+      await dispatch(getFormsByDateProfileInspectorAction());
+    } else if (response.ok) {
+      const result = await response.json();
+      dispatch({
+        type: GET_FORM_DATE_PROFILE_INSPECTOR,
+        payload: result,
+      });
+      // Process the data
     }
-  };
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const setFormsNameAction = (navigate) => async (dispatch) => {
   try {

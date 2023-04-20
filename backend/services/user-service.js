@@ -19,6 +19,9 @@ class UserService {
    */
   async registration(userName, email, password, role) {
     try {
+      if (!userName || !email || !password || !role) {
+        throw backendErrors.INCORRECT_DATA_ERROR;
+      }
       const [roleFind, createdRole] = await Roles.findOrCreate({ where: { [role]: true } });
       const [newUser, createdUser] = await Users.findOrCreate({
         where: { email },
