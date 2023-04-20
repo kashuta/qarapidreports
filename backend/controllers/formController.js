@@ -62,8 +62,8 @@ class FormController {
 
   async getAllDataForOneInspector(req, res, next) {
     try {
-      const { refresh } = req.cookie;
-      const responseObject = await formService.getAllDataForOneInspector(refresh);
+      const { refreshToken } = req.cookies;
+      const responseObject = await formService.getAllDataForOneInspector(refreshToken);
       res.status(200).json({ responseObject });
     } catch (err) {
       console.log(err);
@@ -73,15 +73,46 @@ class FormController {
 
   async getByDateDataForOneInspector(req, res, next) {
     try {
-      const { refresh } = req.body;
-      const { from, to } = req.body;
-      const date = { from, to };
-      const responseObject = await formService.getByDateDataForOneInspector(refresh, date);
+      const { refreshToken } = req.cookies;
+      const { data } = req.body;
+      if (!data) {
+        return next(ErrorHandler.UnprocessableEntityError(backendErrors.INCORRECT_DATA_ERROR, res));
+      }
+
+      const responseObject = await formService.getByDateDataForOneInspector(refreshToken, data);
       res.status(200).json({ responseObject });
     } catch (err) {
-      console.log(err);
       return next(ErrorHandler.BadRequestError(err, res));
     }
+  }
+
+  async getInspectorStat(req, res, next) {
+    try {
+      const { email, data, location } = req.body;
+      if (!data) {
+        return next(ErrorHandler.UnprocessableEntityError(backendErrors.INCORRECT_DATA_ERROR, res));
+      }
+      if (!email || !location) {
+        return next(ErrorHandler.UnprocessableEntityError(backendErrors.INCORRECT_DATA_ERROR, res));
+      }
+      const responseObject = await formService.getInspectorStat(email, data, location);
+      console.log({ ...responseObject });
+      res.status(200).json({ responseObject });
+    } catch (err) {
+      return next(ErrorHandler.BadRequestError(err, res));
+    }
+  }
+
+  async getHseFormParams(req, res, next) {
+    // try {
+    //   // const { data } = req.body;
+    //   const { from, to } = req.body;
+    //   const data = { from, to };
+    //   const responseObject = await formService.getHseFormParams(data);
+    //   return res.json({});
+    // } catch (err) {
+    //   throw next(ErrorHandler.BadRequestError(err, res));
+    // }
   }
 }
 

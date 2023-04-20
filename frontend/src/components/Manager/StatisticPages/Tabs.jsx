@@ -65,7 +65,7 @@ export default function VerticalTabs() {
         sx={{
           borderRight: 1,
           borderColor: 'divider',
-          minWidth: '100px',
+          minWidth: '180px',
         }}>
         <Tab label="Main Stat" sx={{ fontWeight: 'bold' }} {...a11yProps(0)} />
         <Tab

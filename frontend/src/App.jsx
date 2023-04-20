@@ -21,6 +21,7 @@ import MainPage from './components/MainPage/MainPage';
 import RegForm from './components/Auth/RegForm';
 import { refreshAccessToken } from './JWT/authActions';
 import Forms from './components/Forms/Forms';
+import Footer from './components/Footer/Footer';
 
 // import { setUserAction } from './components/Redux/user.action';
 
@@ -69,6 +70,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Container>
+      <Footer />
     </LocalizationProvider>
   );
 }

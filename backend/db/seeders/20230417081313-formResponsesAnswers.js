@@ -200,53 +200,40 @@ const forms = {
       condition: 'ok',
     },
   },
-  //   HSE form object:
-  // {"formId": "4",
-  //    "userId": 5,
-  //    "status": "submit",
-  //   "formData": {
-  //     "location": "Tbilisi",
-  //     "observer": "grgr",
-  //     "date": "2023-04-19T12:31:01.905Z",
-  //     "time": null,
-  //     "description": "rgg",
-  //     "action": "grg",
-  //     "improvement": "rg",
-  //     "observationType": "Unsafe act",
-  //     "healthHazard": true,
-  //     "environmentalRisk": true,
-  //     "unsafeCondition": false
-  //   },
-  //   "isSafe": false,
-  //   "images": "recom2.png, recom1.png"
-  // }
-  4: { name: 'Form Four' },
-  // {
-  //   "formId": "5",
-  //   "userId": 5,
-  //   "status": "submit",
-  //   "images": "recom2.png, recom1.png",
-  //   "formData": {
-  //     "country": "r",
-  //     "date": "2023-04-19T12:47:44.831Z",
-  //     "location": "Tbilisi",
-  //     "description": "rr",
-  //     "points": "rr",
-  //     "supervisor": {
-  //       "name": "rr",
-  //       "company": "rr",
-  //       "position": "rr"
-  //     },
-  //     "participants": [
-  //       {
-  //         "name": "rr",
-  //         "company": "r",
-  //         "position": "rr"
-  //       }
-  //     ]
-  //   }
-  // }
-  5: { name: 'Form Five' },
+
+  4: {
+    location: 'Dubai',
+    observer: 'grgr',
+    date: '2023-04-19T12:31:01.905Z',
+    time: null,
+    description: 'rgg',
+    action: 'grg',
+    improvement: 'rg',
+    observationType: 'Unsafe act',
+    healthHazard: true,
+    environmentalRisk: true,
+    unsafeCondition: false,
+  },
+
+  5: {
+    country: 'r',
+    date: '2023-04-19T12:47:44.831Z',
+    location: 'Dubai',
+    description: 'rr',
+    points: 'rr',
+    supervisor: {
+      name: 'rr',
+      company: 'rr',
+      position: 'rr',
+    },
+    participants: [
+      {
+        name: 'rr',
+        company: 'r',
+        position: 'rr',
+      },
+    ],
+  },
 };
 
 async function getFormResponses(queryInterface, Sequelize) {
