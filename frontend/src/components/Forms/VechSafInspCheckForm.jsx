@@ -107,7 +107,7 @@ function VechSafInspCheckForm() {
       'Next date must be greater than the current date',
       (value, context) => {
         const { date } = context.parent;
-        if (moment(value).isBefore(date.$d)) {
+        if (moment(value).isBefore(date)) {
           return false;
         }
         return true;
@@ -123,20 +123,20 @@ function VechSafInspCheckForm() {
       date: dayjs(new Date()),
       MileageReading: '',
       NextMileage: '',
-      nextDate: dayjs(new Date()),
+      nextDate: '',
     },
     validationSchema,
     validateOnChange: true,
     validateOnBlur: true,
-    onSubmit: (values) => {
-      const obj = {
-        formId,
-        userId: user.id,
-        formData: values,
-        status: 'submit',
-        images: '',
-      };
-      dispatch(createReportAction(JSON.stringify(obj), navigate));
+    onSubmit: (values, { resetForm }) => {
+      const data = new FormData();
+      data.append('formData', JSON.stringify(values));
+      data.append('formId', formId);
+      data.append('userId', user.id);
+      data.append('status', 'submit');
+      data.append('images', '');
+      dispatch(createReportAction(data, navigate));
+      resetForm();
     },
   });
 
@@ -155,8 +155,16 @@ function VechSafInspCheckForm() {
           formik.setErrors(errors);
           const touchedFields = Object.keys(errors).reduce((touched, key) => {
             if (typeof errors[key] === 'object') {
+              touched[key] = {};
               for (const nested of Object.keys(errors[key])) {
-                touched[key] = { [nested]: true };
+                if (typeof errors[key][nested] === 'object') {
+                  touched[key][nested] = {};
+                  for (const el of Object.keys(errors[key][nested])) {
+                    touched[key][nested][el] = true;
+                  }
+                } else {
+                  touched[key][nested] = true;
+                }
               }
             } else {
               touched[key] = true;
@@ -196,7 +204,7 @@ function VechSafInspCheckForm() {
   return (
     <Container>
       <form onSubmit={formik.handleSubmit}>
-        <h1 className={styles.form_h1}>VEHICLE SAFETY INSPECTION CHECKLIST</h1>
+        <h1 className={`${styles.form_h1} ${styles.text_center}`}>VEHICLE SAFETY INSPECTION CHECKLIST</h1>
         <Box
           component="form"
           sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
@@ -209,11 +217,11 @@ function VechSafInspCheckForm() {
             id="location"
             name="location"
             label="Location"
-            value={formik.values.nameLocation}
+            value={formik.values.location}
             onChange={formik.handleChange}
             onBlur={(e) => formik.setFieldTouched(e.target.name)}
-            error={formik.touched.nameLocation && Boolean(formik.errors.nameLocation)}
-            helperText={formik.touched.nameLocation && formik.errors.nameLocation}
+            error={formik.touched.location && Boolean(formik.errors.location)}
+            helperText={formik.touched.location && formik.errors.location}
           >
             {nameLocation.map((el, index) => (
               <MenuItem key={index + 1} value={el}>
@@ -295,7 +303,7 @@ function VechSafInspCheckForm() {
                           row
                           style={{ flexWrap: 'nowrap' }}
                           name={`${elem.question}.condition`}
-                          value={formik.values[elem.question]?.condition}
+                          value={formik.values[elem.question]?.condition ?? ''}
                           onChange={formik.handleChange}
                         >
                           <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="ok" control={<Radio />} label="OK" />
@@ -314,7 +322,7 @@ function VechSafInspCheckForm() {
                           },
                         }}
                         name={`${elem.question}.comments`}
-                        value={formik.values[elem.question]?.comments}
+                        value={formik.values[elem.question]?.comments ?? ''}
                         onChange={formik.handleChange}
                         onBlur={(e) => formik.setFieldTouched(e.target.name)}
                         error={formik.touched[`${elem.question}`]?.comments && Boolean(formik.errors[`${elem.question}`]?.comments)}
@@ -356,16 +364,6 @@ function VechSafInspCheckForm() {
           </Button>
           <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="error" value="clear">
             <h2>Clear</h2>
-          </Button>
-          <Button
-            sx={{ height: 80, width: 250, margin: 3 }}
-            size="large"
-            onClick={handleSubmit}
-            type="submit"
-            variant="outlined"
-            color="primary"
-            value="Print">
-            <h2>Print</h2>
           </Button>
         </Box>
       </form>
