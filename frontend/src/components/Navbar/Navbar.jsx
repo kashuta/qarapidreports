@@ -33,7 +33,7 @@ export default function Navbar() {
     });
     localStorage.removeItem('accessToken');
     dispatch(setUserAction(null));
-    navigate('/login');
+    navigate('/');
   };
 
   return (

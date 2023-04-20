@@ -16,13 +16,15 @@ class LocationController {
   }
 
   async addLocation(req, res, next) {
+    const { addLocation } = req.body;
+    const { name, managerId } = addLocation;
     try {
-      const { name, managerId } = req.body;
       const data = await locationService.addLocationData(name, managerId);
+
       if (!data) {
         return next(ErrorHandler.InternalServerError(backendErrors.DATABASE_ERROR, res));
       }
-      return res.sendStatus(200).json({ message: 'Location added successfully' });
+      return res.json(data);
     } catch (err) {
       return next(ErrorHandler.InternalServerError(err, res));
     }
@@ -35,7 +37,7 @@ class LocationController {
       if (!data) {
         return next(ErrorHandler.InternalServerError(backendErrors.DATABASE_ERROR, res));
       }
-      return res.sendStatus(200).json({ message: 'Location deleted successfully' });
+      return res.json({ message: 'Location deleted successfully' });
     } catch (err) {
       return next(ErrorHandler.InternalServerError(err, res));
     }

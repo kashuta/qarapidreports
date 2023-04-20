@@ -3,7 +3,7 @@
 import { setAccessToken } from './tokenHelpers';
 import authFetch from './authFetch';
 import { getUserLoaderAction, setUserAction } from '../Redux/user.action';
-import { getLocationsAction } from '../Redux/report.action';
+// import { getLocationsAction } from '../Redux/report.action';
 
 export const refreshAccessToken = (navigate) => async (dispatch) => {
   try {
@@ -25,7 +25,7 @@ export const refreshAccessToken = (navigate) => async (dispatch) => {
       setAccessToken(newAccessToken);
       dispatch(setUserAction(data.userFront));
       dispatch(getUserLoaderAction(true));
-      dispatch(getLocationsAction(navigate));
+      // dispatch(getLocationsAction(navigate));
       return newAccessToken;
     }
   } catch (error) {

@@ -6,6 +6,8 @@ import {
   GET_LOCATIONS,
   GET_FORM_ALL_PROFILE_INSPECTOR,
   GET_FORM_DATE_PROFILE_INSPECTOR,
+  SET_NEW_LOCATION,
+  DELETE_LOCATION,
 } from './type.redux';
 
 const initialState = {
@@ -14,8 +16,8 @@ const initialState = {
   inspectorsNames: [],
   formResponseData: null,
   locations: [],
-  FormAllProfileInspector: null,
-  FormDateProfileInspector: null,
+  FormAllProfileInspector: [],
+  FormDateProfileInspector: [],
 };
 
 // eslint-disable-next-line default-param-last
@@ -33,10 +35,17 @@ const ReportReducer = (state = initialState, action) => {
       return { ...state, formResponseData: payload };
     case GET_LOCATIONS:
       return { ...state, locations: payload };
+    case SET_NEW_LOCATION:
+      return { ...state, locations: [...state.locations, payload] };
+    case DELETE_LOCATION:
+      return {
+        ...state,
+        locations: state.locations.filter((p) => p.name !== payload),
+      };
     case GET_FORM_ALL_PROFILE_INSPECTOR:
       return { ...state, FormAllProfileInspector: payload };
     case GET_FORM_DATE_PROFILE_INSPECTOR:
-      return { ...state, FormDateProfileInspector: payload };
+      return { ...state, FormAllProfileInspector: payload };
     default:
       return state;
   }
