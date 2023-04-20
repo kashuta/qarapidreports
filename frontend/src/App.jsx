@@ -37,7 +37,7 @@ function App() {
 
   if (!user) {
     return (
-      <Container >
+      <Container>
         <Navbar />
         <Routes>
           <Route path="/" element={<MainPage />} />
