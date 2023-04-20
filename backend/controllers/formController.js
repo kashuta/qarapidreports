@@ -26,7 +26,9 @@ class FormController {
 
   async saveFormData(req, res, next) {
     try {
-      const { formId, status, formData, userId } = req.body;
+      const {
+        formId, status, formData, userId,
+      } = req.body;
       if (!formId || !status || !formData || !userId) {
         return next(ErrorHandler.UnprocessableEntityError(backendErrors.INCORRECT_DATA_ERROR, res));
       }
@@ -49,22 +51,35 @@ class FormController {
     }
   }
 
-  async getFormDataForInspectorDashboard(req, res, next) {
-    try {
-      const { email } = req.body;
-      console.log(email);
-      const responseObject = await formService.getFormDataForInspectorDashboard(email);
-      res.status(200).json(responseObject);
-    } catch (err) {
-      return next(ErrorHandler.BadRequestError(err, res));
-    }
-  }
-
   async inspectorsNamesData(req, res, next) {
     try {
       const responseObject = await formService.getAllInspectorsNames();
       return res.json(responseObject);
     } catch (err) {
+      return next(ErrorHandler.BadRequestError(err, res));
+    }
+  }
+
+  async getAllDataForOneInspector(req, res, next) {
+    try {
+      const { refresh } = req.cookie;
+      const responseObject = await formService.getAllDataForOneInspector(refresh);
+      res.status(200).json({ responseObject });
+    } catch (err) {
+      console.log(err);
+      return next(ErrorHandler.BadRequestError(err, res));
+    }
+  }
+
+  async getByDateDataForOneInspector(req, res, next) {
+    try {
+      const { refresh } = req.body;
+      const { from, to } = req.body;
+      const date = { from, to };
+      const responseObject = await formService.getByDateDataForOneInspector(refresh, date);
+      res.status(200).json({ responseObject });
+    } catch (err) {
+      console.log(err);
       return next(ErrorHandler.BadRequestError(err, res));
     }
   }

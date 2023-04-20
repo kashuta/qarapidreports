@@ -3,7 +3,7 @@ const moment = require('moment');
 const Sequelize = require('sequelize');
 const {
   Form, FormSection, FormField, FormResponse, FormResponseAnswer,
-  Users, Locations,
+  Users, Locations, RefreshToken,
 } = require('../db/models');
 const { backendErrors } = require('../exceptions');
 
@@ -98,7 +98,6 @@ class FormService {
       element.FormResponses.forEach((formResponse) => {
         // Получаем название формы и значение isSafe
         const formName = formResponse.Form.name;
-        console.log(formName);
         const { isSafe } = formResponse;
 
         // Проверяем, что форма является 'HSE OBSERVATION (STOP) CARD'
@@ -177,27 +176,57 @@ class FormService {
       throw new Error(err.message);
     }
   }
-  // {
-  // allreports - все отчеты по юзеру
-  // отдельная ручка для сортировки по дате
-  // имя формы: количество
-  // все локации
-  // }
 
-  async getFormDataForInspectorDashboard(email) {
+  async getAllDataForOneInspector(refresh) {
     try {
-      const allFormNames = await Users.findOne({ where: { email } });
-      const qwer = await Users.findOne({
-        where: { email },
+      const valid = await RefreshToken.findOne({ where: { token: refresh }, raw: true });
+      const rsponse = await Users.findOne({
+        where: { id: valid.userId },
+        attributes: [],
         include: [{
           model: FormResponse,
-          attributes: ['id'],
-          include: [{ model: Form, attributes: ['name'] }],
+          attributes: ['formId'],
+          include: [{
+            model: Form,
+            attributes: ['name'],
+          }, {
+            model: FormResponseAnswer,
+            attributes: ['answer'],
+          }],
         }],
-        attributes: ['userName'],
       });
-      console.log(qwer);
-      return {};
+      const obj = rsponse.get({ plain: true }).FormResponses.map((el) => ({ name: el.Form.name, answer: el.FormResponseAnswers[0].answer }));
+      return obj;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  async getByDateDataForOneInspector(refresh, date) {
+    try {
+      const valid = await RefreshToken.findOne({ where: { token: refresh }, raw: true });
+      const response = await Users.findOne({
+        where: { id: valid.userId },
+        attributes: [],
+        include: [{
+          model: FormResponse,
+          attributes: ['formId'],
+          where: {
+            createdAt: {
+              [Sequelize.Op.between]: [date.from, date.to],
+            },
+          },
+          include: [{
+            model: Form,
+            attributes: ['name'],
+          }, {
+            model: FormResponseAnswer,
+            attributes: ['answer'],
+          }],
+        }],
+      });
+      const obj = response.get({ plain: true }).FormResponses.map((el) => ({ name: el.Form.name, answer: el.FormResponseAnswers[0].answer }));
+      return obj;
     } catch (err) {
       throw new Error(err.message);
     }
