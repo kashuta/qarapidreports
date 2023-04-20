@@ -214,8 +214,6 @@ function ForkliftForm() {
     setOpen(false);
   };
 
-  // console.log('render');
-
   return (
     <Container>
       <form onSubmit={formik.handleSubmit}>
@@ -227,6 +225,15 @@ function ForkliftForm() {
         >
           <h2 className={styles.form_h2}>A.&ensp;Truck and operator details</h2>
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '20px', marginTop: '20px' }}
             select
             align="left"
             id="location"
@@ -244,6 +251,12 @@ function ForkliftForm() {
           </TextField>
 
           <DatePicker
+            sx={{
+              '&.MuiTextField-root': {
+                mb: '20px',
+                mt: '20px',
+              },
+            }}
             label="Date"
             name="date"
             value={formik.values.date}
@@ -251,6 +264,15 @@ function ForkliftForm() {
           />
 
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '20px', marginTop: '20px' }}
             id="operator"
             name="operator"
             label="Operator"
@@ -261,6 +283,15 @@ function ForkliftForm() {
             helperText={formik.touched.operator && formik.errors.operator}
           />
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '20px', marginTop: '20px' }}
             id="machineHours"
             name="machineHours"
             label="Machine hours"
@@ -274,6 +305,15 @@ function ForkliftForm() {
             helperText={formik.touched.machineHours && formik.errors.machineHours}
           />
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '20px', marginTop: '20px' }}
             id="regNumber"
             name="regNumber"
             label="Registration No."
@@ -284,6 +324,15 @@ function ForkliftForm() {
             helperText={formik.touched.regNumber && formik.errors.regNumber}
           />
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '20px', marginTop: '20px' }}
             id="signature"
             name="signature"
             label="Signature"
@@ -327,7 +376,7 @@ function ForkliftForm() {
                     <TableCell sx={{ border: 1, padding: '0 10px' }}>{elem.item}</TableCell>
                     <TableCell sx={{ border: 1, padding: '0 10px' }}>{elem.hint}</TableCell>
                     <TableCell sx={{ border: 1, padding: 0 }} align="center">
-                      <FormControl sx={{ m: 0 }} error={formik.touched[`${elem.item}`]?.condition && Boolean(formik.errors[`${elem.item}`]?.condition)} variant="standard">
+                      <FormControl sx={{ m: 0, mt: 2, mb: 2 }} error={formik.touched[`${elem.item}`]?.condition && Boolean(formik.errors[`${elem.item}`]?.condition)} variant="standard">
                         <RadioGroup
                           row
                           style={{ flexWrap: 'nowrap' }}
@@ -338,11 +387,19 @@ function ForkliftForm() {
                           <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="ok" control={<Radio />} label="OK" />
                           <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="nok" control={<Radio />} label="NOK" />
                         </RadioGroup>
-                        <FormHelperText sx={{ margin: '0 0 0 5px' }}>{formik.touched[`${elem.item}`]?.condition && formik.errors[`${elem.item}`]?.condition}</FormHelperText>
+                        <FormHelperText sx={{ margin: '0 0 0 5px', position: 'absolute', top: '80%' }}>{formik.touched[`${elem.item}`]?.condition && formik.errors[`${elem.item}`]?.condition}</FormHelperText>
                       </FormControl>
                     </TableCell>
                     <TableCell sx={{ border: 1, padding: '0 10px' }}>
                       <TextField
+                        sx={{
+                          '& .MuiFormHelperText-root.Mui-error': {
+                            position: 'absolute',
+                            bottom: '-25px',
+                            left: 0,
+                          },
+                        }}
+                        style={{ marginBottom: '20px', marginTop: '20px' }}
                         fullWidth
                         inputProps={{
                           style: {
@@ -370,7 +427,7 @@ function ForkliftForm() {
                     <TableCell sx={{ border: 1, padding: '0 10px' }}>{elem.item}</TableCell>
                     <TableCell sx={{ border: 1, padding: '0 10px' }}>{elem.hint}</TableCell>
                     <TableCell sx={{ border: 1, padding: 0 }} align="center">
-                      <FormControl sx={{ m: 0 }} error={formik.touched[`${elem.item}`]?.condition && Boolean(formik.errors[`${elem.item}`]?.condition)} variant="standard">
+                      <FormControl sx={{ m: 0, mt: 2, mb: 2 }} error={formik.touched[`${elem.item}`]?.condition && Boolean(formik.errors[`${elem.item}`]?.condition)} variant="standard">
                         <RadioGroup
                           row
                           style={{ flexWrap: 'nowrap' }}
@@ -381,11 +438,19 @@ function ForkliftForm() {
                           <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="ok" control={<Radio />} label="OK" />
                           <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="nok" control={<Radio />} label="NOK" />
                         </RadioGroup>
-                        <FormHelperText sx={{ margin: '0 0 0 5px' }}>{formik.touched[`${elem.item}`]?.condition && formik.errors[`${elem.item}`]?.condition}</FormHelperText>
+                        <FormHelperText sx={{ margin: '0 0 0 5px', position: 'absolute', top: '80%' }}>{formik.touched[`${elem.item}`]?.condition && formik.errors[`${elem.item}`]?.condition}</FormHelperText>
                       </FormControl>
                     </TableCell>
                     <TableCell sx={{ border: 1, padding: '0 10px' }}>
                       <TextField
+                        sx={{
+                          '& .MuiFormHelperText-root.Mui-error': {
+                            position: 'absolute',
+                            bottom: '-25px',
+                            left: 0,
+                          },
+                        }}
+                        style={{ marginBottom: '20px', marginTop: '20px' }}
                         fullWidth
                         inputProps={{
                           style: {
@@ -452,17 +517,6 @@ function ForkliftForm() {
             color="error"
             value="clear">
             <h2>Clear</h2>
-          </Button>
-          <Button
-            sx={{
-              height: 80, width: 250, margin: 3, ml: 1, mr: 0,
-            }}
-            size="large"
-            type="button"
-            variant="outlined"
-            color="primary"
-            value="print">
-            <h2>Print</h2>
           </Button>
         </Box>
       </form>
