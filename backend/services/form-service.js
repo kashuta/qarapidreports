@@ -175,34 +175,10 @@ class FormService {
     }
   }
 
-  async getAllDataForOneInspector(refresh) {
-    try {
-      const valid = await RefreshToken.findOne({ where: { token: refresh }, raw: true });
-      const rsponse = await Users.findOne({
-        where: { id: valid.userId },
-        attributes: [],
-        include: [{
-          model: FormResponse,
-          attributes: ['formId'],
-          include: [{
-            model: Form,
-            attributes: ['name'],
-          }, {
-            model: FormResponseAnswer,
-            attributes: ['answer'],
-          }],
-        }],
-      });
-      const obj = rsponse.get({ plain: true }).FormResponses.map((el) => ({ name: el.Form.name, answer: el.FormResponseAnswers[0].answer }));
-      return obj;
-    } catch (err) {
-      throw new Error(err.message);
-    }
-  }
-
   async getByDateDataForOneInspector(refresh, data) {
     try {
       const valid = await RefreshToken.findOne({ where: { token: refresh }, raw: true });
+      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!here');
       const response = await Users.findOne({
         where: { id: valid.userId },
         attributes: [],
@@ -219,13 +195,21 @@ class FormService {
             attributes: ['name'],
           }, {
             model: FormResponseAnswer,
-            attributes: ['answer'],
+            attributes: ['answer', 'createdAt'],
           }],
         }],
       });
-      const obj = response.get({ plain: true }).FormResponses.map((el) => ({ name: el.Form.name, answer: el.FormResponseAnswers[0].answer }));
+      console.log(response);
+      if (response === null) {
+        return null;
+      }
+      console.dir('@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', response.get({ plain: true }), { depth: null });
+      const obj = response.get({ plain: true }).FormResponses.map((el) => ({ name: el.Form.name, answer: el.FormResponseAnswers[0].answer, createdAt: el.FormResponseAnswers[0].createdAt })).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      console.log('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', obj);
       return obj;
+      // return {};
     } catch (err) {
+      console.log(err.message);
       throw new Error(err.message);
     }
   }

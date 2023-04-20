@@ -17,8 +17,11 @@ class UserService {
    * @returns {Promise<Object>} Returns an object containing access token, refresh token, and user details.
    * @throws {Error} Throws an error if user creation fails or if there's an issue with sending the activation email.
    */
-  async registration(userName, email, password, role = 'manager') {
+  async registration(userName, email, password, role) {
     try {
+      if (!userName || !email || !password || !role) {
+        throw backendErrors.INCORRECT_DATA_ERROR;
+      }
       const [roleFind, createdRole] = await Roles.findOrCreate({ where: { [role]: true } });
       const [newUser, createdUser] = await Users.findOrCreate({
         where: { email },

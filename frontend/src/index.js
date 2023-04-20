@@ -22,11 +22,12 @@ const theme = createTheme({
   },
 });
 root.render(
-  <ThemeProvider theme={theme}>
-    <BrowserRouter>
+  <BrowserRouter>
+    <ThemeProvider theme={theme}>
       <Provider store={store}>
         <App />
       </Provider>
-    </BrowserRouter>
-  </ThemeProvider>,
+    </ThemeProvider>
+    ,
+  </BrowserRouter>,
 );
