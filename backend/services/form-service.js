@@ -1,9 +1,8 @@
-/* eslint-disable no-unused-vars */
 const moment = require('moment');
 const Sequelize = require('sequelize');
 const {
   Form, FormSection, FormField, FormResponse, FormResponseAnswer,
-  Users, Locations, RefreshToken,
+  Users, RefreshToken,
 } = require('../db/models');
 const { backendErrors } = require('../exceptions');
 
@@ -125,7 +124,6 @@ class FormService {
         // проверка, что дата data.from находится до data.to (с учетом указанной единицы измерения);
         throw new Error(backendErrors.INCORRECT_DATA_ERROR);
       }
-      const allFormNames = await this.getAllFormNames();
       const qwer = await Users.findAll({
         where: { roleId: 3 },
         include: [{
@@ -231,6 +229,78 @@ class FormService {
       throw new Error(err.message);
     }
   }
+
+  async getInspectorStat(email, data, location) {
+    try {
+      const obj = await Users.findOne({
+        where: { email },
+        attributes: ['userName'],
+        include: [
+          {
+            model: FormResponse,
+            attributes: ['formId'],
+            where: {
+              createdAt: {
+                [Sequelize.Op.between]: [data.from, data.to],
+              },
+            },
+            include: [{
+              model: Form,
+              attributes: ['name'],
+            }, {
+              model: FormResponseAnswer,
+              attributes: ['answer'],
+              where: {
+                'answer.location': {
+                  [Sequelize.Op.like]: `%${location}%`,
+                },
+              },
+            }],
+          },
+        ],
+      });
+      const responseObject = obj.get({ plain: true }).FormResponses.map((el) => ({
+        formName: el.Form.name,
+        answer: el.FormResponseAnswers[0].answer,
+        location: el.FormResponseAnswers[0].answer.location,
+        date: el.FormResponseAnswers[0].answer.date,
+      }));
+      const countMap = responseObject.reduce((acc, cur) => {
+        const { formName } = cur;
+        if (!acc[formName]) {
+          acc[formName] = 1;
+        } else {
+          acc[formName]++;
+        }
+        return acc;
+      }, {});
+      let totalForms = 0;
+      for (const formName in countMap) {
+        totalForms += countMap[formName];
+      }
+      return { responseObject, countMap, total: totalForms };
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  // async getHseFormParams(data) {
+  //   try {
+  //     const obj = await FormResponse.findAll({
+  //       where: { formId: 4, createdAt: { [Sequelize.Op.between]: [data.from, data.to] } },
+  //       attributes: ['isSafe'],
+  //       include: [{
+  //         model: FormResponseAnswer,
+  //         attributes: ['answer'],
+  //       }],
+  //     });
+  //     console.log(obj);
+  //     console.dir(obj.map((el) => el.get({ plain: true })), { depth: null });
+  //   } catch (err) {
+  //     console.log(err);
+  //     throw new Error(err.message);
+  //   }
+  // }
 }
 
 module.exports = new FormService();

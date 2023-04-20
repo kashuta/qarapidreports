@@ -22,6 +22,10 @@ router.post('/get_all_data_for_one_inspector', formController.getAllDataForOneIn
 
 router.post('/get_by_date_data_for_one_inspector', formController.getByDateDataForOneInspector);
 
+router.post('/get_inspector_stat', formController.getInspectorStat);
+
+router.post('/get_hse_form_params', formController.getHseFormParams);
+
 // Запрос, который сохраняет фотографию
 router.post('/upload', multerMiddleware.single('avatar'), async (req, res) => {
   try {
