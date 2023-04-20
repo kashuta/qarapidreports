@@ -26,6 +26,8 @@ router.post('/get_inspector_stat', formController.getInspectorStat);
 
 router.post('/get_hse_form_params', formController.getHseFormParams);
 
+
+
 // Запрос, который сохраняет фотографию
 router.post('/upload', multerMiddleware.single('avatar'), async (req, res) => {
   try {

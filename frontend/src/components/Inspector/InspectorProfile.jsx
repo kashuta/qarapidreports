@@ -80,7 +80,7 @@ function InspectorProfile() {
   const navigate = useNavigate();
 
   const user = useSelector((state) => state.UserReducer.user);
-  console.log('useruseruseruseruseruseruser', user);
+  // console.log('useruseruseruseruseruseruser', user);
   const { userId } = useParams();
   if (+user.id !== +userId) {
     return <PageNotFound />;
@@ -88,7 +88,7 @@ function InspectorProfile() {
 
   const [value1, setValue1] = useState(dayjs(new Date()).subtract(17, 'day'));
   const [value2, setValue2] = useState(dayjs(new Date()));
-  console.log(value1);
+  // console.log(value1);
 
   const data = { from: value1, to: value2 };
   useEffect(() => {
@@ -99,10 +99,10 @@ function InspectorProfile() {
     event.preventDefault();
     dispatch(getFormsByDateProfileInspectorAction(navigate, data));
   };
-  console.log('datadatadatadatadatadatadatadatadatadatadata', data);
+  // console.log('datadatadatadatadatadatadatadatadatadatadata', data);
 
   const totalForms = useSelector((state) => state.ReportReducer.FormAllProfileInspector);
-  console.log('totalFormstotalFormstotalFormstotalFormstotalFormstotalForms', totalForms);
+  // console.log('totalFormstotalFormstotalFormstotalFormstotalFormstotalForms', totalForms);
   return (
     <Box>
       <Box sx={{ alignContent: 'center', marginLeft: 30, marginTop: 15 }}>

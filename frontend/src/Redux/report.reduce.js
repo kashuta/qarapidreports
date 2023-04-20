@@ -8,6 +8,7 @@ import {
   GET_FORM_DATE_PROFILE_INSPECTOR,
   SET_NEW_LOCATION,
   DELETE_LOCATION,
+  GET_HSE_FORM_STAT,
 } from './type.redux';
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
   locations: [],
   FormAllProfileInspector: [],
   FormDateProfileInspector: [],
+  HSEformDATA: [],
 };
 
 // eslint-disable-next-line default-param-last
@@ -46,6 +48,8 @@ const ReportReducer = (state = initialState, action) => {
       return { ...state, FormAllProfileInspector: payload };
     case GET_FORM_DATE_PROFILE_INSPECTOR:
       return { ...state, FormAllProfileInspector: payload };
+    case GET_HSE_FORM_STAT:
+      return { ...state, HSEformDATA: payload };
     default:
       return state;
   }

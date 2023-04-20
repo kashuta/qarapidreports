@@ -5,12 +5,13 @@ import InspectorMain from '../Inspector/InspectorMain';
 import AdminPage from '../Admin/AdminPage';
 import NoUserPage from './NoUserPage';
 import Dashboard from '../Manager/Dashboard';
+import MySpinner from '../UI/MySpinner';
 
 function MainPage() {
   const loader = useSelector((state) => state.UserReducer.loader);
   const user = useSelector((state) => state.UserReducer.user);
   if (!loader) {
-    return <h2 style={{ margin: 300 }}>Loading...</h2>;
+    return <MySpinner />;
   }
   if (user?.role === 'inspector') {
     return <InspectorMain />;
