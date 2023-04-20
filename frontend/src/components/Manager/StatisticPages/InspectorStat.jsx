@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -9,7 +9,7 @@ import {
   Paper,
   Select,
 } from '@mui/material';
-import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -34,7 +34,7 @@ function InspectorStat() {
   // const FormsDate = useSelector(
   //   (state) => state.ReportReducer.getFormResponseDataAction,
   // );
-
+  console.log(location);
   inspectorsNames.forEach((el) => {
     inspectors.push(el.userName);
   });
@@ -89,17 +89,18 @@ function InspectorStat() {
   console.log(value1);
   console.log(value2);
 
-  console.log('inspectorinspectorinspectorinspectorinspectorinspectorinspectorinspecorinspectorinspectorin', inspector);
+  console.log('inspespecorrinspectorin', inspector);
   return (
     <Box sx={{
-      width: 1,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'column',
       gap: '2px',
     }}>
-      <Box sx={{ m: 3, justifyContent: 'center', alignItems: 'center' }}>
+      <Box sx={{
+        m: 2, marginBottom: 10, justifyContent: 'center', alignItems: 'center',
+      }}>
         <LocalizationProvider
           dateAdapter={AdapterDayjs}
           sx={{ m: 1, width: 200 }}>

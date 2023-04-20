@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -18,8 +17,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+import { useDispatch, useSelector } from 'react-redux';
 import Document0024 from '../Documents/Document0024';
 import PageNotFound from '../ProtectedRoute/PageNotFound';
+import { getFormsAllProfileInspectorAction } from '../../Redux/report.action';
 
 async function openPdf(document) {
   const pdfBlob = await pdf(document).toBlob();
@@ -37,6 +38,9 @@ async function downloadPdf(document, fileName) {
 }
 
 function InspectorProfile() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const user = useSelector((state) => state.UserReducer.user);
   const { userId } = useParams();
   if (+user.id !== +userId) {
@@ -48,8 +52,12 @@ function InspectorProfile() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(value1, value2);
+    dispatch(getFormsAllProfileInspectorAction(navigate));
   };
+
+  const totalForms = useSelector(
+    (state) => state.ReportReducer.FormAllProfileInspector,
+  );
 
   const Data = [[
     {

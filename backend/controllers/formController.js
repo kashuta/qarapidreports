@@ -62,8 +62,9 @@ class FormController {
 
   async getAllDataForOneInspector(req, res, next) {
     try {
-      const { refresh } = req.cookie;
-      const responseObject = await formService.getAllDataForOneInspector(refresh);
+      const { refreshToken } = req.cookies;
+      console.log('???????????????????????????????????????????????????????????????????????????', refreshToken);
+      const responseObject = await formService.getAllDataForOneInspector(refreshToken);
       res.status(200).json({ responseObject });
     } catch (err) {
       console.log(err);
@@ -73,10 +74,9 @@ class FormController {
 
   async getByDateDataForOneInspector(req, res, next) {
     try {
-      const { refresh } = req.body;
-      const { from, to } = req.body;
-      const date = { from, to };
-      const responseObject = await formService.getByDateDataForOneInspector(refresh, date);
+      const { refreshToken } = req.cookies;
+      const { data } = req.params;
+      const responseObject = await formService.getByDateDataForOneInspector(refreshToken, data);
       res.status(200).json({ responseObject });
     } catch (err) {
       console.log(err);

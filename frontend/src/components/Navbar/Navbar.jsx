@@ -37,7 +37,7 @@ export default function Navbar() {
   };
 
   return (
-    <Box sx={{ maxWidth: '100%' }}>
+    <Box sx={{ maxWidth: '100%', padding: 4 }}>
       <AppBar color="primary">
         <Toolbar
           sx={{
