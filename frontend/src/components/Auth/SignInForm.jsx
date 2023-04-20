@@ -35,6 +35,7 @@ function SignInForm() {
       .then((data) => {
         if (data.message) {
           alert(data.message);
+          dispatch(getUserLoaderAction(true));
           navigate('/login');
         } else {
           const token = data.accessToken;

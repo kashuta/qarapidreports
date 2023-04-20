@@ -20,10 +20,11 @@ class LocationController {
     const { name, managerId } = addLocation;
     try {
       const data = await locationService.addLocationData(name, managerId);
+
       if (!data) {
         return next(ErrorHandler.InternalServerError(backendErrors.DATABASE_ERROR, res));
       }
-      return res.json({ message: 'Location added successfully' });
+      return res.json(data);
     } catch (err) {
       return next(ErrorHandler.InternalServerError(err, res));
     }

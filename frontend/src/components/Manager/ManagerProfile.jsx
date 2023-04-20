@@ -11,7 +11,10 @@ import {
   TextField,
 } from '@mui/material';
 import PageNotFound from '../ProtectedRoute/PageNotFound';
-import { addNewLocationAction, deleteLocationAction } from '../../Redux/report.action';
+import {
+  addNewLocationAction,
+  deleteLocationAction,
+} from '../../Redux/report.action';
 
 function ManagerProfile() {
   const [name, setName] = useState(null);
@@ -40,7 +43,7 @@ function ManagerProfile() {
     return <PageNotFound />;
   }
   return (
-    <Box sx={{ mt: 10, width: 1 / 2 }} component="form">
+    <Box sx={{ mt: 10, width: 1 / 2, ml: '50px' }} component="form">
       <InputLabel id="demo-simple-select-label">Add Location</InputLabel>
       <TextField
         required
