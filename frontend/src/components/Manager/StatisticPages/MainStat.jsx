@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button } from '@mui/material';
 
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +15,7 @@ import dayjs from 'dayjs';
 import HseBar from '../ChartsComponents/HSE.Bar';
 import MyDoughnut from '../ChartsComponents/MyDoughnut';
 import MainBar from '../ChartsComponents/MainBar';
-import { getFormResponseDataAction } from '../../../Redux/report.action';
+import { getFormResponseDataAction, getInspectorsNamesAction } from '../../../Redux/report.action';
 
 function MainStat() {
   const [value1, setValue1] = useState(dayjs(new Date()));
@@ -23,6 +23,10 @@ function MainStat() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const data = { from: value1, to: value2 };
+
+  useEffect(() => {
+    dispatch(getInspectorsNamesAction(navigate));
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

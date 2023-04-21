@@ -214,7 +214,7 @@ class FormService {
     }
   }
 
-  async getInspectorStat(email, data, location) {
+  async getInspectorStat(email, data) {
     try {
       const obj = await Users.findOne({
         where: { email },
@@ -234,15 +234,13 @@ class FormService {
             }, {
               model: FormResponseAnswer,
               attributes: ['answer'],
-              where: {
-                'answer.location': {
-                  [Sequelize.Op.like]: `%${location}%`,
-                },
-              },
             }],
           },
         ],
       });
+      if (obj === null) {
+        return {};
+      }
       const responseObject = obj.get({ plain: true }).FormResponses.map((el) => ({
         formName: el.Form.name,
         answer: el.FormResponseAnswers[0].answer,
@@ -264,6 +262,7 @@ class FormService {
       }
       return { responseObject, countMap, total: totalForms };
     } catch (err) {
+      console.log(err);
       throw new Error(err.message);
     }
   }

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -70,7 +71,7 @@ async function OpenOrDownloadPdf(answer, name, status, username) {
   } else {
     const link = window.document.createElement('a');
     link.href = pdfUrl;
-    link.download = `form_${moment(answer.date).format('MM/DD/YYYY HH:mm')}.pdf`;
+    link.download = `form_${moment(answer.date).format('HH:mm MM/DD/YYYY')}.pdf`;
     link.click();
   }
 }
@@ -86,7 +87,7 @@ function InspectorProfile() {
     return <PageNotFound />;
   }
 
-  const [value1, setValue1] = useState(dayjs(new Date()).subtract(17, 'day'));
+  const [value1, setValue1] = useState(dayjs(new Date()).subtract(1, 'day'));
   const [value2, setValue2] = useState(dayjs(new Date()));
   console.log(value1);
 
@@ -102,7 +103,7 @@ function InspectorProfile() {
   console.log('datadatadatadatadatadatadatadatadatadatadata', data);
 
   const totalForms = useSelector((state) => state.ReportReducer.FormAllProfileInspector);
-  console.log('totalFormstotalFormstotalFormstotalFormstotalFormstotalForms', totalForms);
+  console.log('totatotaltotatotaltotalltotatotaltotalltotatotaltotalltotall', totalForms.responseObject && Object.values(totalForms.responseObject[0].answer));
   return (
     <Box>
       <Box sx={{ alignContent: 'center', marginLeft: 30, marginTop: 15 }}>
@@ -137,7 +138,7 @@ function InspectorProfile() {
       </Box>
       <Box sx={{ m: 10 }} align="center">
         <TableContainer component={Paper} elevation={5}>
-          <Table aria-label="simple table" sx={{ width: 800 }} align="center">
+          <Table aria-label="simple table" sx={{ width: 990 }} align="center">
             <TableHead>
               <TableRow>
                 <TableCell sx={{ fontSize: 20 }}><b>Form</b></TableCell>

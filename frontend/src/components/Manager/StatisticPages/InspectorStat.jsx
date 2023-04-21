@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -13,83 +13,39 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 import InspectorTable from './InspectorTable';
 import InspectorBar from '../ChartsComponents/Inspector.Bar';
+import { getInspectorStat } from '../../../Redux/report.action';
 
 function InspectorStat() {
-  const [value1, setValue1] = useState(dayjs(new Date()));
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [value1, setValue1] = useState(dayjs(new Date()).subtract(1, 'day'));
   const [value2, setValue2] = useState(dayjs(new Date()));
-  const [inspector, setInspector] = useState('Inspectors');
-  const [location, setLocation] = useState('');
 
-  const inspectors = ['Inspectors'];
-  const locations = ['Locations'];
+  const data = { from: value1, to: value2 };
 
-  const inspectorsNames = useSelector(
-    (state) => state.ReportReducer.inspectorsNames,
-  );
-
-  // const FormsDate = useSelector(
-  //   (state) => state.ReportReducer.getFormResponseDataAction,
-  // );
-  console.log(location);
-  inspectorsNames.forEach((el) => {
-    inspectors.push(el.userName);
-  });
-
-  const DATA = [[
-    {
-      FormName: 'MONTHLY SAFETY CHECKLIST',
-      InspectorName: 'Said',
-      Location: 'Dubai',
-      Date: '12/04/23',
-      Form_id: 13,
-    },
-    {
-      FormName: 'VEHICLE SAFETY INSPECTION',
-      InspectorName: 'Habib',
-      Location: 'Oman',
-      Date: '10/04/23',
-      Form_id: 11,
-    },
-    {
-      FormName: 'FORKLIFT SAFETY INSPECTION',
-      InspectorName: 'Al-React-js ibn Redux',
-      Location: 'Dubai',
-      Date: '7/04/23',
-      Form_id: 22,
-    },
-
-    {
-      FormName: 'TOOL BOX SAFETY MEETING',
-      InspectorName: 'Ivan',
-      Location: 'Miami',
-      Date: '3/04/23',
-      Form_id: 43,
-    }],
-  [15, 19, 10, 5, 11, 60],
-  ];
-  locations.push('Dubai', 'Moscow', 'Miami');
-
+  const inspectorNames = useSelector((state) => state.ReportReducer.inspectorsNames);
+  const [choiceInspector, setChoiceInspector] = useState();
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(value1, value2);
+    const email = choiceInspector;
+    dispatch(getInspectorStat(navigate, email, data));
   };
 
-  const handleChange = (event) => {
+  const handleChangeInspector = (event) => {
     event.preventDefault();
-    setInspector(event.target.value);
+    setChoiceInspector(event.target.value);
   };
-  const handleChange2 = (event) => {
-    event.preventDefault();
-    setLocation(event.target.value);
-  };
-  console.log(value1);
-  console.log(value2);
 
-  console.log('inspespecorrinspectorin', inspector);
+  const inspectorData = useSelector((state) => state.ReportReducer.inspectorStat);
+
+  console.log('----------inspectorData---------------', inspectorData);
+
   return (
     <Box sx={{
       display: 'flex',
@@ -121,26 +77,14 @@ function InspectorStat() {
               sx={{ width: 50 }}
             />
             <FormControl sx={{ width: 200 }}>
-              <InputLabel id="demo-simple-select-label">Inspectors</InputLabel>
+              <InputLabel id="demo-simple-select-label">Inspector</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 label="Inspector"
-                onChange={handleChange}>
-                {inspectors?.map((insp) => (
-                  <MenuItem value={insp}>{insp}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl sx={{ width: 200 }}>
-              <InputLabel id="demo-simple-select-label">Location</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label="Inspector"
-                onChange={handleChange2}>
-                {locations?.map((insp) => (
-                  <MenuItem value={insp}>{insp}</MenuItem>
+                onChange={handleChangeInspector}>
+                {inspectorNames && inspectorNames?.map((el) => (
+                  <MenuItem value={el.email}>{el.userName}</MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -154,11 +98,18 @@ function InspectorStat() {
           </DemoContainer>
         </LocalizationProvider>
       </Box>
+      { inspectorData?.length !== 0 && (
       <Box component={Paper} elevation={2}>
-        <InspectorBar inspector={inspector} count={DATA[1]} />
+        <InspectorBar
+          name={choiceInspector}
+          count={inspectorData.responseObject.countMap}
+          total={inspectorData.responseObject.total} />
         <Divider sx={{ marginBottom: 2 }} />
-        <InspectorTable inspector={inspector} Data={DATA[0]} />
+        <InspectorTable
+          name={choiceInspector}
+          Data={Object.values(inspectorData.responseObject.responseObject)} />
       </Box>
+      )}
 
     </Box>
   );
