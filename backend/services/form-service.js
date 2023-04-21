@@ -1,8 +1,13 @@
 const moment = require('moment');
 const Sequelize = require('sequelize');
 const {
-  Form, FormSection, FormField, FormResponse, FormResponseAnswer,
-  Users, RefreshToken,
+  Form,
+  FormSection,
+  FormField,
+  FormResponse,
+  FormResponseAnswer,
+  Users,
+  RefreshToken
 } = require('../db/models');
 const { backendErrors } = require('../exceptions');
 
@@ -23,13 +28,13 @@ class FormService {
         formId: form.id,
         columnNames: formSections.map((el) => ({
           title: el.title,
-          order: el.order,
+          order: el.order
         })),
         questionFields: formFields.map((el) => ({
           question: el.label,
           type: el.type,
-          order: el.order,
-        })),
+          order: el.order
+        }))
       };
 
       return responseObject;
@@ -52,14 +57,14 @@ class FormService {
       const created = await FormResponse.create({
         formId,
         inspectorId: userId,
-        status,
+        status
       });
       if (!created) {
         throw new Error(backendErrors.DATABASE_ERROR);
       }
       const createdAnswer = await FormResponseAnswer.create({
         formResponseId: created.dataValues.id,
-        answer: formData,
+        answer: formData
       });
       if (!createdAnswer) {
         throw new Error(backendErrors.DATABASE_ERROR);
@@ -72,22 +77,25 @@ class FormService {
   async safe(data) {
     const qwer = await Users.findAll({
       where: { roleId: 3 },
-      include: [{
-        model: FormResponse,
-        where: {
-          createdAt: {
-            [Sequelize.Op.between]: [data.from, data.to],
+      include: [
+        {
+          model: FormResponse,
+          where: {
+            createdAt: {
+              [Sequelize.Op.between]: [data.from, data.to]
+            }
           },
-        },
-        attributes: ['id', 'isSafe'],
-        include: [
-          {
-            model: FormResponseAnswer,
-            attributes: ['answer'],
-          },
-          { model: Form, where: { name: 'HSE OBSERVATION (STOP) CARD' }, attributes: ['name'] }],
-      }],
-      attributes: ['userName'],
+          attributes: ['id', 'isSafe'],
+          include: [
+            {
+              model: FormResponseAnswer,
+              attributes: ['answer']
+            },
+            { model: Form, where: { name: 'HSE OBSERVATION (STOP) CARD' }, attributes: ['name'] }
+          ]
+        }
+      ],
+      attributes: ['userName']
     });
     const countByFormAndIsSafe = [];
     let i = 0;
@@ -103,7 +111,9 @@ class FormService {
         if (formName === 'HSE OBSERVATION (STOP) CARD') {
           i++;
           // Если элемент с данным названием формы и значением isSafe уже есть в объекте, увеличиваем его счетчик
-          if (countByFormAndIsSafe[formName] && countByFormAndIsSafe[formName][isSafe]) { countByFormAndIsSafe[formName][isSafe]++; } else {
+          if (countByFormAndIsSafe[formName] && countByFormAndIsSafe[formName][isSafe]) {
+            countByFormAndIsSafe[formName][isSafe]++;
+          } else {
             countByFormAndIsSafe.push({ [isSafe]: 1 });
           }
         }
@@ -126,29 +136,39 @@ class FormService {
       }
       const qwer = await Users.findAll({
         where: { roleId: 3 },
-        include: [{
-          model: FormResponse,
-          where: {
-            createdAt: {
-              [Sequelize.Op.between]: [data.from, data.to],
+        include: [
+          {
+            model: FormResponse,
+            where: {
+              createdAt: {
+                [Sequelize.Op.between]: [data.from, data.to]
+              }
             },
-          },
-          attributes: ['id', 'isSafe'],
-          include: [
-            { model: Form, attributes: ['name'] }],
-        }],
-        attributes: ['userName'],
+            attributes: ['id', 'isSafe'],
+            include: [{ model: Form, attributes: ['name'] }]
+          }
+        ],
+        attributes: ['userName']
       });
-      const objectUserFormName = qwer.map((el) => el.get({ plain: true })).map((el) => ({ userName: el.userName, FormName: el.FormResponses.map((el1) => el1.Form.name), isSafe: el.FormResponses.map((el1) => el1.isSafe) }));
+      const objectUserFormName = qwer
+        .map((el) => el.get({ plain: true }))
+        .map((el) => ({
+          userName: el.userName,
+          FormName: el.FormResponses.map((el1) => el1.Form.name),
+          isSafe: el.FormResponses.map((el1) => el1.isSafe)
+        }));
       const allInspectorNames = objectUserFormName.map((el) => el.userName);
-      const allReportCount = objectUserFormName.reduce((prev, curr) => prev + curr.FormName.length, 0);
+      const allReportCount = objectUserFormName.reduce(
+        (prev, curr) => prev + curr.FormName.length,
+        0
+      );
       const info = objectUserFormName.map((el) => ({
         inspectorName: el.userName,
         allReportCountUser: el.FormName.length,
         reports: el.FormName.reduce((acc, curr) => {
           acc[curr] = (acc[curr] || 0) + 1;
           return acc;
-        }, {}),
+        }, {})
       }));
       const allReportFormCount = objectUserFormName.reduce((acc, curr) => {
         curr.FormName.forEach((name) => {
@@ -158,7 +178,11 @@ class FormService {
       }, {});
       const hseForm = await this.safe(data);
       return {
-        allInspectorNames, allReportCount, allReportFormCount, ...hseForm, info,
+        allInspectorNames,
+        allReportCount,
+        allReportFormCount,
+        ...hseForm,
+        info
       };
     } catch (err) {
       throw new Error(err.message);
@@ -178,34 +202,46 @@ class FormService {
   async getByDateDataForOneInspector(refresh, data) {
     try {
       const valid = await RefreshToken.findOne({ where: { token: refresh }, raw: true });
-      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!here');
       const response = await Users.findOne({
         where: { id: valid.userId },
         attributes: [],
-        include: [{
-          model: FormResponse,
-          attributes: ['formId'],
-          where: {
-            createdAt: {
-              [Sequelize.Op.between]: [data.from, data.to],
+        include: [
+          {
+            model: FormResponse,
+            attributes: ['formId'],
+            where: {
+              createdAt: {
+                [Sequelize.Op.between]: [data.from, data.to]
+              }
             },
-          },
-          include: [{
-            model: Form,
-            attributes: ['name'],
-          }, {
-            model: FormResponseAnswer,
-            attributes: ['answer', 'createdAt'],
-          }],
-        }],
+            include: [
+              {
+                model: Form,
+                attributes: ['name']
+              },
+              {
+                model: FormResponseAnswer,
+                attributes: ['answer', 'createdAt']
+              }
+            ]
+          }
+        ]
       });
       console.log(response);
       if (response === null) {
         return null;
       }
-      console.dir('@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', response.get({ plain: true }), { depth: null });
-      const obj = response.get({ plain: true }).FormResponses.map((el) => ({ name: el.Form.name, answer: el.FormResponseAnswers[0].answer, createdAt: el.FormResponseAnswers[0].createdAt })).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      console.log('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', obj);
+      // console.dir('@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', response.get({ plain: true }), {
+      //   depth: null
+      // });
+      const obj = response
+        .get({ plain: true })
+        .FormResponses.map((el) => ({
+          name: el.Form.name,
+          answer: el.FormResponseAnswers[0].answer,
+          createdAt: el.FormResponseAnswers[0].createdAt
+        }))
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       return obj;
       // return {};
     } catch (err) {
@@ -225,18 +261,21 @@ class FormService {
             attributes: ['formId'],
             where: {
               createdAt: {
-                [Sequelize.Op.between]: [data.from, data.to],
-              },
+                [Sequelize.Op.between]: [data.from, data.to]
+              }
             },
-            include: [{
-              model: Form,
-              attributes: ['name'],
-            }, {
-              model: FormResponseAnswer,
-              attributes: ['answer'],
-            }],
-          },
-        ],
+            include: [
+              {
+                model: Form,
+                attributes: ['name']
+              },
+              {
+                model: FormResponseAnswer,
+                attributes: ['answer']
+              }
+            ]
+          }
+        ]
       });
       if (obj === null) {
         return {};
@@ -245,7 +284,7 @@ class FormService {
         formName: el.Form.name,
         answer: el.FormResponseAnswers[0].answer,
         location: el.FormResponseAnswers[0].answer.location,
-        date: el.FormResponseAnswers[0].answer.date,
+        date: el.FormResponseAnswers[0].answer.date
       }));
       const countMap = responseObject.reduce((acc, cur) => {
         const { formName } = cur;
@@ -267,23 +306,40 @@ class FormService {
     }
   }
 
-  // async getHseFormParams(data) {
-  //   try {
-  //     const obj = await FormResponse.findAll({
-  //       where: { formId: 4, createdAt: { [Sequelize.Op.between]: [data.from, data.to] } },
-  //       attributes: ['isSafe'],
-  //       include: [{
-  //         model: FormResponseAnswer,
-  //         attributes: ['answer'],
-  //       }],
-  //     });
-  //     console.log(obj);
-  //     console.dir(obj.map((el) => el.get({ plain: true })), { depth: null });
-  //   } catch (err) {
-  //     console.log(err);
-  //     throw new Error(err.message);
-  //   }
-  // }
+  async getHseFormParams(data) {
+    try {
+      const obj = await FormResponse.findAll({
+        where: { formId: 4, createdAt: { [Sequelize.Op.between]: [data.from, data.to] } },
+        attributes: ['isSafe'],
+        include: [
+          {
+            model: FormResponseAnswer,
+            attributes: ['answer']
+          }
+        ]
+      });
+      const responseObject = obj
+        .map((el) => el.get({ plain: true }))
+        .map((el1) => ({
+          healthHazard: el1.FormResponseAnswers[0].answer.healthHazard,
+          unsafeCondition: el1.FormResponseAnswers[0].answer.unsafeCondition,
+          environmentalRisk: el1.FormResponseAnswers[0].answer.environmentalRisk
+        }));
+      const counts = responseObject.reduce(
+        (acc, curr) => {
+          acc.healthHazard += curr.healthHazard ? 1 : 0;
+          acc.unsafeCondition += curr.unsafeCondition ? 1 : 0;
+          acc.environmentalRisk += curr.environmentalRisk ? 1 : 0;
+          return acc;
+        },
+        { healthHazard: 0, unsafeCondition: 0, environmentalRisk: 0 }
+      );
+      return { ...counts };
+    } catch (err) {
+      console.log(err);
+      throw new Error(err.message);
+    }
+  }
 }
 
 module.exports = new FormService();

@@ -9,6 +9,7 @@ import {
   GET_INSPECTOR_STAT,
   SET_NEW_LOCATION,
   DELETE_LOCATION,
+  GET_HSE_FORM_STAT,
 } from './type.redux';
 
 const initialState = {
@@ -20,6 +21,7 @@ const initialState = {
   FormAllProfileInspector: [],
   FormDateProfileInspector: [],
   inspectorStat: [],
+  HSEformDATA: [],
 };
 
 // eslint-disable-next-line default-param-last
@@ -50,6 +52,8 @@ const ReportReducer = (state = initialState, action) => {
       return { ...state, FormAllProfileInspector: payload };
     case GET_INSPECTOR_STAT:
       return { ...state, inspectorStat: payload };
+    case GET_HSE_FORM_STAT:
+      return { ...state, HSEformDATA: payload };
     default:
       return state;
   }

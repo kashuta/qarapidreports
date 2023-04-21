@@ -48,7 +48,6 @@ function MainHorizontBar() {
   if (totalForms) {
     const countDataFromDB = Object.values(totalForms.allReportFormCount);
     count = countDataFromDB;
-    console.log(countDataFromDB);
   } else {
     count = [1, 2, 3, 4, 5];
   }

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Box, Container, Grid } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import TabPanel from './StatisticPages/Tabs';

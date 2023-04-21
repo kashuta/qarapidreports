@@ -64,17 +64,12 @@ function SignInForm() {
   return (
     <Box
       component="form"
-      container
+      container="true"
       display="flex"
       alignItems="center"
       justify="center"
-      minHeight="100vh"
       flexDirection="column"
       margin="100px 400px"
-      // sx={{
-      //   left: '50%',
-      //   top: '50%',
-      // }}
     >
       <TextField
         required

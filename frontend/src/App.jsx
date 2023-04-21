@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Container from '@mui/material/Container';
+import { Box } from '@mui/material';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -22,8 +23,8 @@ import RegForm from './components/Auth/RegForm';
 import { refreshAccessToken } from './JWT/authActions';
 import Forms from './components/Forms/Forms';
 import Footer from './components/Footer/Footer';
-import { Box } from '@mui/material';
 import { getLocationsAction } from './Redux/report.action';
+import MySpinner from './components/UI/MySpinner';
 
 // import { setUserAction } from './components/Redux/user.action';
 
@@ -40,7 +41,7 @@ function App() {
   }, []); // Add dependencies if needed
 
   if (!loader && !user) {
-    return <h2 style={{ margin: 300 }}>Loading...</h2>;
+    return <MySpinner />;
   }
 
   if (!user) {
@@ -80,7 +81,6 @@ function App() {
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Container>
-
       </Box>
       <Footer />
     </LocalizationProvider>

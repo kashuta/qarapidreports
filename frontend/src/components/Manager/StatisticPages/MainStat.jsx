@@ -13,7 +13,7 @@ import dayjs from 'dayjs';
 import HseBar from '../ChartsComponents/HSE.Bar';
 // import MyDoughnut from '../ChartsComponents/MyDoughnut';
 import MainBar from '../ChartsComponents/MainBar';
-import { getFormResponseDataAction, getInspectorsNamesAction } from '../../../Redux/report.action';
+import { getFormResponseDataAction, getHSEFormDataAction, getInspectorsNamesAction } from '../../../Redux/report.action';
 import MainHorizontBar from '../ChartsComponents/MainHorizontBar';
 
 function MainStat() {
@@ -30,12 +30,13 @@ function MainStat() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     dispatch(getFormResponseDataAction(data, navigate));
+    dispatch(getHSEFormDataAction(data));
   };
   //   общий объект с базы
   const totalForms = useSelector(
     (state) => state.ReportReducer.formResponseData,
   );
-  // console.log(totalForms.hseForm.true);
+
   return (
     // <LocalizationProvider dateAdapter={AdapterDayjs}>
     <Box

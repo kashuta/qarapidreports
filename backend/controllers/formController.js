@@ -26,9 +26,7 @@ class FormController {
 
   async saveFormData(req, res, next) {
     try {
-      const {
-        formId, status, formData, userId,
-      } = req.body;
+      const { formId, status, formData, userId } = req.body;
       if (!formId || !status || !formData || !userId) {
         return next(ErrorHandler.UnprocessableEntityError(backendErrors.INCORRECT_DATA_ERROR, res));
       }
@@ -103,15 +101,14 @@ class FormController {
   }
 
   async getHseFormParams(req, res, next) {
-    // try {
-    //   // const { data } = req.body;
-    //   const { from, to } = req.body;
-    //   const data = { from, to };
-    //   const responseObject = await formService.getHseFormParams(data);
-    //   return res.json({});
-    // } catch (err) {
-    //   throw next(ErrorHandler.BadRequestError(err, res));
-    // }
+    try {
+      const { data } = req.body;
+      const responseObject = await formService.getHseFormParams(data);
+      console.log(responseObject);
+      return res.json(responseObject);
+    } catch (err) {
+      throw next(ErrorHandler.BadRequestError(err, res));
+    }
   }
 }
 
