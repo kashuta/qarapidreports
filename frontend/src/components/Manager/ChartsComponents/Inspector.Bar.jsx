@@ -28,9 +28,15 @@ function InspectorBar({ name, count, total }) {
       },
       title: {
         display: true,
-        text: 'Number of reports by form',
+        text: 'Inspector Statistics',
+        font: {
+          size: 40,
+          weight: 'bold', // or any other font size you prefer
+        },
+        align: 'center',
       },
     },
+    responsive: true,
     scales: {
       x: {
         ticks: {
@@ -55,19 +61,23 @@ function InspectorBar({ name, count, total }) {
   };
   return (
     <Box sx={{
-      display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2, mt: 5,
+      display: 'flex', alignItems: 'center', gap: 1, mb: 7, width: '100%',
     }}>
-      <Box>
-        <Bar options={options} data={data} width={600} height={300} />
+      <Box width="60%">
+        <Bar options={options} data={data} height={200} />
       </Box>
 
-      <Box sx={{ flex: 1, marginRight: 5 }}>
-        <TableContainer component={Paper} elevation={10}>
-          <Table sx={{ minWidth: 150 }} size="small" aria-label="a dense table">
+      <Box sx={{ flex: 1, marginRight: 0 }}>
+        <TableContainer component={Paper} elevation={5}>
+          <Table sx={{ minWidth: 50 }} size="small" aria-label="a dense table">
             <TableHead>
               <TableRow>
                 <TableCell sx={{ fontSize: 18 }}>
-                  <b>Total: {total}</b>
+                  <b>
+                    Total:
+                    {' '}
+                    {total}
+                  </b>
                 </TableCell>
                 <TableCell align="right" sx={{ fontSize: 18 }}><b>Count</b></TableCell>
               </TableRow>

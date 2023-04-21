@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import moment from 'moment';
 import { pdf } from '@react-pdf/renderer';
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import Document0024 from '../../Documents/Document0024';
 import Document0109 from '../../Documents/Document0109';
 import Document0144 from '../../Documents/Document0144';
@@ -65,37 +65,41 @@ async function OpenOrDownloadPdf(answer, name, status, username) {
 function InspectorTable({ Data, name }) {
   console.log('{{{{{{{{{{{{{{{{{{{{{{{{{{{{', Data);
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{ fontSize: 20 }}><b>Form</b></TableCell>
-            <TableCell align="right" sx={{ fontSize: 20 }}><b>Location</b></TableCell>
-            <TableCell align="right" sx={{ fontSize: 20 }}><b>Date</b></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {Data.map((el) => (
-            <TableRow
-              key={el.formName}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row"><b>{el.formName}</b></TableCell>
-              <TableCell align="right" sx={{ fontSize: 17 }}>{el.location}</TableCell>
-              <TableCell align="right" sx={{ fontSize: 17 }}>{moment(el.date).format('MM/DD/YYYY')}</TableCell>
-              <TableCell align="right">
-                <Button variant="contained" onClick={() => OpenOrDownloadPdf(el.answer, el.formName, 'open', name)}>open</Button>
-              </TableCell>
-              <TableCell align="right">
-                <Button variant="contained" onClick={() => OpenOrDownloadPdf(el.answer, el.formName, 'download', name)}>
-                  download
-                </Button>
-              </TableCell>
+    <Box mb={5}>
+      <TableContainer component={Paper}>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontSize: 20 }}><b>Form</b></TableCell>
+              <TableCell align="right" sx={{ fontSize: 20 }}><b>Location</b></TableCell>
+              <TableCell align="right" sx={{ fontSize: 20 }}><b>Date</b></TableCell>
+              <TableCell sx={{ fontSize: 20 }} />
+              <TableCell sx={{ fontSize: 20 }} />
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {Data.map((el) => (
+              <TableRow
+                key={el.formName}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+                <TableCell component="th" scope="row"><b>{el.formName}</b></TableCell>
+                <TableCell align="right" sx={{ fontSize: 17 }}>{el.location}</TableCell>
+                <TableCell align="right" sx={{ fontSize: 17 }}>{moment(el.date).format('MM/DD/YYYY')}</TableCell>
+                <TableCell align="right">
+                  <Button variant="contained" onClick={() => OpenOrDownloadPdf(el.answer, el.formName, 'open', name)}>open</Button>
+                </TableCell>
+                <TableCell align="right">
+                  <Button variant="contained" onClick={() => OpenOrDownloadPdf(el.answer, el.formName, 'download', name)}>
+                    download
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 }
 

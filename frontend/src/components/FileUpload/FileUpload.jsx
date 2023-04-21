@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import {
   Box,
   Button,
@@ -63,7 +64,7 @@ function FileUpload({
   return (
     <Box mb={5} mt={3} align="center">
       <Button variant="contained" component="label">
-        Attach image
+        Attach images
         <input hidden onChange={onFileUpload} name={name} accept="image/jpg, image/png, image/jpeg" multiple={multiple} type="file" />
       </Button>
 

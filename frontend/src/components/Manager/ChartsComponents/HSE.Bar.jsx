@@ -30,6 +30,10 @@ function HseBar() {
       title: {
         display: true,
         text: 'Unsafe HSE',
+        font: {
+          size: 30,
+          weight: 'bold', // or any other font size you prefer
+        },
       },
     },
   };
@@ -42,6 +46,7 @@ function HseBar() {
   //   'Inspector5',
   //   'Inspector6',
   // ];
+  const colors = ['#3399CC', '#ff6600', '#8BB836', '#15315B', '#707173'];
   const labels = ['Health HAZARD', 'Enviromental Risk', 'Unsafe Condition'];
 
   const HSEbarData = {
@@ -50,7 +55,7 @@ function HseBar() {
       {
         label: 'Total for period',
         data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
-        backgroundColor: 'rgb(255, 99, 132)',
+        backgroundColor: colors,
       },
     ],
   };

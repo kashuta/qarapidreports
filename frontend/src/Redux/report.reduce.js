@@ -7,6 +7,8 @@ import {
   GET_FORM_ALL_PROFILE_INSPECTOR,
   GET_FORM_DATE_PROFILE_INSPECTOR,
   GET_INSPECTOR_STAT,
+  SET_NEW_LOCATION,
+  DELETE_LOCATION,
 } from './type.redux';
 
 const initialState = {
@@ -35,6 +37,13 @@ const ReportReducer = (state = initialState, action) => {
       return { ...state, formResponseData: payload };
     case GET_LOCATIONS:
       return { ...state, locations: payload };
+    case SET_NEW_LOCATION:
+      return { ...state, locations: [...state.locations, payload] };
+    case DELETE_LOCATION:
+      return {
+        ...state,
+        locations: state.locations.filter((p) => p.name !== payload),
+      };
     case GET_FORM_ALL_PROFILE_INSPECTOR:
       return { ...state, FormAllProfileInspector: payload };
     case GET_FORM_DATE_PROFILE_INSPECTOR:

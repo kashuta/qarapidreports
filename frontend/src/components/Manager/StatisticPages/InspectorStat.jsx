@@ -1,9 +1,11 @@
+/* eslint-disable no-nested-ternary */
 import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
   Divider,
   FormControl,
+  Grid,
   InputLabel,
   MenuItem,
   Paper,
@@ -26,6 +28,7 @@ function InspectorStat() {
 
   const [value1, setValue1] = useState(dayjs(new Date()).subtract(1, 'day'));
   const [value2, setValue2] = useState(dayjs(new Date()));
+  const [status, setStatus] = useState(false);
 
   const data = { from: value1, to: value2 };
 
@@ -34,6 +37,7 @@ function InspectorStat() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const email = choiceInspector;
+    setStatus(true);
     dispatch(getInspectorStat(navigate, email, data));
   };
 
@@ -49,35 +53,34 @@ function InspectorStat() {
   return (
     <Box sx={{
       display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
       flexDirection: 'column',
-      gap: '2px',
+      width: '100%',
     }}>
-      <Box sx={{
-        m: 2, marginBottom: 10, justifyContent: 'center', alignItems: 'center',
-      }}>
-        <LocalizationProvider
-          dateAdapter={AdapterDayjs}
-          sx={{ m: 1, width: 200 }}>
-          <DemoContainer components={['DatePicker', 'DatePicker']}>
+      <Box sx={{ marginBottom: 5, display: 'flex', gap: 1 }}>
+        <Grid container spacing={1}>
+          <Grid item xs>
             <DatePicker
               label="from"
               name="from"
               value={value1}
               onChange={(newValue) => setValue1(newValue)}
-              sx={{ width: 50 }}
-            />
+              sx={{ width: '100%' }}
+                />
+          </Grid>
+          <Grid item xs>
             <DatePicker
               label="To"
               name="to"
               value={value2}
               minDate={value1}
               onChange={(newValue) => setValue2(newValue)}
-              sx={{ width: 50 }}
+              sx={{ width: '100%' }}
             />
-            <FormControl sx={{ width: 200 }}>
-              <InputLabel id="demo-simple-select-label">Inspector</InputLabel>
+          </Grid>
+
+          <Grid item xs>
+            <FormControl sx={{ width: '100%' }}>
+              <InputLabel id="demo-simple-select-label">Inspectors</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -88,29 +91,32 @@ function InspectorStat() {
                 ))}
               </Select>
             </FormControl>
-            <Button
-              onClick={handleSubmit}
-              variant="contained"
-              type="submit"
-              sx={{ width: 150 }}>
-              Submit
-            </Button>
-          </DemoContainer>
-        </LocalizationProvider>
-      </Box>
-      { inspectorData?.length !== 0 && (
-      <Box component={Paper} elevation={2}>
-        <InspectorBar
-          name={choiceInspector}
-          count={inspectorData.responseObject.countMap}
-          total={inspectorData.responseObject.total} />
-        <Divider sx={{ marginBottom: 2 }} />
-        <InspectorTable
-          name={choiceInspector}
-          Data={Object.values(inspectorData.responseObject.responseObject)} />
-      </Box>
-      )}
+          </Grid>
 
+        </Grid>
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
+          type="submit"
+          sx={{ width: 150 }}>
+          Submit
+        </Button>
+      </Box>
+      { inspectorData.length !== 0 && Object.keys(inspectorData?.responseObject).length > 0 ? (
+        <Box>
+          <InspectorBar
+            name={choiceInspector}
+            count={inspectorData.responseObject.countMap}
+            total={inspectorData.responseObject.total} />
+          <Divider sx={{ marginBottom: 2 }} />
+          <InspectorTable
+            name={choiceInspector}
+            Data={Object.values(inspectorData.responseObject.responseObject)} />
+        </Box>
+      )
+        : status !== false ? (
+          <p style={{ textAlign: 'center', fontSize: '30px' }}>No data</p>
+        ) : <p style={{ textAlign: 'center', fontSize: '30px' }}>Please choose date range and inspector </p>}
     </Box>
   );
 }

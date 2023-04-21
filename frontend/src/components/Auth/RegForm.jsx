@@ -42,7 +42,6 @@ function RegForm() {
           navigate('/reg');
         } else {
           alert('Please check your email and activate your account');
-          navigate('/login');
         }
       })
       .catch(console.log);
@@ -144,9 +143,9 @@ function RegForm() {
           marginBottom: '1rem',
           width: '100%',
         }}>
-        <MenuItem value="Admin">Admin</MenuItem>
-        <MenuItem value="Manager">Manager</MenuItem>
-        <MenuItem value="Inspector">Inspector</MenuItem>
+        <MenuItem value="admin">Admin</MenuItem>
+        <MenuItem value="manager">Manager</MenuItem>
+        <MenuItem value="inspector">Inspector</MenuItem>
       </Select>
       <Button
         onClick={handleSubmit}

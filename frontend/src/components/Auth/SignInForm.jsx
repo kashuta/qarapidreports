@@ -23,7 +23,6 @@ function SignInForm() {
   const handleSubmit = (event) => {
     event.preventDefault();
     dispatch(getUserLoaderAction(false));
-
     fetch('http://localhost:3001/api/v2/auth/login', {
       method: 'POST',
       headers: {
