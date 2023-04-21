@@ -54,7 +54,8 @@ export default function VerticalTabs() {
         flexGrow: 1,
         bgcolor: 'background.paper',
         display: 'flex',
-        height: 250,
+        paddingTop: '30px',
+        width: '100%',
       }}>
       <Tabs
         orientation="vertical"
@@ -75,12 +76,15 @@ export default function VerticalTabs() {
         />
         {/* <Tab label="Range Stat" {...a11yProps(2)} /> */}
       </Tabs>
-      <TabPanel value={value} index={0}>
-        <MainStat />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <InspectorStat />
-      </TabPanel>
+      <Box sx={{ flexGrow: 1 }}>
+        <TabPanel value={value} index={0} sx={{ flexGrow: 1 }}>
+          <MainStat />
+        </TabPanel>
+
+        <TabPanel value={value} index={1} sx={{ flexGrow: 1 }}>
+          <InspectorStat />
+        </TabPanel>
+      </Box>
       {/* <TabPanel value={value} index={2}>
         Item Three
       </TabPanel> */}

@@ -18,11 +18,7 @@ function Dashboard() {
     dispatch(getLocationsAction(navigate));
   }, []);
   return (
-    <Grid container>
-      <Grid item>
-        <TabPanel />
-      </Grid>
-    </Grid>
+    <TabPanel />
   );
 }
 

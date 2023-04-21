@@ -99,15 +99,15 @@ function VechSafInspCheckForm() {
     validationSchema,
     validateOnChange: true,
     validateOnBlur: true,
-    onSubmit: (values) => {
-      const obj = {
-        formId,
-        userId: user.id,
-        formData: values,
-        status: 'submit',
-        images: '',
-      };
-      dispatch(createReportAction(JSON.stringify(obj), navigate));
+    onSubmit: (values, { resetForm }) => {
+      const data = new FormData();
+      data.append('formData', JSON.stringify(values));
+      data.append('formId', formId);
+      data.append('userId', user.id);
+      data.append('status', 'submit');
+      data.append('images', '');
+      dispatch(createReportAction(data, navigate));
+      resetForm();
     },
   });
 
@@ -126,8 +126,16 @@ function VechSafInspCheckForm() {
           formik.setErrors(errors);
           const touchedFields = Object.keys(errors).reduce((touched, key) => {
             if (typeof errors[key] === 'object') {
+              touched[key] = {};
               for (const nested of Object.keys(errors[key])) {
-                touched[key] = { [nested]: true };
+                if (typeof errors[key][nested] === 'object') {
+                  touched[key][nested] = {};
+                  for (const el of Object.keys(errors[key][nested])) {
+                    touched[key][nested][el] = true;
+                  }
+                } else {
+                  touched[key][nested] = true;
+                }
               }
             } else {
               touched[key] = true;
@@ -167,7 +175,7 @@ function VechSafInspCheckForm() {
   return (
     <Container>
       <form onSubmit={formik.handleSubmit}>
-        <h1 className={styles.form_h1}>
+        <h1 className={`${styles.form_h1} ${styles.text_center}`}>
           MONTHLY SAFETY CHECKLIST - FIELD SERVICES
         </h1>
         <Box
@@ -181,11 +189,11 @@ function VechSafInspCheckForm() {
             id="location"
             name="location"
             label="Location"
-            value={formik.values.nameLocation}
+            value={formik.values.location}
             onChange={formik.handleChange}
             onBlur={(e) => formik.setFieldTouched(e.target.name)}
-            error={formik.touched.nameLocation && Boolean(formik.errors.nameLocation)}
-            helperText={formik.touched.nameLocation && formik.errors.nameLocation}>
+            error={formik.touched.location && Boolean(formik.errors.location)}
+            helperText={formik.touched.location && formik.errors.location}>
             {nameLocation.map((el, index) => (
               <MenuItem key={index + 1} value={el}>
                 {el}
@@ -232,7 +240,7 @@ function VechSafInspCheckForm() {
                           row
                           style={{ flexWrap: 'nowrap' }}
                           name={`${elem.question}.condition`}
-                          value={formik.values[elem.question]?.condition}
+                          value={formik.values[elem.question]?.condition ?? ''}
                           onChange={formik.handleChange}
                         >
                           <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="yes" control={<Radio />} label="YES" />
@@ -251,7 +259,7 @@ function VechSafInspCheckForm() {
                           },
                         }}
                         name={`${elem.question}.comments`}
-                        value={formik.values[elem.question]?.comments}
+                        value={formik.values[elem.question]?.comments ?? ''}
                         onChange={formik.handleChange}
                         onBlur={(e) => formik.setFieldTouched(e.target.name)}
                         error={formik.touched[`${elem.question}`]?.comments && Boolean(formik.errors[`${elem.question}`]?.comments)}
@@ -270,14 +278,14 @@ function VechSafInspCheckForm() {
           mb={5}
           align="left">
           <p>
-            Field service manager Name & Sign:
+            <b> Field service manager Name & Sign:</b>
             {' '}
-            {user.userName}
+            <b>{user.userName}</b>
           </p>
         </Box>
         <Box m={3} display="flex" justifyContent="center">
           <Button
-            sx={{ height: 80, width: 220, margin: 3 }}
+            sx={{ height: 80, width: 250, margin: 3 }}
             size="large"
             onClick={handleSubmit}
             type="submit"
@@ -286,16 +294,7 @@ function VechSafInspCheckForm() {
             value="submit">
             <h2>Submit</h2>
           </Button>
-          <Button
-            sx={{ height: 80, width: 250, margin: 3 }}
-            size="large"
-            onClick={handleSubmit}
-            type="submit"
-            variant="outlined"
-            color="primary"
-            value="save">
-            <h2>Save</h2>
-          </Button>
+
           <Button
             sx={{ height: 80, width: 250, margin: 3 }}
             size="large"
@@ -305,16 +304,6 @@ function VechSafInspCheckForm() {
             color="error"
             value="clear">
             <h2>Clear</h2>
-          </Button>
-          <Button
-            sx={{ height: 80, width: 250, margin: 3 }}
-            size="large"
-            onClick={handleSubmit}
-            type="submit"
-            variant="outlined"
-            color="primary"
-            value="Print">
-            <h2>Print</h2>
           </Button>
         </Box>
       </form>

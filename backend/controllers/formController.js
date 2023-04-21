@@ -86,16 +86,15 @@ class FormController {
 
   async getInspectorStat(req, res, next) {
     try {
-      const { email, data, location } = req.body;
+      const { email, data } = req.body;
       if (!data) {
         return next(ErrorHandler.UnprocessableEntityError(backendErrors.INCORRECT_DATA_ERROR, res));
       }
-      if (!email || !location) {
+      if (!email) {
         return next(ErrorHandler.UnprocessableEntityError(backendErrors.INCORRECT_DATA_ERROR, res));
       }
-      const responseObject = await formService.getInspectorStat(email, data, location);
-      console.log({ ...responseObject });
-      res.status(200).json({ responseObject });
+      const responseObject = await formService.getInspectorStat(email, data);
+      res.json({ responseObject });
     } catch (err) {
       return next(ErrorHandler.BadRequestError(err, res));
     }

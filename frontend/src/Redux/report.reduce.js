@@ -6,6 +6,7 @@ import {
   GET_LOCATIONS,
   GET_FORM_ALL_PROFILE_INSPECTOR,
   GET_FORM_DATE_PROFILE_INSPECTOR,
+  GET_INSPECTOR_STAT,
   SET_NEW_LOCATION,
   DELETE_LOCATION,
   GET_HSE_FORM_STAT,
@@ -19,6 +20,7 @@ const initialState = {
   locations: [],
   FormAllProfileInspector: [],
   FormDateProfileInspector: [],
+  inspectorStat: [],
   HSEformDATA: [],
 };
 
@@ -48,6 +50,8 @@ const ReportReducer = (state = initialState, action) => {
       return { ...state, FormAllProfileInspector: payload };
     case GET_FORM_DATE_PROFILE_INSPECTOR:
       return { ...state, FormAllProfileInspector: payload };
+    case GET_INSPECTOR_STAT:
+      return { ...state, inspectorStat: payload };
     case GET_HSE_FORM_STAT:
       return { ...state, HSEformDATA: payload };
     default:
