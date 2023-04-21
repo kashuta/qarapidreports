@@ -2,12 +2,13 @@ import React from 'react';
 import {
   Document, Page, Image, Text, Font, View,
 } from '@react-pdf/renderer';
+import moment from 'moment';
 import pdfStyles0109 from './pdfStyle0109';
 import ArialFont from '../../Fonts/Arial.ttf';
 import Arialbold from '../../Fonts/Arial-bold.ttf';
 
 /* HSE OBSERVATION (STOP) CARD, форма для отрисовки PDF */
-function Document0109() {
+function Document0109({ data, username }) {
   Font.register({ family: 'Arial', src: ArialFont });
   Font.register({ family: 'Arialbold', src: Arialbold });
 
@@ -42,16 +43,16 @@ function Document0109() {
         <Image src="/images/GME0109.png" />
         {/* OBSERVER */}
         <Text style={[pdfStyles0109.date, pdfStyles0109.textTop]}>
-          {ForkLift.formData.date}
+          {moment(data.date).format('MM/DD/YYYY')}
         </Text>
         <Text style={[pdfStyles0109.Time, pdfStyles0109.textTop]}>
-          {ForkLift.formData.Time}
+          {moment(data.date).format('HH:mm')}
         </Text>
         <Text style={[pdfStyles0109.location, pdfStyles0109.textTop]}>
-          {ForkLift.formData.location}
+          {data.location}
         </Text>
         <Text style={[pdfStyles0109.ObserversName, pdfStyles0109.textTop]}>
-          {ForkLift.formData.ObserversName}
+          {username}
         </Text>
 
         {/* OBSERVATION TYPE */}
@@ -73,7 +74,7 @@ function Document0109() {
 
         {/* OBSERVATION DESCRIPTION */}
         <View style={pdfStyles0109.DescriptionField}>
-          <Text style={pdfStyles0109.AllText}>{ForkLift.formData.DescriptionText}</Text>
+          <Text style={pdfStyles0109.AllText}>{ForkLift.formData.description}</Text>
           <Image style={pdfStyles0109.ImageDescriptionField} src="/images/example.jpeg" />
         </View>
 

@@ -22,7 +22,6 @@ function Document0144({ data, username }) {
 
   return (
     <Document>
-
       <Page size="A4">
 
         {/* картинка Хедер и верхние поля для заполнения */}

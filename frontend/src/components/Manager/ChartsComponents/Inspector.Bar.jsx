@@ -12,10 +12,14 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Box } from '@mui/material';
 
-function InspectorBar({ inspector, count }) {
+function InspectorBar({ name, count, total }) {
   const formsName = useSelector(
     (state) => state.ReportReducer.formsName,
   );
+
+  console.log('countcountcountcountcount', count);
+  console.log('totaltotaltotaltotal', total);
+  console.log('namenamenamenamename', name);
 
   const options = {
     plugins: {
@@ -24,7 +28,12 @@ function InspectorBar({ inspector, count }) {
       },
       title: {
         display: true,
-        text: 'Number of reports by form',
+        text: 'Inspector Statistics',
+        font: {
+          size: 40,
+          weight: 'bold', // or any other font size you prefer
+        },
+        align: 'center',
       },
     },
     responsive: true,
@@ -37,15 +46,16 @@ function InspectorBar({ inspector, count }) {
     },
   };
 
-  const labels = formsName.map((form) => form.name);
+  const labels = Object.keys(count);
 
+  const colors = ['#3399CC', '#ff6600', '#8BB836', '#15315B', '#707173'];
   const data = {
     labels, // название отчетов
     datasets: [
       {
         label: 'Total for period',
-        data: count, // подставить колл. отчетов
-        backgroundColor: ['#3399CC', '#ff6600', '#8BB836', '#15315B', '#707173'],
+        data: Object.values(count), // подставить колл. отчетов
+        backgroundColor: colors,
       },
     ],
   };
@@ -63,38 +73,28 @@ function InspectorBar({ inspector, count }) {
             <TableHead>
               <TableRow>
                 <TableCell sx={{ fontSize: 18 }}>
-                  <b>{inspector}</b>
+                  <b>
+                    Total:
+                    {' '}
+                    {total}
+                  </b>
                 </TableCell>
                 <TableCell align="right" sx={{ fontSize: 18 }}><b>Count</b></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row" sx={{ backgroundColor: '#3399CC' }}>
-                  <b>MONTHLY SAFETY CHECKLIST</b>
-                </TableCell>
-                <TableCell align="right" sx={{ fontSize: 18 }}><b>{count[0]}</b></TableCell>
-              </TableRow>
-              <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row" sx={{ backgroundColor: '#ff6600' }}><b>VEHICLE SAFETY INSPECTION</b></TableCell>
-                <TableCell align="right" sx={{ fontSize: 18 }}><b>{count[1]}</b></TableCell>
-              </TableRow>
-              <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row" sx={{ backgroundColor: '#8BB836' }}><b>FORKLIFT SAFETY INSPECTION</b></TableCell>
-                <TableCell align="right" sx={{ fontSize: 18 }}><b>{count[2]}</b></TableCell>
-              </TableRow>
-              <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row" sx={{ backgroundColor: '#15315B', color: 'white' }}><b>HSE OBSERVATION (STOP)</b></TableCell>
-                <TableCell align="right" sx={{ fontSize: 18 }}><b>{count[3]}</b></TableCell>
-              </TableRow>
-              <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row" sx={{ backgroundColor: '#707173' }}><b>TOOL BOX SAFETY MEETING</b></TableCell>
-                <TableCell align="right" sx={{ fontSize: 18 }}><b>{count[4]}</b></TableCell>
-              </TableRow>
-              <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row" sx={{ fontSize: 18 }}><b>total:</b></TableCell>
-                <TableCell align="right" sx={{ fontSize: 18 }}><b>{count[5]}</b></TableCell>
-              </TableRow>
+
+              {Object.entries(count).map((item, index) => (
+                <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell component="th" scope="row" sx={{ backgroundColor: colors[index] }}>
+                    <b>
+                      {item[0]}
+                    </b>
+                  </TableCell>
+                  <TableCell align="right" sx={{ fontSize: 18 }}><b>{item[1]}</b></TableCell>
+                </TableRow>
+              ))}
+
             </TableBody>
           </Table>
         </TableContainer>

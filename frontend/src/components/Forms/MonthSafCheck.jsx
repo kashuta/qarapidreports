@@ -278,9 +278,9 @@ function VechSafInspCheckForm() {
           mb={5}
           align="left">
           <p>
-            Field service manager Name & Sign:
+            <b> Field service manager Name & Sign:</b>
             {' '}
-            {user.userName}
+            <b>{user.userName}</b>
           </p>
         </Box>
         <Box m={3} display="flex" justifyContent="center">
@@ -294,16 +294,7 @@ function VechSafInspCheckForm() {
             value="submit">
             <h2>Submit</h2>
           </Button>
-          <Button
-            sx={{ height: 80, width: 250, margin: 3 }}
-            size="large"
-            onClick={handleSubmit}
-            type="submit"
-            variant="outlined"
-            color="primary"
-            value="save">
-            <h2>Save</h2>
-          </Button>
+
           <Button
             sx={{ height: 80, width: 250, margin: 3 }}
             size="large"

@@ -352,16 +352,6 @@ function VechSafInspCheckForm() {
           <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="primary" value="submit">
             <h2>Submit</h2>
           </Button>
-          <Button
-            sx={{ height: 80, width: 250, margin: 3 }}
-            size="large"
-            onClick={handleSubmit}
-            type="submit"
-            variant="outlined"
-            color="primary"
-            value="save">
-            <h2>Save</h2>
-          </Button>
           <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="error" value="clear">
             <h2>Clear</h2>
           </Button>

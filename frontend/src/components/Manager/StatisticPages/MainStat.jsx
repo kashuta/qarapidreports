@@ -1,15 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box, Button, Grid, Paper,
 } from '@mui/material';
 
 import { useNavigate } from 'react-router-dom';
 
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Divider from '@mui/material/Divider';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -17,7 +13,7 @@ import dayjs from 'dayjs';
 import HseBar from '../ChartsComponents/HSE.Bar';
 // import MyDoughnut from '../ChartsComponents/MyDoughnut';
 import MainBar from '../ChartsComponents/MainBar';
-import { getFormResponseDataAction } from '../../../Redux/report.action';
+import { getFormResponseDataAction, getInspectorsNamesAction } from '../../../Redux/report.action';
 import MainHorizontBar from '../ChartsComponents/MainHorizontBar';
 
 function MainStat() {
@@ -26,6 +22,10 @@ function MainStat() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const data = { from: value1, to: value2 };
+
+  useEffect(() => {
+    dispatch(getInspectorsNamesAction(navigate));
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -53,6 +53,7 @@ function MainStat() {
             name="from"
             value={value1}
             onChange={(newValue) => setValue1(newValue)}
+            sx={{ width: '100%' }}
             />
 
         </Grid>
@@ -62,6 +63,7 @@ function MainStat() {
             name="to"
             value={value2}
             onChange={(newValue) => setValue2(newValue)}
+            sx={{ width: '100%' }}
             />
 
         </Grid>
