@@ -202,7 +202,6 @@ class FormService {
   async getByDateDataForOneInspector(refresh, data) {
     try {
       const valid = await RefreshToken.findOne({ where: { token: refresh }, raw: true });
-      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!here');
       const response = await Users.findOne({
         where: { id: valid.userId },
         attributes: [],
@@ -232,9 +231,9 @@ class FormService {
       if (response === null) {
         return null;
       }
-      console.dir('@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', response.get({ plain: true }), {
-        depth: null
-      });
+      // console.dir('@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', response.get({ plain: true }), {
+      //   depth: null
+      // });
       const obj = response
         .get({ plain: true })
         .FormResponses.map((el) => ({
@@ -243,10 +242,6 @@ class FormService {
           createdAt: el.FormResponseAnswers[0].createdAt
         }))
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      console.log(
-        'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
-        obj
-      );
       return obj;
       // return {};
     } catch (err) {
@@ -269,15 +264,18 @@ class FormService {
                 [Sequelize.Op.between]: [data.from, data.to]
               }
             },
-            include: [{
-              model: Form,
-              attributes: ['name'],
-            }, {
-              model: FormResponseAnswer,
-              attributes: ['answer'],
-            }],
-          },
-        ],
+            include: [
+              {
+                model: Form,
+                attributes: ['name']
+              },
+              {
+                model: FormResponseAnswer,
+                attributes: ['answer']
+              }
+            ]
+          }
+        ]
       });
       if (obj === null) {
         return {};

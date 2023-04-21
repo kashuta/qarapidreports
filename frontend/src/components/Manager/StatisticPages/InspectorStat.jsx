@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -8,12 +8,8 @@ import {
   Grid,
   InputLabel,
   MenuItem,
-  Paper,
   Select,
 } from '@mui/material';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
@@ -32,7 +28,9 @@ function InspectorStat() {
 
   const data = { from: value1, to: value2 };
 
-  const inspectorNames = useSelector((state) => state.ReportReducer.inspectorsNames);
+  const inspectorNames = useSelector(
+    (state) => state.ReportReducer.inspectorsNames,
+  );
   const [choiceInspector, setChoiceInspector] = useState();
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -46,16 +44,17 @@ function InspectorStat() {
     setChoiceInspector(event.target.value);
   };
 
-  const inspectorData = useSelector((state) => state.ReportReducer.inspectorStat);
-
-  console.log('----------inspectorData---------------', inspectorData);
+  const inspectorData = useSelector(
+    (state) => state.ReportReducer.inspectorStat,
+  );
 
   return (
-    <Box sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      width: '100%',
-    }}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+      }}>
       <Box sx={{ marginBottom: 5, display: 'flex', gap: 1 }}>
         <Grid container spacing={1}>
           <Grid item xs>
@@ -65,7 +64,7 @@ function InspectorStat() {
               value={value1}
               onChange={(newValue) => setValue1(newValue)}
               sx={{ width: '100%' }}
-                />
+            />
           </Grid>
           <Grid item xs>
             <DatePicker
@@ -86,13 +85,13 @@ function InspectorStat() {
                 id="demo-simple-select"
                 label="Inspector"
                 onChange={handleChangeInspector}>
-                {inspectorNames && inspectorNames?.map((el) => (
-                  <MenuItem value={el.email}>{el.userName}</MenuItem>
-                ))}
+                {inspectorNames
+                  && inspectorNames?.map((el) => (
+                    <MenuItem value={el.email}>{el.userName}</MenuItem>
+                  ))}
               </Select>
             </FormControl>
           </Grid>
-
         </Grid>
         <Button
           onClick={handleSubmit}
@@ -102,21 +101,28 @@ function InspectorStat() {
           Submit
         </Button>
       </Box>
-      { inspectorData.length !== 0 && Object.keys(inspectorData?.responseObject).length > 0 ? (
+      {inspectorData.length !== 0
+      && Object.keys(inspectorData?.responseObject).length > 0 ? (
         <Box>
           <InspectorBar
             name={choiceInspector}
             count={inspectorData.responseObject.countMap}
-            total={inspectorData.responseObject.total} />
+            total={inspectorData.responseObject.total}
+          />
           <Divider sx={{ marginBottom: 2 }} />
           <InspectorTable
             name={choiceInspector}
-            Data={Object.values(inspectorData.responseObject.responseObject)} />
+            Data={Object.values(inspectorData.responseObject.responseObject)}
+          />
         </Box>
-      )
-        : status !== false ? (
+        ) : status !== false ? (
           <p style={{ textAlign: 'center', fontSize: '30px' }}>No data</p>
-        ) : <p style={{ textAlign: 'center', fontSize: '30px' }}>Please choose date range and inspector </p>}
+        ) : (
+          <p style={{ textAlign: 'center', fontSize: '30px' }}>
+            Please choose date range and inspector
+            {' '}
+          </p>
+        )}
     </Box>
   );
 }

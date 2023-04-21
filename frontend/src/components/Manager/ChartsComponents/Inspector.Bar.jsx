@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,14 +12,10 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Box } from '@mui/material';
 
-function InspectorBar({ name, count, total }) {
-  const formsName = useSelector(
-    (state) => state.ReportReducer.formsName,
-  );
-
-  console.log('countcountcountcountcount', count);
-  console.log('totaltotaltotaltotal', total);
-  console.log('namenamenamenamename', name);
+function InspectorBar({ count, total }) {
+  // const formsName = useSelector(
+  //   (state) => state.ReportReducer.formsName,
+  // );
 
   const options = {
     plugins: {
