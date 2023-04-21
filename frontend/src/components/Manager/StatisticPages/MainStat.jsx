@@ -13,7 +13,7 @@ import dayjs from 'dayjs';
 import HseBar from '../ChartsComponents/HSE.Bar';
 // import MyDoughnut from '../ChartsComponents/MyDoughnut';
 import MainBar from '../ChartsComponents/MainBar';
-import { getFormResponseDataAction, getInspectorsNamesAction } from '../../../Redux/report.action';
+import { getFormResponseDataAction, getHSEFormDataAction, getInspectorsNamesAction } from '../../../Redux/report.action';
 import MainHorizontBar from '../ChartsComponents/MainHorizontBar';
 
 function MainStat() {
