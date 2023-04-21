@@ -54,7 +54,7 @@ export default function VerticalTabs() {
         flexGrow: 1,
         bgcolor: 'background.paper',
         display: 'flex',
-        height: 250,
+        paddingTop: '30px',
       }}>
       <Tabs
         orientation="vertical"

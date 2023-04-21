@@ -349,7 +349,7 @@ function VechSafInspCheckForm() {
           </p>
         </Box>
         <Box m={3} display="flex" justifyContent="center">
-          <Button sx={{ height: 80, width: 220, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="primary" value="submit">
+          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="primary" value="submit">
             <h2>Submit</h2>
           </Button>
           <Button

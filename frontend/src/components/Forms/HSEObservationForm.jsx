@@ -200,6 +200,12 @@ function HSEObservationForm() {
           <h2 className={`${styles.form_h2} ${styles.text_uppercase} ${styles.text_center}`}>Observer</h2>
 
           <DatePicker
+            sx={{
+              '&.MuiTextField-root': {
+                mb: '20px',
+                mt: '20px',
+              },
+            }}
             label="Date"
             name="date"
             value={formik.values.date}
@@ -207,12 +213,30 @@ function HSEObservationForm() {
           />
 
           <TimeField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '20px', marginTop: '20px' }}
             label="Time"
             value={formik.values.date}
             onChange={formik.handleChange}
             format="HH:mm"
           />
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '20px', marginTop: '20px' }}
             select
             align="left"
             id="location"
@@ -230,6 +254,15 @@ function HSEObservationForm() {
           </TextField>
 
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '20px', marginTop: '20px' }}
             id="observer"
             name="observer"
             label="Observer's name"
@@ -244,7 +277,7 @@ function HSEObservationForm() {
         <Box mb={5}>
           <h2 className={`${styles.form_h2} ${styles.text_uppercase} ${styles.text_center}`}>Observation type</h2>
           <Box display="flex" alignItems="flex-start">
-            <FormControl sx={{ m: 0 }} error={formik.touched.observationType && Boolean(formik.errors.observationType)} variant="standard">
+            <FormControl sx={{ m: 0, flexShrink: 0 }} error={formik.touched.observationType && Boolean(formik.errors.observationType)} variant="standard">
               <RadioGroup
                 name="observationType"
                 value={formik.values.observationType}
@@ -262,7 +295,7 @@ function HSEObservationForm() {
               </RadioGroup>
               <FormHelperText sx={{ margin: 1 }}>{formik.touched.observationType && formik.errors.observationType}</FormHelperText>
             </FormControl>
-            <FormControl component="fieldset" error={formik.touched.healthHazard && Boolean(formik.errors.healthHazard)}>
+            <FormControl component="fieldset" sx={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }} error={formik.touched.healthHazard && Boolean(formik.errors.healthHazard)}>
               <FormGroup row>
                 <FormControlLabel
                   disabled={formik.values.observationType !== 'Unsafe act'}
@@ -300,10 +333,18 @@ function HSEObservationForm() {
           </Box>
 
         </Box>
-        <Box mb={5} fullWidth>
+        <Box mb={5}>
           <h2 className={`${styles.form_h2} ${styles.text_uppercase} ${styles.text_center}`}>Observation description</h2>
           <p className={styles.text_center}>Please describe your observation with a picture attached if possible:</p>
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
             fullWidth
             multiline
             rows={5}
@@ -319,10 +360,19 @@ function HSEObservationForm() {
           <FileUpload multiple name="images" singleFile={singleFile} setSingleFile={setSingleFile} fileList={fileList} setFileList={setFileList} />
         </Box>
 
-        <Box mb={5} fullWidth>
+        <Box mb={5}>
           <h2 className={`${styles.form_h2} ${styles.text_uppercase} ${styles.text_center}`}>Containment action</h2>
           <p className={styles.text_center}>What did you do to correct the situation and eliminate the risk?</p>
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '10px' }}
             fullWidth
             multiline
             rows={5}
@@ -338,10 +388,19 @@ function HSEObservationForm() {
 
         </Box>
 
-        <Box mb={5} fullWidth>
+        <Box mb={5}>
           <h2 className={`${styles.form_h2} ${styles.text_uppercase} ${styles.text_center}`}>Proposed improvement</h2>
           <p className={styles.text_center}>If you are unable to correct the situation, what do you suggest as a sotution?</p>
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '10px' }}
             fullWidth
             multiline
             rows={5}
@@ -370,7 +429,7 @@ function HSEObservationForm() {
             value="submit">
             <h2>Submit</h2>
           </Button>
-          <Button
+          {/* <Button
             sx={{
               height: 80, width: 250, margin: 1, mb: 3, mt: 3,
             }}
@@ -381,7 +440,7 @@ function HSEObservationForm() {
             color="primary"
             value="save">
             <h2>Save</h2>
-          </Button>
+          </Button> */}
           <Button
             sx={{
               height: 80, width: 250, margin: 1, mb: 3, mt: 3,
@@ -393,17 +452,6 @@ function HSEObservationForm() {
             color="error"
             value="clear">
             <h2>Clear</h2>
-          </Button>
-          <Button
-            sx={{
-              height: 80, width: 250, margin: 3, ml: 1, mr: 0,
-            }}
-            size="large"
-            type="button"
-            variant="outlined"
-            color="primary"
-            value="print">
-            <h2>Print</h2>
           </Button>
         </Box>
       </form>

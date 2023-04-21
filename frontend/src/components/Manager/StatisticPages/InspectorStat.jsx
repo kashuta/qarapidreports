@@ -4,6 +4,7 @@ import {
   Button,
   Divider,
   FormControl,
+  Grid,
   InputLabel,
   MenuItem,
   Paper,
@@ -93,35 +94,33 @@ function InspectorStat() {
   return (
     <Box sx={{
       display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
       flexDirection: 'column',
-      gap: '2px',
+      width: '100%',
     }}>
-      <Box sx={{
-        m: 2, marginBottom: 10, justifyContent: 'center', alignItems: 'center',
-      }}>
-        <LocalizationProvider
-          dateAdapter={AdapterDayjs}
-          sx={{ m: 1, width: 200 }}>
-          <DemoContainer components={['DatePicker', 'DatePicker']}>
+      <Box sx={{ marginBottom: 5, display: 'flex', gap: 1 }}>
+        <Grid container spacing={1}>
+          <Grid item xs>
             <DatePicker
               label="from"
               name="from"
               value={value1}
               onChange={(newValue) => setValue1(newValue)}
-              sx={{ width: 50 }}
-            />
+              sx={{ width: '100%' }}
+                />
+          </Grid>
+          <Grid item xs>
             <DatePicker
               label="To"
               name="to"
               value={value2}
               minDate={value1}
               onChange={(newValue) => setValue2(newValue)}
-              sx={{ width: 50 }}
-            />
-            <FormControl sx={{ width: 200 }}>
-              <InputLabel id="demo-simple-select-label">Inspectors</InputLabel>
+              sx={{ width: '100%' }}
+                />
+          </Grid>
+          <Grid item xs>
+            <FormControl sx={{ width: '100%' }}>
+              <InputLabel id="demo-simple-select-label">Inspector</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -132,31 +131,18 @@ function InspectorStat() {
                 ))}
               </Select>
             </FormControl>
-            <FormControl sx={{ width: 200 }}>
-              <InputLabel id="demo-simple-select-label">Location</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label="Inspector"
-                onChange={handleChange2}>
-                {locations?.map((insp) => (
-                  <MenuItem value={insp}>{insp}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <Button
-              onClick={handleSubmit}
-              variant="contained"
-              type="submit"
-              sx={{ width: 150 }}>
-              Submit
-            </Button>
-          </DemoContainer>
-        </LocalizationProvider>
+          </Grid>
+        </Grid>
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
+          type="submit"
+          sx={{ width: 150 }}>
+          Submit
+        </Button>
       </Box>
-      <Box component={Paper} elevation={2}>
+      <Box elevation={2}>
         <InspectorBar inspector={inspector} count={DATA[1]} />
-        <Divider sx={{ marginBottom: 2 }} />
         <InspectorTable inspector={inspector} Data={DATA[0]} />
       </Box>
 

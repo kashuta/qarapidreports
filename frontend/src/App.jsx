@@ -22,6 +22,7 @@ import RegForm from './components/Auth/RegForm';
 import { refreshAccessToken } from './JWT/authActions';
 import Forms from './components/Forms/Forms';
 import Footer from './components/Footer/Footer';
+import { Box } from '@mui/material';
 import { getLocationsAction } from './Redux/report.action';
 
 // import { setUserAction } from './components/Redux/user.action';
@@ -58,21 +59,29 @@ function App() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Container>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route element={<ProtectedRoleRoute role="inspector" />}>
-            <Route path="/:formId" element={<Forms />} />
-            <Route path="/inspector/:userId" element={<InspectorProfile />} />
-          </Route>
-          <Route element={<ProtectedRoleRoute role="manager" />}>
-            <Route path="/manager/:userId" element={<ManagerProfile />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-          </Route>
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </Container>
+      <Navbar />
+      <Box
+        component="main"
+        sx={{
+          display: 'flex',
+          flexGrow: 1,
+        }}>
+        <Container>
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route element={<ProtectedRoleRoute role="inspector" />}>
+              <Route path="/:formId" element={<Forms />} />
+              <Route path="/inspector/:userId" element={<InspectorProfile />} />
+            </Route>
+            <Route element={<ProtectedRoleRoute role="manager" />}>
+              <Route path="/manager/:userId" element={<ManagerProfile />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+            </Route>
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </Container>
+
+      </Box>
       <Footer />
     </LocalizationProvider>
   );
