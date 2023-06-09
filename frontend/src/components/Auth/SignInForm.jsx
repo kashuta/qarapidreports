@@ -1,6 +1,7 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from 'react';
+
 import { Button, IconButton, InputAdornment, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import Visibility from '@mui/icons-material/Visibility';
@@ -10,15 +11,15 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { getUserLoaderAction, setUserAction } from '../../Redux/user.action';
+// import DialogForm from '../Forms/DialogForm';
 
 function SignInForm() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [form, setForm] = useState({
     email: '',
     password: '',
   });
-
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -69,8 +70,7 @@ function SignInForm() {
       alignItems="center"
       justify="center"
       flexDirection="column"
-      margin="100px 400px"
-    >
+      margin="100px 400px">
       <TextField
         required
         label="Email"
@@ -117,6 +117,14 @@ function SignInForm() {
         }}>
         Login
       </Button>
+      {/* <DialogForm
+        open={open}
+        statusBtn={statusBtn}
+        handleClose={handleClose}
+        handleConfirm={handleConfirm}
+        handleConfirmSave={handleConfirmSave}
+        handleConfirmClear={handleConfirmClear}
+      /> */}
     </Box>
   );
 }
