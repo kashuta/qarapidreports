@@ -4,7 +4,7 @@ function Footer() {
   return (
     <footer className="footer">
       <p>
-        © 2023 All rights reserved | Elbrus-2023 Tigers
+        © 2023 All rights reserved 
       </p>
     </footer>
   );

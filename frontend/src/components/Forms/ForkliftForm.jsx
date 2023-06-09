@@ -32,7 +32,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import styles from './Form.module.css';
-import DialogForm from './DialogForm';
+import DialogForm from '../UI/DialogForm';
 import { createReportAction, setReportFieldsAction } from '../../Redux/report.action';
 
 function ForkliftForm() {
