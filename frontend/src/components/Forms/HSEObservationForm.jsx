@@ -26,7 +26,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import styles from './Form.module.css';
-import DialogForm from './DialogForm';
+import DialogForm from '../UI/DialogForm';
 import FileUpload from '../FileUpload/FileUpload';
 import { createReportAction } from '../../Redux/report.action';
 
@@ -82,7 +82,7 @@ function HSEObservationForm() {
   const [open, setOpen] = useState(false);
   const [statusBtn, setStatusBtn] = useState('');
   const formId = useLocation().pathname.split('/').at(-1);
-  const user = useSelector((state) => state.UserReducer.user);
+  const { user } = useSelector(({ UserReducer }) => UserReducer);
   const [singleFile, setSingleFile] = useState([]);
   const [fileList, setFileList] = useState([]);
   const dispatch = useDispatch();
@@ -90,20 +90,25 @@ function HSEObservationForm() {
   const locations = useSelector((state) => state.ReportReducer.locations);
   const locationsNames = locations.map((el) => el.name);
 
+  const storagedValues = JSON.parse(localStorage.getItem(formId));
+  const savedValues = storagedValues ? { ...storagedValues, date: dayjs(storagedValues.date), time: dayjs(storagedValues.time) } : null;
+
+  const initialValues = {
+    location: '',
+    observer: '',
+    date: dayjs(new Date()),
+    time: dayjs(new Date()),
+    description: '',
+    action: '',
+    improvement: '',
+    observationType: '',
+    healthHazard: false,
+    environmentalRisk: false,
+    unsafeCondition: false,
+  };
+
   const formik = useFormik({
-    initialValues: {
-      location: '',
-      observer: '',
-      date: dayjs(new Date()),
-      time: dayjs((new Date()).toTimeString()),
-      description: '',
-      action: '',
-      improvement: '',
-      observationType: '',
-      healthHazard: false,
-      environmentalRisk: false,
-      unsafeCondition: false,
-    },
+    initialValues: savedValues || initialValues,
     validationSchema,
     validateOnChange: true,
     validateOnBlur: true,
@@ -181,6 +186,7 @@ function HSEObservationForm() {
   };
 
   const handleConfirmSave = () => {
+    localStorage.setItem(formId, JSON.stringify(formik.values));
     setOpen(false);
   };
 
@@ -223,8 +229,8 @@ function HSEObservationForm() {
             }}
             style={{ marginBottom: '20px', marginTop: '20px' }}
             label="Time"
-            value={formik.values.date}
-            onChange={formik.handleChange}
+            value={formik.values.time}
+            onChange={((value) => (formik.setValues({ ...formik.values, time: value })))}
             format="HH:mm"
           />
           <TextField
@@ -429,7 +435,7 @@ function HSEObservationForm() {
             value="submit">
             <h2>Submit</h2>
           </Button>
-          {/* <Button
+          <Button
             sx={{
               height: 80, width: 250, margin: 1, mb: 3, mt: 3,
             }}
@@ -440,7 +446,7 @@ function HSEObservationForm() {
             color="primary"
             value="save">
             <h2>Save</h2>
-          </Button> */}
+          </Button>
           <Button
             sx={{
               height: 80, width: 250, margin: 1, mb: 3, mt: 3,

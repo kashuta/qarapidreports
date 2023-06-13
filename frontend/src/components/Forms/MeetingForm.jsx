@@ -33,7 +33,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { useLocation, useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import styles from './Form.module.css';
-import DialogForm from './DialogForm';
+import DialogForm from '../UI/DialogForm';
 import { createReportAction } from '../../Redux/report.action';
 import FileUpload from '../FileUpload/FileUpload';
 

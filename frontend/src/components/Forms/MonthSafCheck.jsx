@@ -32,7 +32,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import styles from './Form.module.css';
-import DialogForm from './DialogForm';
+import DialogForm from '../UI/DialogForm';
 import { createReportAction, setReportFieldsAction } from '../../Redux/report.action';
 
 function VechSafInspCheckForm() {
@@ -44,6 +44,9 @@ function VechSafInspCheckForm() {
   const reportsFields = useSelector((state) => state.ReportReducer.reportFields);
   const inspectLocation = useSelector((state) => state.ReportReducer.locations);
   const user = useSelector((state) => state.UserReducer.user);
+
+  const storagedValues = JSON.parse(localStorage.getItem(formId));
+  const savedValues = storagedValues ? { ...storagedValues, date: dayjs(storagedValues.date) } : null;
 
   useEffect(() => {
     dispatch(setReportFieldsAction(formId, navigate));
@@ -90,12 +93,14 @@ function VechSafInspCheckForm() {
       .required('Please, fill this field'),
   });
 
+  const initialValues = {
+    ...questionsValues,
+    location: '',
+    date: dayjs(new Date()),
+  };
+
   const formik = useFormik({
-    initialValues: {
-      ...questionsValues,
-      location: '',
-      date: dayjs(new Date()),
-    },
+    initialValues: savedValues || initialValues,
     validationSchema,
     validateOnChange: true,
     validateOnBlur: true,
@@ -165,6 +170,7 @@ function VechSafInspCheckForm() {
   };
 
   const handleConfirmSave = () => {
+    localStorage.setItem(formId, JSON.stringify(formik.values));
     setOpen(false);
   };
 
@@ -179,7 +185,6 @@ function VechSafInspCheckForm() {
           MONTHLY SAFETY CHECKLIST - FIELD SERVICES
         </h1>
         <Box
-          component="form"
           sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
           mb={5}
           align="center">
@@ -293,6 +298,19 @@ function VechSafInspCheckForm() {
             color="primary"
             value="submit">
             <h2>Submit</h2>
+          </Button>
+
+          <Button
+            sx={{
+              height: 80, width: 250, margin: 1, mb: 3, mt: 3,
+            }}
+            size="large"
+            onClick={(e) => handleSubmit(e)}
+            type="submit"
+            variant="outlined"
+            color="primary"
+            value="save">
+            <h2>Save</h2>
           </Button>
 
           <Button
