@@ -278,7 +278,6 @@ function VechSafInspCheckForm() {
           </TableContainer>
         </Box>
         <Box
-          component="form"
           sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
           mb={5}
           align="left">

@@ -46,6 +46,9 @@ function ForkliftForm() {
   const locations = useSelector((state) => state.ReportReducer.locations);
   const locationsNames = locations.map((el) => el.name);
 
+  const storagedValues = JSON.parse(localStorage.getItem(formId));
+  const savedValues = storagedValues ? { ...storagedValues, date: dayjs(storagedValues.date) } : null;
+
   useEffect(() => {
     dispatch(setReportFieldsAction(formId, navigate));
   }, []);
@@ -127,17 +130,19 @@ function ForkliftForm() {
       .required('Please, fill this field'),
   });
 
+  const initialValues = {
+    ...engineOffValues,
+    ...engineOnValues,
+    location: '',
+    operator: '',
+    date: dayjs(new Date()),
+    machineHours: '',
+    regNumber: '',
+    signature: '',
+  };
+
   const formik = useFormik({
-    initialValues: {
-      ...engineOffValues,
-      ...engineOnValues,
-      location: '',
-      operator: '',
-      date: dayjs(new Date()),
-      machineHours: '',
-      regNumber: '',
-      signature: '',
-    },
+    initialValues: savedValues || initialValues,
     validationSchema,
     validateOnChange: true,
     validateOnBlur: true,
@@ -207,6 +212,7 @@ function ForkliftForm() {
   };
 
   const handleConfirmSave = () => {
+    localStorage.setItem(formId, JSON.stringify(formik.values));
     setOpen(false);
   };
 
@@ -494,7 +500,7 @@ function ForkliftForm() {
             value="submit">
             <h2>Submit</h2>
           </Button>
-          {/* <Button
+          <Button
             sx={{
               height: 80, width: 250, margin: 1, mb: 3, mt: 3,
             }}
@@ -505,7 +511,7 @@ function ForkliftForm() {
             color="primary"
             value="save">
             <h2>Save</h2>
-          </Button> */}
+          </Button>
           <Button
             sx={{
               height: 80, width: 250, margin: 1, mb: 3, mt: 3,

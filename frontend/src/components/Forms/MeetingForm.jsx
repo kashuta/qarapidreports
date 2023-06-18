@@ -50,6 +50,9 @@ function MeetingForm() {
   const [singleFile, setSingleFile] = useState([]);
   const [fileList, setFileList] = useState([]);
 
+  const storagedValues = JSON.parse(localStorage.getItem(formId));
+  const savedValues = storagedValues ? { ...storagedValues, date: dayjs(storagedValues.date) } : null;
+
   const validationSchema = yup.object().shape({
     country: yup
       .string('Enter operator name')
@@ -156,7 +159,9 @@ function MeetingForm() {
     setSingleFile([]);
   };
 
-  const handleConfirmSave = () => {
+  const handleConfirmSave = (formik) => {
+    console.log(formik.values);
+    localStorage.setItem(formId, JSON.stringify(formik.values));
     setOpen(false);
   };
 
@@ -167,7 +172,7 @@ function MeetingForm() {
   return (
     <Container>
       <Formik
-        initialValues={initialValues}
+        initialValues={savedValues || initialValues}
         validationSchema={validationSchema}
         validateOnChange
         validateOnBlur
@@ -552,7 +557,7 @@ function MeetingForm() {
                   value="submit">
                   <h2>Submit</h2>
                 </Button>
-                {/* <Button
+                <Button
                   sx={{
                     height: 80, width: 250, margin: 1, mb: 3, mt: 3,
                   }}
@@ -563,7 +568,7 @@ function MeetingForm() {
                   color="primary"
                   value="save">
                   <h2>Save</h2>
-                </Button> */}
+                </Button>
                 <Button
                   sx={{
                     height: 80, width: 250, margin: 1, mb: 3, mt: 3,
@@ -578,7 +583,7 @@ function MeetingForm() {
                 </Button>
               </Box>
             </Form>
-            <DialogForm open={open} statusBtn={statusBtn} handleClose={handleClose} handleConfirm={() => handleConfirm(formik)} handleConfirmSave={handleConfirmSave} handleConfirmClear={() => handleConfirmClear(formik)} />
+            <DialogForm open={open} statusBtn={statusBtn} handleClose={handleClose} handleConfirm={() => handleConfirm(formik)} handleConfirmSave={() => handleConfirmSave(formik)} handleConfirmClear={() => handleConfirmClear(formik)} />
           </>
         )}
       </Formik>
