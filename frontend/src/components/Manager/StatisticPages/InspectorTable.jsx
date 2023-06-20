@@ -63,7 +63,7 @@ async function OpenOrDownloadPdf(answer, name, status, username) {
 }
 
 function InspectorTable({ Data, name }) {
-  console.log('{{{{{{{{{{{{{{{{{{{{{{{{{{{{', Data);
+
   return (
     <Box mb={5}>
       <TableContainer component={Paper}>

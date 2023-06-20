@@ -26,7 +26,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import styles from './Form.module.css';
-import DialogForm from './DialogForm';
+import DialogForm from '../UI/DialogForm';
 import FileUpload from '../FileUpload/FileUpload';
 import { createReportAction } from '../../Redux/report.action';
 

@@ -17,7 +17,6 @@ import {
 
 export const getInspectorStat = (navigate, email, data) => async (dispatch) => {
   try {
-    console.log('{{{{{{{{{{{{{{{{{{{{{{{first}}}}}}}}}}}}}}}}}}}}}}}');
     const response = await authFetch(
       'http://localhost:3001/api/v2/form/get_inspector_stat',
       {

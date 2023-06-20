@@ -19,23 +19,34 @@ export const setUserAction = (data) => ({
 //     payload: data,
 //   });
 
-//   export const setUserAction = () => (dispatch) => {
-//     fetch('http://localhost:5050/auth', {
-//       credentials: 'include',
-//     })
-//       .then((res) => res.json())
-//       .then((data) => {
-//         // setUser(data);
-//         dispatch({
-//           type: SET_USER,
-//           payload: data,
-//         });
-//         dispatch(getUserLoaderAction(true));
-//       })
-//       .catch((e) => {
-//         dispatch(setErrorAction(e));
-//       });
-//   };
+export const loginUserAction = (values, navigate) => (dispatch) => {
+  console.log(values, '!!!!!values!!!!!');
+  fetch('http://localhost:3001/api/v2/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(values),
+    credentials: 'include',
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.message) {
+        alert(data.message);
+        dispatch(getUserLoaderAction(true));
+        navigate('/login');
+      } else {
+        const token = data.accessToken;
+        localStorage.setItem('accessToken', token);
+        dispatch({
+          type: SET_USER,
+          payload: data.userFront,
+        });
+        dispatch(getUserLoaderAction(true));
+      }
+    })
+    .catch(console.log);
+};
 
 //   export const loginUserAction = (form, navigate) => (dispatch) => {
 //     fetch('http://localhost:5050/auth/login', {

@@ -27,9 +27,7 @@ class UserController {
             return next(ErrorHandler.UnprocessableEntityError(backendErrors.SWW_ERROR, res));
         }
       }
-      const {
-        userName, email, password, role,
-      } = req.body;
+      const { userName, email, password, role } = req.body;
       const userData = await userService.registration(userName, email, password, role);
       return res.json(userData);
     } catch (err) {
@@ -40,13 +38,14 @@ class UserController {
   async login(req, res, next) {
     try {
       const { email, password } = req.body;
+      console.log(req.body, 'req body');
       if (email === '' || password === '') {
         return next(ErrorHandler.UnprocessableEntityError(backendErrors.VALIDATION_ERROR, res));
       }
       const userData = await userService.login(email, password);
       res.cookie('refreshToken', userData.refreshToken, {
         httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24 * 30,
+        maxAge: 1000 * 60 * 60 * 24 * 30
       });
       return res.json(userData);
     } catch (err) {
@@ -85,7 +84,7 @@ class UserController {
       const userData = await userService.refresh(refreshToken);
       res.cookie('refreshToken', userData.refreshToken, {
         httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24 * 30,
+        maxAge: 1000 * 60 * 60 * 24 * 30
       });
       return res.json(userData);
     } catch (err) {

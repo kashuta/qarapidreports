@@ -9,7 +9,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { getUserLoaderAction, setUserAction } from '../../Redux/user.action';
+import { getUserLoaderAction, loginUserAction } from '../../Redux/user.action';
 
 function SignInForm() {
   const [form, setForm] = useState({
@@ -23,29 +23,7 @@ function SignInForm() {
   const handleSubmit = (event) => {
     event.preventDefault();
     dispatch(getUserLoaderAction(false));
-    fetch('http://localhost:3001/api/v2/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(form),
-      credentials: 'include',
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.message) {
-          alert(data.message);
-          dispatch(getUserLoaderAction(true));
-          navigate('/login');
-        } else {
-          const token = data.accessToken;
-          localStorage.setItem('accessToken', token);
-          dispatch(setUserAction(data.userFront));
-          dispatch(getUserLoaderAction(true));
-        }
-      })
-      .catch(console.log);
-
+    dispatch(loginUserAction(form, navigate));
     navigate('/');
   };
 
@@ -69,8 +47,7 @@ function SignInForm() {
       alignItems="center"
       justify="center"
       flexDirection="column"
-      margin="100px 400px"
-    >
+      margin="100px 400px">
       <TextField
         required
         label="Email"

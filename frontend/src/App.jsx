@@ -7,7 +7,6 @@ import { Box } from '@mui/material';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import SignInForm from './components/Auth/SignInForm';
 import Navbar from './components/Navbar/Navbar';
 import './App.css';
 
@@ -25,12 +24,14 @@ import Forms from './components/Forms/Forms';
 import Footer from './components/Footer/Footer';
 import { getLocationsAction } from './Redux/report.action';
 import MySpinner from './components/UI/MySpinner';
+import SignInFormTest from './components/Auth/LoginTestForm';
 
 // import { setUserAction } from './components/Redux/user.action';
 
 function App() {
   const user = useSelector((state) => state.UserReducer.user);
   const loader = useSelector((state) => state.UserReducer.loader);
+  console.log(user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/reg" element={<RegForm />} />
-          <Route path="/login" element={<SignInForm />} />
+          <Route path="/login" element={<SignInFormTest />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Container>
