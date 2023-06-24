@@ -29,6 +29,7 @@ import styles from './Form.module.css';
 import DialogForm from '../UI/DialogForm';
 import FileUpload from '../FileUpload/FileUpload';
 import { createReportAction } from '../../Redux/report.action';
+import { clearLocalStorageData } from '../../utils/utils';
 
 const validationSchema = yup.object().shape({
   location: yup
@@ -90,7 +91,8 @@ function HSEObservationForm() {
   const locations = useSelector((state) => state.ReportReducer.locations);
   const locationsNames = locations.map((el) => el.name);
 
-  const storagedValues = JSON.parse(localStorage.getItem(formId));
+  const formDataId = `user${user.id}-form${formId}`;
+  const storagedValues = JSON.parse(localStorage.getItem(formDataId));
   const savedValues = storagedValues ? { ...storagedValues, date: dayjs(storagedValues.date), time: dayjs(storagedValues.time) } : null;
 
   const initialValues = {
@@ -130,7 +132,8 @@ function HSEObservationForm() {
         });
       }
       dispatch(createReportAction(data, navigate));
-      resetForm();
+      clearLocalStorageData(formDataId);
+      resetForm({ values: initialValues });
       setFileList([]);
       setSingleFile([]);
     },
@@ -180,13 +183,14 @@ function HSEObservationForm() {
 
   const handleConfirmClear = () => {
     setOpen(false);
-    formik.handleReset();
+    clearLocalStorageData(formDataId);
+    formik.handleReset({ values: initialValues });
     setFileList([]);
     setSingleFile([]);
   };
 
   const handleConfirmSave = () => {
-    localStorage.setItem(formId, JSON.stringify(formik.values));
+    localStorage.setItem(formDataId, JSON.stringify(formik.values));
     setOpen(false);
   };
 

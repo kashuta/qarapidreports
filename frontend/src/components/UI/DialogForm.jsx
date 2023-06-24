@@ -34,8 +34,8 @@ function DialogForm({
         <DialogContentText id="alert-dialog-description">
           {
           statusBtn === 'submit' ? 'Are you sure you want to Submit'
-            : statusBtn === 'save' ? 'Are you sure you want to Save?'
-              : statusBtn === 'validation-error' ? 'Please, fill all required fields correctly before submitting' : 'Are you sure you want to Clear?'
+            : statusBtn === 'save' ? 'Filled form fields will be saved to your browser. Attached files will not be saved. Continue?'
+              : statusBtn === 'validation-error' ? 'Please, fill all required fields correctly before submitting' : 'Are you sure you want to Clear? Saved form data will aslo be deleted.'
           }
         </DialogContentText>
       </DialogContent>

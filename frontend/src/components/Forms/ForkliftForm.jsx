@@ -34,6 +34,7 @@ import dayjs from 'dayjs';
 import styles from './Form.module.css';
 import DialogForm from '../UI/DialogForm';
 import { createReportAction, setReportFieldsAction } from '../../Redux/report.action';
+import { clearLocalStorageData } from '../../utils/utils';
 
 function ForkliftForm() {
   const [open, setOpen] = useState(false);
@@ -46,7 +47,8 @@ function ForkliftForm() {
   const locations = useSelector((state) => state.ReportReducer.locations);
   const locationsNames = locations.map((el) => el.name);
 
-  const storagedValues = JSON.parse(localStorage.getItem(formId));
+  const formDataId = `user${user.id}-form${formId}`;
+  const storagedValues = JSON.parse(localStorage.getItem(formDataId));
   const savedValues = storagedValues ? { ...storagedValues, date: dayjs(storagedValues.date) } : null;
 
   useEffect(() => {
@@ -154,7 +156,8 @@ function ForkliftForm() {
       data.append('status', 'submit');
       data.append('images', '');
       dispatch(createReportAction(data, navigate));
-      resetForm();
+      resetForm({ values: initialValues });
+      clearLocalStorageData(formDataId);
     },
   });
 
@@ -208,11 +211,12 @@ function ForkliftForm() {
 
   const handleConfirmClear = () => {
     setOpen(false);
-    formik.handleReset();
+    clearLocalStorageData(formDataId);
+    formik.handleReset({ values: initialValues });
   };
 
   const handleConfirmSave = () => {
-    localStorage.setItem(formId, JSON.stringify(formik.values));
+    localStorage.setItem(formDataId, JSON.stringify(formik.values));
     setOpen(false);
   };
 

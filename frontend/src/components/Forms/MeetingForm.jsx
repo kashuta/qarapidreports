@@ -36,6 +36,7 @@ import styles from './Form.module.css';
 import DialogForm from '../UI/DialogForm';
 import { createReportAction } from '../../Redux/report.action';
 import FileUpload from '../FileUpload/FileUpload';
+import { clearLocalStorageData } from '../../utils/utils';
 
 function MeetingForm() {
   const [open, setOpen] = useState(false);
@@ -50,7 +51,8 @@ function MeetingForm() {
   const [singleFile, setSingleFile] = useState([]);
   const [fileList, setFileList] = useState([]);
 
-  const storagedValues = JSON.parse(localStorage.getItem(formId));
+  const formDataId = `user${user.id}-form${formId}`;
+  const storagedValues = JSON.parse(localStorage.getItem(formDataId));
   const savedValues = storagedValues ? { ...storagedValues, date: dayjs(storagedValues.date) } : null;
 
   const validationSchema = yup.object().shape({
@@ -154,14 +156,14 @@ function MeetingForm() {
 
   const handleConfirmClear = (formik) => {
     setOpen(false);
-    formik.handleReset();
+    clearLocalStorageData(formDataId);
+    formik.handleReset({ values: initialValues });
     setFileList([]);
     setSingleFile([]);
   };
 
   const handleConfirmSave = (formik) => {
-    console.log(formik.values);
-    localStorage.setItem(formId, JSON.stringify(formik.values));
+    localStorage.setItem(formDataId, JSON.stringify(formik.values));
     setOpen(false);
   };
 
@@ -191,7 +193,8 @@ function MeetingForm() {
             });
           }
           dispatch(createReportAction(data, navigate));
-          resetForm();
+          clearLocalStorageData(formDataId);
+          resetForm({ values: initialValues });
           setFileList([]);
           setSingleFile([]);
         }}
