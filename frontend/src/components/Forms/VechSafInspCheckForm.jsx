@@ -33,8 +33,9 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import moment from 'moment';
 import styles from './Form.module.css';
-import DialogForm from './DialogForm';
+import DialogForm from '../UI/DialogForm';
 import { createReportAction, setReportFieldsAction } from '../../Redux/report.action';
+import { clearLocalStorageData } from '../../utils/utils';
 
 function VechSafInspCheckForm() {
   const [open, setOpen] = useState(false);
@@ -45,6 +46,10 @@ function VechSafInspCheckForm() {
   const reportsFields = useSelector((state) => state.ReportReducer.reportFields);
   const inspectLocation = useSelector((state) => state.ReportReducer.locations);
   const user = useSelector((state) => state.UserReducer.user);
+
+  const formDataId = `user${user.id}-form${formId}`;
+  const storagedValues = JSON.parse(localStorage.getItem(formDataId));
+  const savedValues = storagedValues ? { ...storagedValues, date: dayjs(storagedValues.date), nextDate: dayjs(storagedValues.nextDate) } : null;
 
   useEffect(() => {
     dispatch(setReportFieldsAction(formId, navigate));
@@ -115,16 +120,18 @@ function VechSafInspCheckForm() {
     ),
   });
 
+  const initialValues = {
+    ...questionsValues,
+    location: '',
+    regNumber: '',
+    date: dayjs(new Date()),
+    MileageReading: '',
+    NextMileage: '',
+    nextDate: dayjs(new Date()),
+  };
+
   const formik = useFormik({
-    initialValues: {
-      ...questionsValues,
-      location: '',
-      regNumber: '',
-      date: dayjs(new Date()),
-      MileageReading: '',
-      NextMileage: '',
-      nextDate: '',
-    },
+    initialValues: savedValues || initialValues,
     validationSchema,
     validateOnChange: true,
     validateOnBlur: true,
@@ -136,7 +143,8 @@ function VechSafInspCheckForm() {
       data.append('status', 'submit');
       data.append('images', '');
       dispatch(createReportAction(data, navigate));
-      resetForm();
+      clearLocalStorageData(formDataId);
+      resetForm({ values: initialValues });
     },
   });
 
@@ -190,10 +198,12 @@ function VechSafInspCheckForm() {
 
   const handleConfirmClear = () => {
     setOpen(false);
-    formik.handleReset();
+    clearLocalStorageData(formDataId);
+    formik.handleReset({ values: initialValues });
   };
 
   const handleConfirmSave = () => {
+    localStorage.setItem(formDataId, JSON.stringify(formik.values));
     setOpen(false);
   };
 
@@ -206,7 +216,6 @@ function VechSafInspCheckForm() {
       <form onSubmit={formik.handleSubmit}>
         <h1 className={`${styles.form_h1} ${styles.text_center}`}>VEHICLE SAFETY INSPECTION CHECKLIST</h1>
         <Box
-          component="form"
           sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
           mb={5}
           align="center"
@@ -336,7 +345,6 @@ function VechSafInspCheckForm() {
           </TableContainer>
         </Box>
         <Box
-          component="form"
           sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
           mb={5}
           align="left"
@@ -351,6 +359,18 @@ function VechSafInspCheckForm() {
         <Box m={3} display="flex" justifyContent="center">
           <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="primary" value="submit">
             <h2>Submit</h2>
+          </Button>
+          <Button
+            sx={{
+              height: 80, width: 250, margin: 1, mb: 3, mt: 3,
+            }}
+            size="large"
+            onClick={(e) => handleSubmit(e)}
+            type="submit"
+            variant="outlined"
+            color="primary"
+            value="save">
+            <h2>Save</h2>
           </Button>
           <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="error" value="clear">
             <h2>Clear</h2>

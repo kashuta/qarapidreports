@@ -33,9 +33,10 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { useLocation, useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import styles from './Form.module.css';
-import DialogForm from './DialogForm';
+import DialogForm from '../UI/DialogForm';
 import { createReportAction } from '../../Redux/report.action';
 import FileUpload from '../FileUpload/FileUpload';
+import { clearLocalStorageData } from '../../utils/utils';
 
 function MeetingForm() {
   const [open, setOpen] = useState(false);
@@ -49,6 +50,10 @@ function MeetingForm() {
 
   const [singleFile, setSingleFile] = useState([]);
   const [fileList, setFileList] = useState([]);
+
+  const formDataId = `user${user.id}-form${formId}`;
+  const storagedValues = JSON.parse(localStorage.getItem(formDataId));
+  const savedValues = storagedValues ? { ...storagedValues, date: dayjs(storagedValues.date) } : null;
 
   const validationSchema = yup.object().shape({
     country: yup
@@ -151,12 +156,14 @@ function MeetingForm() {
 
   const handleConfirmClear = (formik) => {
     setOpen(false);
-    formik.handleReset();
+    clearLocalStorageData(formDataId);
+    formik.handleReset({ values: initialValues });
     setFileList([]);
     setSingleFile([]);
   };
 
-  const handleConfirmSave = () => {
+  const handleConfirmSave = (formik) => {
+    localStorage.setItem(formDataId, JSON.stringify(formik.values));
     setOpen(false);
   };
 
@@ -167,7 +174,7 @@ function MeetingForm() {
   return (
     <Container>
       <Formik
-        initialValues={initialValues}
+        initialValues={savedValues || initialValues}
         validationSchema={validationSchema}
         validateOnChange
         validateOnBlur
@@ -186,7 +193,8 @@ function MeetingForm() {
             });
           }
           dispatch(createReportAction(data, navigate));
-          resetForm();
+          clearLocalStorageData(formDataId);
+          resetForm({ values: initialValues });
           setFileList([]);
           setSingleFile([]);
         }}
@@ -552,7 +560,7 @@ function MeetingForm() {
                   value="submit">
                   <h2>Submit</h2>
                 </Button>
-                {/* <Button
+                <Button
                   sx={{
                     height: 80, width: 250, margin: 1, mb: 3, mt: 3,
                   }}
@@ -563,7 +571,7 @@ function MeetingForm() {
                   color="primary"
                   value="save">
                   <h2>Save</h2>
-                </Button> */}
+                </Button>
                 <Button
                   sx={{
                     height: 80, width: 250, margin: 1, mb: 3, mt: 3,
@@ -578,7 +586,7 @@ function MeetingForm() {
                 </Button>
               </Box>
             </Form>
-            <DialogForm open={open} statusBtn={statusBtn} handleClose={handleClose} handleConfirm={() => handleConfirm(formik)} handleConfirmSave={handleConfirmSave} handleConfirmClear={() => handleConfirmClear(formik)} />
+            <DialogForm open={open} statusBtn={statusBtn} handleClose={handleClose} handleConfirm={() => handleConfirm(formik)} handleConfirmSave={() => handleConfirmSave(formik)} handleConfirmClear={() => handleConfirmClear(formik)} />
           </>
         )}
       </Formik>
