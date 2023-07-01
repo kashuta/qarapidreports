@@ -8,11 +8,11 @@ const pdfStyles0320 = StyleSheet.create({
   },
 
   Country: {
-    top: 140,
+    top: 130,
     left: 200,
   },
   location: {
-    top: 140,
+    top: 160,
     left: 200,
   },
   vehicleRegistrationNumber: {
@@ -20,8 +20,8 @@ const pdfStyles0320 = StyleSheet.create({
     left: 200,
   },
   date: {
-    top: 180,
-    left: 200,
+    top: 130,
+    left: 300,
   },
   MileageReadingKM: {
     top: 200,

@@ -17,14 +17,20 @@ class UserController {
       const validationErrors = validationResult(req);
       if (!validationErrors.isEmpty()) {
         switch (validationErrors.errors[0].param) {
-          case 'userName': return next(ErrorHandler.UnprocessableEntityError(backendErrors.INVALID_USERNAME, res));
-          case 'email': return next(ErrorHandler.UnprocessableEntityError(backendErrors.INVALID_EMAIL, res));
-          case 'password': return next(ErrorHandler.UnprocessableEntityError(backendErrors.INVALID_PASSWORD, res));
-          default: return next(ErrorHandler.UnprocessableEntityError(backendErrors.SWW_ERROR, res));
+          case 'userName':
+            return next(ErrorHandler.UnprocessableEntityError(backendErrors.INVALID_USERNAME, res));
+          case 'email':
+            return next(ErrorHandler.UnprocessableEntityError(backendErrors.INVALID_EMAIL, res));
+          case 'password':
+            return next(ErrorHandler.UnprocessableEntityError(backendErrors.INVALID_PASSWORD, res));
+          default:
+            return next(ErrorHandler.UnprocessableEntityError(backendErrors.SWW_ERROR, res));
         }
       }
-      const { userName, email, password } = req.body;
-      const userData = await userService.registration(userName, email, password);
+      const {
+        userName, email, password, role,
+      } = req.body;
+      const userData = await userService.registration(userName, email, password, role);
       return res.json(userData);
     } catch (err) {
       return next(ErrorHandler.BadRequestError(err, res));
@@ -63,7 +69,11 @@ class UserController {
     try {
       const { link } = req.params;
       const resp = await userService.activate(link);
-      if (resp) { res.render('viewError'); } else { res.render('view'); }
+      if (resp.isActive) {
+        res.render('viewError');
+      } else {
+        res.render('view');
+      }
     } catch (err) {
       return next(ErrorHandler.BadRequestError(err, res));
     }

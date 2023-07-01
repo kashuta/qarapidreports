@@ -31,64 +31,31 @@ import {
 import { DatePicker } from '@mui/x-date-pickers';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
+import moment from 'moment';
 import styles from './Form.module.css';
-import DialogForm from './DialogForm';
+import DialogForm from '../UI/DialogForm';
 import { createReportAction, setReportFieldsAction } from '../../Redux/report.action';
+import { clearLocalStorageData } from '../../utils/utils';
 
-// const questions = [
-//   'All vehicle lights are functioning',
-//   'Vehicle monitoring system (IVMS) is ok',
-//   'Brake fluid level is ok',
-//   'Engine oil level is ok',
-//   'Radiator coolant level is ok',
-//   'Windshield wiper/Washer fluid is ok',
-//   'Drinking water available inside',
-//   'Tire Pressure (including spare) is ok',
-//   'Fire extinguisher is available and pressurized',
-//   'First aid kit is available and contents not expired',
-//   'Reflective jacket is available',
-//   'Reflective triangle is available',
-//   'Jack and wheel wrench are available',
-//   'OXY inspection sticker is valid',
-//   'Maintenance status is ok',
-// ];
-
-// const schema = yup.object().shape({
-//   date: yup.date(),
-//   nextDate: yup.date().when('date', {
-//     is: (date) => !!date,
-//     then: yup.date().test(
-//       'is-greater-than-or-equal-to-date',
-//       'Next date must be greater than or equal to the current date',
-//       (value, context) => {
-//         const { date } = context.parent;
-//         return !date || !value || value >= date;
-//       },
-//     ),
-//   }),
-// });
-
-// Проверка данных формы
-// schema.validate(nextDate)
-//   .then((validData) => {
-//     // Данные формы валидны
-//   })
-//   .catch((error) => {
-//     // Данные формы не валидны
-//   });
-
-function VechSafInspCheckForm({ location }) {
+function VechSafInspCheckForm() {
   const [open, setOpen] = useState(false);
   const [statusBtn, setStatusBtn] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const formId = useLocation().pathname.split('/').at(-1);
   const reportsFields = useSelector((state) => state.ReportReducer.reportFields);
+  const inspectLocation = useSelector((state) => state.ReportReducer.locations);
   const user = useSelector((state) => state.UserReducer.user);
+
+  const formDataId = `user${user.id}-form${formId}`;
+  const storagedValues = JSON.parse(localStorage.getItem(formDataId));
+  const savedValues = storagedValues ? { ...storagedValues, date: dayjs(storagedValues.date), nextDate: dayjs(storagedValues.nextDate) } : null;
 
   useEffect(() => {
     dispatch(setReportFieldsAction(formId, navigate));
   }, []);
+
+  const nameLocation = inspectLocation.map((el) => el.name);
 
   const formFields = reportsFields.find((el) => el.formId === +formId);
 
@@ -140,43 +107,44 @@ function VechSafInspCheckForm({ location }) {
       .typeError('Value must be a number')
       .positive('Enter positive number')
       .required('Please, fill this field'),
-    // nextDate: yup.date().when('date', {
-    //   is: (date) => !!date,
-    //   then: yup.date().test(
-    //     'is-greater-than-or-equal-to-date',
-    //     'Next date must be greater than or equal to the current date',
-    //     (value, context) => {
-    //       console.log('nextDate', value.getTime());
-    //       const { date } = context.parent;
-    //       console.log('curDate', date.$d.getTime());
-    //       console.log('test', date.$d > value);
-    //       return !date || !value || value >= date;
-    //     },
-    //   ),
-    // }),
+    nextDate: yup.date().test(
+      'less-to-date',
+      'Next date must be greater than the current date',
+      (value, context) => {
+        const { date } = context.parent;
+        if (moment(value).isBefore(date)) {
+          return false;
+        }
+        return true;
+      },
+    ),
   });
 
+  const initialValues = {
+    ...questionsValues,
+    location: '',
+    regNumber: '',
+    date: dayjs(new Date()),
+    MileageReading: '',
+    NextMileage: '',
+    nextDate: dayjs(new Date()),
+  };
+
   const formik = useFormik({
-    initialValues: {
-      ...questionsValues,
-      location: '',
-      regNumber: '',
-      date: dayjs(new Date()),
-      MileageReading: '',
-      NextMileage: '',
-      nextDate: dayjs(new Date()),
-    },
+    initialValues: savedValues || initialValues,
     validationSchema,
     validateOnChange: true,
     validateOnBlur: true,
-    onSubmit: (values) => {
-      const obj = {
-        formId,
-        userId: user.id,
-        formData: values,
-        status: 'submit',
-      };
-      dispatch(createReportAction(JSON.stringify(obj), navigate));
+    onSubmit: (values, { resetForm }) => {
+      const data = new FormData();
+      data.append('formData', JSON.stringify(values));
+      data.append('formId', formId);
+      data.append('userId', user.id);
+      data.append('status', 'submit');
+      data.append('images', '');
+      dispatch(createReportAction(data, navigate));
+      clearLocalStorageData(formDataId);
+      resetForm({ values: initialValues });
     },
   });
 
@@ -195,8 +163,16 @@ function VechSafInspCheckForm({ location }) {
           formik.setErrors(errors);
           const touchedFields = Object.keys(errors).reduce((touched, key) => {
             if (typeof errors[key] === 'object') {
+              touched[key] = {};
               for (const nested of Object.keys(errors[key])) {
-                touched[key] = { [nested]: true };
+                if (typeof errors[key][nested] === 'object') {
+                  touched[key][nested] = {};
+                  for (const el of Object.keys(errors[key][nested])) {
+                    touched[key][nested][el] = true;
+                  }
+                } else {
+                  touched[key][nested] = true;
+                }
               }
             } else {
               touched[key] = true;
@@ -222,10 +198,12 @@ function VechSafInspCheckForm({ location }) {
 
   const handleConfirmClear = () => {
     setOpen(false);
-    formik.handleReset();
+    clearLocalStorageData(formDataId);
+    formik.handleReset({ values: initialValues });
   };
 
   const handleConfirmSave = () => {
+    localStorage.setItem(formDataId, JSON.stringify(formik.values));
     setOpen(false);
   };
 
@@ -236,9 +214,8 @@ function VechSafInspCheckForm({ location }) {
   return (
     <Container>
       <form onSubmit={formik.handleSubmit}>
-        <h1 className={styles.form_h1}>VEHICLE SAFETY INSPECTION CHECKLIST</h1>
+        <h1 className={`${styles.form_h1} ${styles.text_center}`}>VEHICLE SAFETY INSPECTION CHECKLIST</h1>
         <Box
-          component="form"
           sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
           mb={5}
           align="center"
@@ -255,7 +232,7 @@ function VechSafInspCheckForm({ location }) {
             error={formik.touched.location && Boolean(formik.errors.location)}
             helperText={formik.touched.location && formik.errors.location}
           >
-            {location.map((el, index) => (
+            {nameLocation.map((el, index) => (
               <MenuItem key={index + 1} value={el}>
                 {el}
               </MenuItem>
@@ -303,6 +280,12 @@ function VechSafInspCheckForm({ location }) {
             name="nextDate"
             value={formik.values.nextDate}
             onChange={((value) => (formik.setValues({ ...formik.values, nextDate: value })))}
+            minDate={formik.values.date}
+            slotProps={{
+              textField: {
+                helperText: formik.errors.nextDate,
+              },
+            }}
           />
         </Box>
         <Box mb={5}>
@@ -329,7 +312,7 @@ function VechSafInspCheckForm({ location }) {
                           row
                           style={{ flexWrap: 'nowrap' }}
                           name={`${elem.question}.condition`}
-                          value={formik.values[elem.question]?.condition}
+                          value={formik.values[elem.question]?.condition ?? ''}
                           onChange={formik.handleChange}
                         >
                           <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="ok" control={<Radio />} label="OK" />
@@ -348,7 +331,7 @@ function VechSafInspCheckForm({ location }) {
                           },
                         }}
                         name={`${elem.question}.comments`}
-                        value={formik.values[elem.question]?.comments}
+                        value={formik.values[elem.question]?.comments ?? ''}
                         onChange={formik.handleChange}
                         onBlur={(e) => formik.setFieldTouched(e.target.name)}
                         error={formik.touched[`${elem.question}`]?.comments && Boolean(formik.errors[`${elem.question}`]?.comments)}
@@ -362,18 +345,31 @@ function VechSafInspCheckForm({ location }) {
           </TableContainer>
         </Box>
         <Box
-          component="form"
           sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
           mb={5}
           align="left"
         >
-          <p>Inspected by Name & Sign:  __________________</p>
+          <p>
+            Inspected by Name & Sign:
+            {' '}
+            {user.userName}
+            {' '}
+          </p>
         </Box>
         <Box m={3} display="flex" justifyContent="center">
-          <Button sx={{ height: 80, width: 220, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="primary" value="submit">
+          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="primary" value="submit">
             <h2>Submit</h2>
           </Button>
-          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="warning" value="save">
+          <Button
+            sx={{
+              height: 80, width: 250, margin: 1, mb: 3, mt: 3,
+            }}
+            size="large"
+            onClick={(e) => handleSubmit(e)}
+            type="submit"
+            variant="outlined"
+            color="primary"
+            value="save">
             <h2>Save</h2>
           </Button>
           <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="error" value="clear">

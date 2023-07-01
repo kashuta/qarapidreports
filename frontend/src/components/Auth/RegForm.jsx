@@ -42,7 +42,6 @@ function RegForm() {
           navigate('/reg');
         } else {
           alert('Please check your email and activate your account');
-          navigate('/login');
         }
       })
       .catch(console.log);
@@ -63,15 +62,14 @@ function RegForm() {
   return (
     <Box
       component="form"
-      sx={{
-        width: '40%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        marginLeft: 35,
-        marginTop: 10,
-      }}>
+      container="true"
+      display="flex"
+      alignItems="center"
+      justify="center"
+      minHeight="100vh"
+      flexDirection="column"
+      margin="100px 400px"
+    >
       <TextField
         required
         label="First and Last Name"
@@ -97,6 +95,7 @@ function RegForm() {
         }}
       />
       <TextField
+        helperText="More than six characters"
         required
         label="Password"
         name="password"
@@ -135,9 +134,9 @@ function RegForm() {
           marginBottom: '1rem',
           width: '100%',
         }}>
-        <MenuItem value="Admin">Admin</MenuItem>
-        <MenuItem value="Manager">Manager</MenuItem>
-        <MenuItem value="Inspector">Inspector</MenuItem>
+        <MenuItem value="admin">Admin</MenuItem>
+        <MenuItem value="manager">Manager</MenuItem>
+        <MenuItem value="inspector">Inspector</MenuItem>
       </Select>
       <Button
         onClick={handleSubmit}

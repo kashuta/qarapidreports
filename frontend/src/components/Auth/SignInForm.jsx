@@ -1,8 +1,7 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from 'react';
-import {
-  Button, IconButton, InputAdornment, TextField,
-} from '@mui/material';
+import { Button, IconButton, InputAdornment, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -23,7 +22,7 @@ function SignInForm() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    dispatch(getUserLoaderAction(false));
     fetch('http://localhost:3001/api/v2/auth/login', {
       method: 'POST',
       headers: {
@@ -36,6 +35,7 @@ function SignInForm() {
       .then((data) => {
         if (data.message) {
           alert(data.message);
+          dispatch(getUserLoaderAction(true));
           navigate('/login');
         } else {
           const token = data.accessToken;
@@ -64,16 +64,13 @@ function SignInForm() {
   return (
     <Box
       component="form"
-      sx={{
-        width: '40%',
-
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        marginLeft: 35,
-        marginTop: 10,
-      }}>
+      container="true"
+      display="flex"
+      alignItems="center"
+      justify="center"
+      flexDirection="column"
+      margin="100px 400px"
+    >
       <TextField
         required
         label="Email"

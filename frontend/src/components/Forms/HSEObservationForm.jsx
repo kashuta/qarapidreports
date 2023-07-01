@@ -22,9 +22,14 @@ import {
   Checkbox,
 } from '@mui/material';
 import { DatePicker, TimeField } from '@mui/x-date-pickers';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import styles from './Form.module.css';
-import DialogForm from './DialogForm';
+import DialogForm from '../UI/DialogForm';
+import FileUpload from '../FileUpload/FileUpload';
+import { createReportAction } from '../../Redux/report.action';
+import { clearLocalStorageData } from '../../utils/utils';
 
 const validationSchema = yup.object().shape({
   location: yup
@@ -74,29 +79,63 @@ const validationSchema = yup.object().shape({
   }),
 });
 
-function HSEObservationForm({ location }) {
+function HSEObservationForm() {
   const [open, setOpen] = useState(false);
   const [statusBtn, setStatusBtn] = useState('');
+  const formId = useLocation().pathname.split('/').at(-1);
+  const { user } = useSelector(({ UserReducer }) => UserReducer);
+  const [singleFile, setSingleFile] = useState([]);
+  const [fileList, setFileList] = useState([]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const locations = useSelector((state) => state.ReportReducer.locations);
+  const locationsNames = locations.map((el) => el.name);
+
+  const formDataId = `user${user.id}-form${formId}`;
+  const storagedValues = JSON.parse(localStorage.getItem(formDataId));
+  const savedValues = storagedValues ? { ...storagedValues, date: dayjs(storagedValues.date), time: dayjs(storagedValues.time) } : null;
+
+  const initialValues = {
+    location: '',
+    observer: '',
+    date: dayjs(new Date()),
+    time: dayjs(new Date()),
+    description: '',
+    action: '',
+    improvement: '',
+    observationType: '',
+    healthHazard: false,
+    environmentalRisk: false,
+    unsafeCondition: false,
+  };
 
   const formik = useFormik({
-    initialValues: {
-      location: '',
-      observer: '',
-      date: dayjs(new Date()),
-      time: dayjs((new Date()).toTimeString()),
-      description: '',
-      action: '',
-      improvement: '',
-      observationType: '',
-      healthHazard: false,
-      environmentalRisk: false,
-      unsafeCondition: false,
-    },
+    initialValues: savedValues || initialValues,
     validationSchema,
     validateOnChange: true,
     validateOnBlur: true,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: (values, { resetForm }) => {
+      const isSafe = values.observationType === 'Safe observation';
+      const imgNames = fileList.map((el) => el.name).join(', ');
+
+      const data = new FormData();
+      data.append('formData', JSON.stringify(values));
+      data.append('formId', formId);
+      data.append('userId', user.id);
+      data.append('status', 'submit');
+      data.append('images', imgNames);
+      data.append('isSafe', isSafe);
+
+      if (fileList.length > 0) {
+        fileList.forEach((file) => {
+          data.append('file', file);
+        });
+      }
+      dispatch(createReportAction(data, navigate));
+      clearLocalStorageData(formDataId);
+      resetForm({ values: initialValues });
+      setFileList([]);
+      setSingleFile([]);
     },
   });
 
@@ -109,8 +148,16 @@ function HSEObservationForm({ location }) {
           formik.setErrors(errors);
           const touchedFields = Object.keys(errors).reduce((touched, key) => {
             if (typeof errors[key] === 'object') {
+              touched[key] = {};
               for (const nested of Object.keys(errors[key])) {
-                touched[key] = { [nested]: true };
+                if (typeof errors[key][nested] === 'object') {
+                  touched[key][nested] = {};
+                  for (const el of Object.keys(errors[key][nested])) {
+                    touched[key][nested][el] = true;
+                  }
+                } else {
+                  touched[key][nested] = true;
+                }
               }
             } else {
               touched[key] = true;
@@ -136,10 +183,14 @@ function HSEObservationForm({ location }) {
 
   const handleConfirmClear = () => {
     setOpen(false);
-    formik.handleReset();
+    clearLocalStorageData(formDataId);
+    formik.handleReset({ values: initialValues });
+    setFileList([]);
+    setSingleFile([]);
   };
 
   const handleConfirmSave = () => {
+    localStorage.setItem(formDataId, JSON.stringify(formik.values));
     setOpen(false);
   };
 
@@ -159,6 +210,12 @@ function HSEObservationForm({ location }) {
           <h2 className={`${styles.form_h2} ${styles.text_uppercase} ${styles.text_center}`}>Observer</h2>
 
           <DatePicker
+            sx={{
+              '&.MuiTextField-root': {
+                mb: '20px',
+                mt: '20px',
+              },
+            }}
             label="Date"
             name="date"
             value={formik.values.date}
@@ -166,12 +223,30 @@ function HSEObservationForm({ location }) {
           />
 
           <TimeField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '20px', marginTop: '20px' }}
             label="Time"
-            value={formik.values.date}
-            onChange={formik.handleChange}
+            value={formik.values.time}
+            onChange={((value) => (formik.setValues({ ...formik.values, time: value })))}
             format="HH:mm"
           />
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '20px', marginTop: '20px' }}
             select
             align="left"
             id="location"
@@ -183,12 +258,21 @@ function HSEObservationForm({ location }) {
             error={formik.touched.location && Boolean(formik.errors.location)}
             helperText={formik.touched.location && formik.errors.location}
           >
-            {location.map((el, index) => (
+            {locationsNames.map((el, index) => (
               <MenuItem key={index + 1} value={el}>{el}</MenuItem>
             ))}
           </TextField>
 
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '20px', marginTop: '20px' }}
             id="observer"
             name="observer"
             label="Observer's name"
@@ -203,7 +287,7 @@ function HSEObservationForm({ location }) {
         <Box mb={5}>
           <h2 className={`${styles.form_h2} ${styles.text_uppercase} ${styles.text_center}`}>Observation type</h2>
           <Box display="flex" alignItems="flex-start">
-            <FormControl sx={{ m: 0 }} error={formik.touched.observationType && Boolean(formik.errors.observationType)} variant="standard">
+            <FormControl sx={{ m: 0, flexShrink: 0 }} error={formik.touched.observationType && Boolean(formik.errors.observationType)} variant="standard">
               <RadioGroup
                 name="observationType"
                 value={formik.values.observationType}
@@ -221,7 +305,7 @@ function HSEObservationForm({ location }) {
               </RadioGroup>
               <FormHelperText sx={{ margin: 1 }}>{formik.touched.observationType && formik.errors.observationType}</FormHelperText>
             </FormControl>
-            <FormControl component="fieldset" error={formik.touched.healthHazard && Boolean(formik.errors.healthHazard)}>
+            <FormControl component="fieldset" sx={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }} error={formik.touched.healthHazard && Boolean(formik.errors.healthHazard)}>
               <FormGroup row>
                 <FormControlLabel
                   disabled={formik.values.observationType !== 'Unsafe act'}
@@ -259,10 +343,18 @@ function HSEObservationForm({ location }) {
           </Box>
 
         </Box>
-        <Box mb={5} fullWidth>
+        <Box mb={5}>
           <h2 className={`${styles.form_h2} ${styles.text_uppercase} ${styles.text_center}`}>Observation description</h2>
           <p className={styles.text_center}>Please describe your observation with a picture attached if possible:</p>
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
             fullWidth
             multiline
             rows={5}
@@ -275,12 +367,22 @@ function HSEObservationForm({ location }) {
             error={formik.touched.description && Boolean(formik.errors.description)}
             helperText={formik.touched.description && formik.errors.description}
           />
+          <FileUpload multiple name="images" singleFile={singleFile} setSingleFile={setSingleFile} fileList={fileList} setFileList={setFileList} />
         </Box>
 
-        <Box mb={5} fullWidth>
+        <Box mb={5}>
           <h2 className={`${styles.form_h2} ${styles.text_uppercase} ${styles.text_center}`}>Containment action</h2>
           <p className={styles.text_center}>What did you do to correct the situation and eliminate the risk?</p>
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '10px' }}
             fullWidth
             multiline
             rows={5}
@@ -296,10 +398,19 @@ function HSEObservationForm({ location }) {
 
         </Box>
 
-        <Box mb={5} fullWidth>
+        <Box mb={5}>
           <h2 className={`${styles.form_h2} ${styles.text_uppercase} ${styles.text_center}`}>Proposed improvement</h2>
           <p className={styles.text_center}>If you are unable to correct the situation, what do you suggest as a sotution?</p>
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '10px' }}
             fullWidth
             multiline
             rows={5}
@@ -315,14 +426,41 @@ function HSEObservationForm({ location }) {
 
         </Box>
 
-        <Box m={3} display="flex" justifyContent="center">
-          <Button sx={{ height: 80, width: 220, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="primary" value="submit">
+        <Box m="30px 0 30px 0" display="flex" justifyContent="center">
+          <Button
+            sx={{
+              height: 80, width: 250, margin: 3, ml: 0, mr: 1,
+            }}
+            size="large"
+            onClick={(e) => handleSubmit(e)}
+            type="submit"
+            variant="contained"
+            color="primary"
+            value="submit">
             <h2>Submit</h2>
           </Button>
-          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="warning" value="save">
+          <Button
+            sx={{
+              height: 80, width: 250, margin: 1, mb: 3, mt: 3,
+            }}
+            size="large"
+            onClick={(e) => handleSubmit(e)}
+            type="submit"
+            variant="outlined"
+            color="primary"
+            value="save">
             <h2>Save</h2>
           </Button>
-          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="error" value="clear">
+          <Button
+            sx={{
+              height: 80, width: 250, margin: 1, mb: 3, mt: 3,
+            }}
+            size="large"
+            onClick={(e) => handleSubmit(e)}
+            type="submit"
+            variant="contained"
+            color="error"
+            value="clear">
             <h2>Clear</h2>
           </Button>
         </Box>

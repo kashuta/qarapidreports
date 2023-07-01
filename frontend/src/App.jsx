@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Container from '@mui/material/Container';
+import { Box } from '@mui/material';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -21,9 +22,9 @@ import MainPage from './components/MainPage/MainPage';
 import RegForm from './components/Auth/RegForm';
 import { refreshAccessToken } from './JWT/authActions';
 import Forms from './components/Forms/Forms';
-import FormTest from './components/Forms/FormTest';
-import MyReactPdf from './components/Forms/MyReactPdf';
-import TestPdf from './components/Forms/TestPdf';
+import Footer from './components/Footer/Footer';
+import { getLocationsAction } from './Redux/report.action';
+import MySpinner from './components/UI/MySpinner';
 
 // import { setUserAction } from './components/Redux/user.action';
 
@@ -36,16 +37,16 @@ function App() {
 
   useEffect(() => {
     dispatch(refreshAccessToken(navigate));
+    dispatch(getLocationsAction(navigate));
   }, []); // Add dependencies if needed
 
-  const locations = ['Moscow', 'Tbilisi', 'Dubai'];
+  if (!loader && !user) {
+    return <MySpinner />;
+  }
 
-  // if (!loader) {
-  //   return <h2 style={{ margin: 300 }}>Loading...</h2>;
-  // }
   if (!user) {
     return (
-      <Container maxWidth="xl">
+      <Container>
         <Navbar />
         <Routes>
           <Route path="/" element={<MainPage />} />
@@ -59,24 +60,29 @@ function App() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Container maxWidth="xl">
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route element={<ProtectedRoleRoute role="inspector" />}>
-            <Route path="/:formId" element={<Forms location={locations} />} />
-            <Route path="/inspector/:userId" element={<InspectorProfile />} />
-          </Route>
-          <Route element={<ProtectedRoleRoute role="manager" />}>
-            <Route path="/manager/:userId" element={<ManagerProfile />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-          </Route>
-          <Route path="/FormTest" element={<FormTest />} />
-          <Route path="/MyReactPdf" element={<MyReactPdf />} />
-          <Route path="/TestPdf" element={<TestPdf />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </Container>
+      <Navbar />
+      <Box
+        component="main"
+        sx={{
+          display: 'flex',
+          flexGrow: 1,
+        }}>
+        <Container>
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route element={<ProtectedRoleRoute role="inspector" />}>
+              <Route path="/:formId" element={<Forms />} />
+              <Route path="/inspector/:userId" element={<InspectorProfile />} />
+            </Route>
+            <Route element={<ProtectedRoleRoute role="manager" />}>
+              <Route path="/manager/:userId" element={<ManagerProfile />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+            </Route>
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </Container>
+      </Box>
+      <Footer />
     </LocalizationProvider>
   );
 }

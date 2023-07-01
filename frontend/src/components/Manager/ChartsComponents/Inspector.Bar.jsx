@@ -1,62 +1,101 @@
 /* eslint-disable max-len */
 import React from 'react';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { faker } from '@faker-js/faker';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 
-function InspectorBar() {
-  const inspectorsNames = useSelector(
-    (state) => state.ReportReducer.inspectorsNames,
-  );
-  const formsName = useSelector(
-    (state) => state.ReportReducer.formsName,
-  );
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { Box } from '@mui/material';
 
-  ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend,
-  );
+function InspectorBar({ count, total }) {
+  // const formsName = useSelector(
+  //   (state) => state.ReportReducer.formsName,
+  // );
 
   const options = {
-    responsive: true,
     plugins: {
       legend: {
-        position: 'top',
+        display: false,
       },
       title: {
         display: true,
-        text: 'Chart.js Bar Chart',
+        text: 'Inspector Statistics',
+        font: {
+          size: 40,
+          weight: 'bold', // or any other font size you prefer
+        },
+        align: 'center',
+      },
+    },
+    responsive: true,
+    scales: {
+      x: {
+        ticks: {
+          display: false, // Установите display в false для скрытия labels оси X
+        },
       },
     },
   };
 
-  const labels = formsName.map((form) => form.name);
+  const labels = Object.keys(count);
 
+  const colors = ['#3399CC', '#ff6600', '#8BB836', '#15315B', '#707173'];
   const data = {
     labels, // название отчетов
     datasets: [
       {
-        label: 'Dataset 1',
-        data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })), // подставить колл. отчетов
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        label: 'Total for period',
+        data: Object.values(count), // подставить колл. отчетов
+        backgroundColor: colors,
       },
     ],
   };
   return (
-    <Bar options={options} data={data} />
+    <Box sx={{
+      display: 'flex', alignItems: 'center', gap: 1, mb: 7, width: '100%',
+    }}>
+      <Box width="60%">
+        <Bar options={options} data={data} height={200} />
+      </Box>
+
+      <Box sx={{ flex: 1, marginRight: 0 }}>
+        <TableContainer component={Paper} elevation={5}>
+          <Table sx={{ minWidth: 50 }} size="small" aria-label="a dense table">
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ fontSize: 18 }}>
+                  <b>
+                    Total:
+                    {' '}
+                    {total}
+                  </b>
+                </TableCell>
+                <TableCell align="right" sx={{ fontSize: 18 }}><b>Count</b></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+
+              {Object.entries(count).map((item, index) => (
+                <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell component="th" scope="row" sx={{ backgroundColor: colors[index] }}>
+                    <b>
+                      {item[0]}
+                    </b>
+                  </TableCell>
+                  <TableCell align="right" sx={{ fontSize: 18 }}><b>{item[1]}</b></TableCell>
+                </TableRow>
+              ))}
+
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+    </Box>
   );
 }
 

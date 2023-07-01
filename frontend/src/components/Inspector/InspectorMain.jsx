@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React, { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
@@ -22,7 +23,9 @@ function InspectorMain() {
   }
 
   return (
-    <Container maxWidth="xl">
+    <Container sx={{
+      display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%',
+    }}>
       <Box
         sx={{
           display: 'flex',
@@ -30,40 +33,41 @@ function InspectorMain() {
             m: 1,
           },
           borderRadius: 4,
-          boxShadow: 10,
-          // height: 600,
           width: 1 / 2,
           margin: 'auto',
-          marginTop: '100px',
           justifyContent: 'center',
           alignItems: 'center',
           pt: '20px',
         }}
-        // display="flex"
-        // justifyContent="center"
-        // alignItems="center"
       >
         <ButtonGroup
           orientation="vertical"
           aria-label="vertical outlined button group">
-          {formsName?.map((form) => (
-            <NavLink key={form.id} to={`/${form.id}`}>
-              <Button
-                key={form.id}
-                size="large"
-                variant="contained"
-                color="primary"
-                sx={{
-                  height: 100,
-                  width: 1,
-                  borderRadius: 2,
-                  marginBottom: '20px',
-                }}>
-                <Typography sx={{ fontSize: '25px', fontWeight: 'bold' }}>
-                  {form.name}
-                </Typography>
-              </Button>
-            </NavLink>
+          {formsName?.map((form, i) => (
+            <Box sx={{ marginBottom: '20px' }} key={i}>
+              <NavLink key={form.id} to={`/${form.id}`} style={{ textDecoration: 'none' }}>
+                <Button
+                  key={form.id}
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  sx={{
+                    height: 100,
+                    width: 1,
+                    borderRadius: 2,
+                    textDecoration: 'none',
+                  }}>
+                  <Typography
+                    sx={{
+                      fontSize: '25px',
+                      fontWeight: 'bold',
+                      textDecoration: 'none',
+                    }}>
+                    {form.name}
+                  </Typography>
+                </Button>
+              </NavLink>
+            </Box>
           ))}
         </ButtonGroup>
       </Box>

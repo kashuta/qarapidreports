@@ -10,29 +10,22 @@ import {
   Legend,
 } from 'chart.js';
 import { useSelector } from 'react-redux';
+import 'chartjs-adapter-date-fns';
 
 function MainBar() {
   const totalForms = useSelector(
     (state) => state.ReportReducer.formResponseData,
   );
-  const MONTHLYSAFETYCHECKLIST = totalForms.filter(
-    (form) => form.formId === 1,
-  ).length;
-  const VEHICLESAFETYINSPECTION = totalForms.filter(
-    (form) => form.formId === 2,
-  ).length;
-  const FORKLIFTSAFETYINSPECTION = totalForms.filter(
-    (form) => form.formId === 3,
-  ).length;
-  const HSEOBSERVATION = totalForms.filter((form) => form.formId === 4).length;
-  const TOOLBOXSAFETYMEETINGFORM = totalForms.filter(
-    (form) => form.formId === 5,
-  ).length;
-  const inspectorsNames = useSelector(
-    (state) => state.ReportReducer.inspectorsNames,
-  );
-
-  const labels = inspectorsNames.map((item) => item.userName);
+  const infoPerInspector = totalForms?.info.map((insp) => insp);
+  // console.log(faker.internet.userName());
+  let labels = [];
+  if (totalForms) {
+    labels = infoPerInspector.map((inspector) => inspector.inspectorName);
+  } else {
+    for (let i = 1; i <= 6; i += 1) {
+      labels.push(`Inspector${i}`);
+    }
+  }
 
   ChartJS.register(
     CategoryScale,
@@ -48,6 +41,10 @@ function MainBar() {
       title: {
         display: true,
         text: 'Inspectors Statistics',
+        font: {
+          size: 30,
+          weight: 'bold', // or any other font size you prefer
+        },
       },
     },
     responsive: true,
@@ -61,42 +58,27 @@ function MainBar() {
     },
   };
 
-  // const labels = [];
+  const colors = ['#3399CC', '#ff6600', '#8BB836', '#15315B', '#707173'];
+  // const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
-  // for (let i = 1; i <= 10; i += 1) {
-  //   labels.push(`Inspector${i}`);
-  // }
+  const reportLabels = [
+    'MONTHLY SAFETY CHECKLIST - FIELD SERVICES',
+    'VEHICLE SAFETY INSPECTION - CHECKLIST',
+    'FORKLIFT SAFETY INSPECTION CHECKLIST',
+    'HSE OBSERVATION (STOP) CARD',
+    'TOOL BOX SAFETY MEETING FORM',
+  ];
 
   const barData = {
     labels,
-    datasets: [
-      {
-        label: 'MONTHLYSAFETYCHECKLIST',
-        data: labels.map(() => MONTHLYSAFETYCHECKLIST),
-        backgroundColor: 'rgb(255, 99, 132)',
-      },
-      {
-        label: 'VEHICLESAFETYINSPECTION',
-        data: labels.map(() => VEHICLESAFETYINSPECTION),
-        backgroundColor: 'rgb(75, 192, 192)',
-      },
-      {
-        label: 'FORKLIFTSAFETYINSPECTION',
-        data: labels.map(() => FORKLIFTSAFETYINSPECTION),
-        backgroundColor: 'rgb(255, 206, 86)',
-      },
-      {
-        label: 'HSEOBSERVATION',
-        data: labels.map(() => HSEOBSERVATION),
-        backgroundColor: 'rgb(53, 162, 235)',
-      },
-      {
-        label: 'TOOLBOXSAFETYMEETINGFORM',
-        data: labels.map(() => TOOLBOXSAFETYMEETINGFORM),
-        backgroundColor: 'rgb(153, 102, 255)',
-      },
-    ],
+    datasets: reportLabels.map((item, index) => ({
+      label: item.toLocaleLowerCase(),
+      data: infoPerInspector?.map((inspector) => inspector.reports[item] || 0),
+      backgroundColor: colors[index],
+      // faker.color.rgb(),
+    })),
   };
+
   return <Bar options={barOptions} data={barData} />;
 }
 

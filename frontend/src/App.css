@@ -3,3 +3,16 @@
   margin: 0 auto;
 }
 
+.footer {
+  min-height: 64px;
+  background-color: #15315b;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main {
+  
+}
+

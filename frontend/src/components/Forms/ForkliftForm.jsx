@@ -32,10 +32,11 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import styles from './Form.module.css';
-import DialogForm from './DialogForm';
+import DialogForm from '../UI/DialogForm';
 import { createReportAction, setReportFieldsAction } from '../../Redux/report.action';
+import { clearLocalStorageData } from '../../utils/utils';
 
-function ForkliftForm({ location }) {
+function ForkliftForm() {
   const [open, setOpen] = useState(false);
   const [statusBtn, setStatusBtn] = useState('');
   const navigate = useNavigate();
@@ -43,6 +44,12 @@ function ForkliftForm({ location }) {
   const formId = useLocation().pathname.split('/').at(-1);
   const reportsFields = useSelector((state) => state.ReportReducer.reportFields);
   const user = useSelector((state) => state.UserReducer.user);
+  const locations = useSelector((state) => state.ReportReducer.locations);
+  const locationsNames = locations.map((el) => el.name);
+
+  const formDataId = `user${user.id}-form${formId}`;
+  const storagedValues = JSON.parse(localStorage.getItem(formDataId));
+  const savedValues = storagedValues ? { ...storagedValues, date: dayjs(storagedValues.date) } : null;
 
   useEffect(() => {
     dispatch(setReportFieldsAction(formId, navigate));
@@ -125,28 +132,32 @@ function ForkliftForm({ location }) {
       .required('Please, fill this field'),
   });
 
+  const initialValues = {
+    ...engineOffValues,
+    ...engineOnValues,
+    location: '',
+    operator: '',
+    date: dayjs(new Date()),
+    machineHours: '',
+    regNumber: '',
+    signature: '',
+  };
+
   const formik = useFormik({
-    initialValues: {
-      ...engineOffValues,
-      ...engineOnValues,
-      location: '',
-      operator: '',
-      date: dayjs(new Date()),
-      machineHours: '',
-      regNumber: '',
-      signature: '',
-    },
+    initialValues: savedValues || initialValues,
     validationSchema,
     validateOnChange: true,
     validateOnBlur: true,
-    onSubmit: (values) => {
-      const obj = {
-        formId,
-        userId: user.id,
-        formData: values,
-        status: 'submit',
-      };
-      dispatch(createReportAction(JSON.stringify(obj), navigate));
+    onSubmit: (values, { resetForm }) => {
+      const data = new FormData();
+      data.append('formData', JSON.stringify(values));
+      data.append('formId', formId);
+      data.append('userId', user.id);
+      data.append('status', 'submit');
+      data.append('images', '');
+      dispatch(createReportAction(data, navigate));
+      resetForm({ values: initialValues });
+      clearLocalStorageData(formDataId);
     },
   });
 
@@ -165,8 +176,16 @@ function ForkliftForm({ location }) {
           formik.setErrors(errors);
           const touchedFields = Object.keys(errors).reduce((touched, key) => {
             if (typeof errors[key] === 'object') {
+              touched[key] = {};
               for (const nested of Object.keys(errors[key])) {
-                touched[key] = { [nested]: true };
+                if (typeof errors[key][nested] === 'object') {
+                  touched[key][nested] = {};
+                  for (const el of Object.keys(errors[key][nested])) {
+                    touched[key][nested][el] = true;
+                  }
+                } else {
+                  touched[key][nested] = true;
+                }
               }
             } else {
               touched[key] = true;
@@ -192,10 +211,12 @@ function ForkliftForm({ location }) {
 
   const handleConfirmClear = () => {
     setOpen(false);
-    formik.handleReset();
+    clearLocalStorageData(formDataId);
+    formik.handleReset({ values: initialValues });
   };
 
   const handleConfirmSave = () => {
+    localStorage.setItem(formDataId, JSON.stringify(formik.values));
     setOpen(false);
   };
 
@@ -203,12 +224,10 @@ function ForkliftForm({ location }) {
     setOpen(false);
   };
 
-  // console.log('render');
-
   return (
     <Container>
       <form onSubmit={formik.handleSubmit}>
-        <h1 className={styles.form_h1}>Forklift safety inspection checklist</h1>
+        <h1 className={`${styles.form_h1} ${styles.text_uppercase} ${styles.text_center}`}>Forklift safety inspection checklist</h1>
         <Box
           sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
           mb={5}
@@ -216,6 +235,15 @@ function ForkliftForm({ location }) {
         >
           <h2 className={styles.form_h2}>A.&ensp;Truck and operator details</h2>
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '20px', marginTop: '20px' }}
             select
             align="left"
             id="location"
@@ -227,12 +255,18 @@ function ForkliftForm({ location }) {
             error={formik.touched.location && Boolean(formik.errors.location)}
             helperText={formik.touched.location && formik.errors.location}
           >
-            {location.map((el, index) => (
+            {locationsNames.map((el, index) => (
               <MenuItem key={index + 1} value={el}>{el}</MenuItem>
             ))}
           </TextField>
 
           <DatePicker
+            sx={{
+              '&.MuiTextField-root': {
+                mb: '20px',
+                mt: '20px',
+              },
+            }}
             label="Date"
             name="date"
             value={formik.values.date}
@@ -240,6 +274,15 @@ function ForkliftForm({ location }) {
           />
 
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '20px', marginTop: '20px' }}
             id="operator"
             name="operator"
             label="Operator"
@@ -250,6 +293,15 @@ function ForkliftForm({ location }) {
             helperText={formik.touched.operator && formik.errors.operator}
           />
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '20px', marginTop: '20px' }}
             id="machineHours"
             name="machineHours"
             label="Machine hours"
@@ -263,6 +315,15 @@ function ForkliftForm({ location }) {
             helperText={formik.touched.machineHours && formik.errors.machineHours}
           />
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '20px', marginTop: '20px' }}
             id="regNumber"
             name="regNumber"
             label="Registration No."
@@ -273,6 +334,15 @@ function ForkliftForm({ location }) {
             helperText={formik.touched.regNumber && formik.errors.regNumber}
           />
           <TextField
+            sx={{
+              '& .MuiFormHelperText-root.Mui-error': {
+                position: 'absolute',
+                bottom: '-25px',
+                left: 0,
+                width: '100%',
+              },
+            }}
+            style={{ marginBottom: '20px', marginTop: '20px' }}
             id="signature"
             name="signature"
             label="Signature"
@@ -316,7 +386,7 @@ function ForkliftForm({ location }) {
                     <TableCell sx={{ border: 1, padding: '0 10px' }}>{elem.item}</TableCell>
                     <TableCell sx={{ border: 1, padding: '0 10px' }}>{elem.hint}</TableCell>
                     <TableCell sx={{ border: 1, padding: 0 }} align="center">
-                      <FormControl sx={{ m: 0 }} error={formik.touched[`${elem.item}`]?.condition && Boolean(formik.errors[`${elem.item}`]?.condition)} variant="standard">
+                      <FormControl sx={{ m: 0, mt: 2, mb: 2 }} error={formik.touched[`${elem.item}`]?.condition && Boolean(formik.errors[`${elem.item}`]?.condition)} variant="standard">
                         <RadioGroup
                           row
                           style={{ flexWrap: 'nowrap' }}
@@ -327,11 +397,19 @@ function ForkliftForm({ location }) {
                           <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="ok" control={<Radio />} label="OK" />
                           <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="nok" control={<Radio />} label="NOK" />
                         </RadioGroup>
-                        <FormHelperText sx={{ margin: '0 0 0 5px' }}>{formik.touched[`${elem.item}`]?.condition && formik.errors[`${elem.item}`]?.condition}</FormHelperText>
+                        <FormHelperText sx={{ margin: '0 0 0 5px', position: 'absolute', top: '80%' }}>{formik.touched[`${elem.item}`]?.condition && formik.errors[`${elem.item}`]?.condition}</FormHelperText>
                       </FormControl>
                     </TableCell>
                     <TableCell sx={{ border: 1, padding: '0 10px' }}>
                       <TextField
+                        sx={{
+                          '& .MuiFormHelperText-root.Mui-error': {
+                            position: 'absolute',
+                            bottom: '-25px',
+                            left: 0,
+                          },
+                        }}
+                        style={{ marginBottom: '20px', marginTop: '20px' }}
                         fullWidth
                         inputProps={{
                           style: {
@@ -339,7 +417,7 @@ function ForkliftForm({ location }) {
                           },
                         }}
                         name={`${elem.item}.actionsNeeded`}
-                        value={formik.values[elem.item]?.actionsNeeded}
+                        value={formik.values[elem.item]?.actionsNeeded ?? ''}
                         onChange={formik.handleChange}
                         onBlur={(e) => formik.setFieldTouched(e.target.name)}
                         error={formik.touched[`${elem.item}`]?.actionsNeeded && Boolean(formik.errors[`${elem.item}`]?.actionsNeeded)}
@@ -359,7 +437,7 @@ function ForkliftForm({ location }) {
                     <TableCell sx={{ border: 1, padding: '0 10px' }}>{elem.item}</TableCell>
                     <TableCell sx={{ border: 1, padding: '0 10px' }}>{elem.hint}</TableCell>
                     <TableCell sx={{ border: 1, padding: 0 }} align="center">
-                      <FormControl sx={{ m: 0 }} error={formik.touched[`${elem.item}`]?.condition && Boolean(formik.errors[`${elem.item}`]?.condition)} variant="standard">
+                      <FormControl sx={{ m: 0, mt: 2, mb: 2 }} error={formik.touched[`${elem.item}`]?.condition && Boolean(formik.errors[`${elem.item}`]?.condition)} variant="standard">
                         <RadioGroup
                           row
                           style={{ flexWrap: 'nowrap' }}
@@ -370,11 +448,19 @@ function ForkliftForm({ location }) {
                           <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="ok" control={<Radio />} label="OK" />
                           <FormControlLabel sx={{ margin: '0 8px 0 0' }} value="nok" control={<Radio />} label="NOK" />
                         </RadioGroup>
-                        <FormHelperText sx={{ margin: '0 0 0 5px' }}>{formik.touched[`${elem.item}`]?.condition && formik.errors[`${elem.item}`]?.condition}</FormHelperText>
+                        <FormHelperText sx={{ margin: '0 0 0 5px', position: 'absolute', top: '80%' }}>{formik.touched[`${elem.item}`]?.condition && formik.errors[`${elem.item}`]?.condition}</FormHelperText>
                       </FormControl>
                     </TableCell>
                     <TableCell sx={{ border: 1, padding: '0 10px' }}>
                       <TextField
+                        sx={{
+                          '& .MuiFormHelperText-root.Mui-error': {
+                            position: 'absolute',
+                            bottom: '-25px',
+                            left: 0,
+                          },
+                        }}
+                        style={{ marginBottom: '20px', marginTop: '20px' }}
                         fullWidth
                         inputProps={{
                           style: {
@@ -382,7 +468,7 @@ function ForkliftForm({ location }) {
                           },
                         }}
                         name={`${elem.item}.actionsNeeded`}
-                        value={formik.values[elem.item]?.actionsNeeded}
+                        value={formik.values[elem.item]?.actionsNeeded ?? ''}
                         onChange={formik.handleChange}
                         onBlur={(e) => formik.setFieldTouched(e.target.name)}
                         error={formik.touched[`${elem.item}`]?.actionsNeeded && Boolean(formik.errors[`${elem.item}`]?.actionsNeeded)}
@@ -405,14 +491,41 @@ function ForkliftForm({ location }) {
             </div>
           </div>
         </Box>
-        <Box m={3} display="flex" justifyContent="center">
-          <Button sx={{ height: 80, width: 220, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="primary" value="submit">
+        <Box m="30px 0 30px 0" display="flex" justifyContent="center">
+          <Button
+            sx={{
+              height: 80, width: 250, margin: 3, ml: 0, mr: 1,
+            }}
+            size="large"
+            onClick={(e) => handleSubmit(e)}
+            type="submit"
+            variant="contained"
+            color="primary"
+            value="submit">
             <h2>Submit</h2>
           </Button>
-          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="warning" value="save">
+          <Button
+            sx={{
+              height: 80, width: 250, margin: 1, mb: 3, mt: 3,
+            }}
+            size="large"
+            onClick={(e) => handleSubmit(e)}
+            type="submit"
+            variant="outlined"
+            color="primary"
+            value="save">
             <h2>Save</h2>
           </Button>
-          <Button sx={{ height: 80, width: 250, margin: 3 }} size="large" onClick={handleSubmit} type="submit" variant="contained" color="error" value="clear">
+          <Button
+            sx={{
+              height: 80, width: 250, margin: 1, mb: 3, mt: 3,
+            }}
+            size="large"
+            onClick={(e) => handleSubmit(e)}
+            type="submit"
+            variant="contained"
+            color="error"
+            value="clear">
             <h2>Clear</h2>
           </Button>
         </Box>

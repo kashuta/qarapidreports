@@ -7,38 +7,34 @@ import { useSelector } from 'react-redux';
 function MyDoughnut() {
   ChartJS.register(ArcElement, Tooltip, Legend);
 
+  const formsNameData = useSelector((state) => state.ReportReducer.formsName);
+  const formNames = formsNameData.map((form) => form.name);
+
+  // общий объект с базы
   const totalForms = useSelector(
     (state) => state.ReportReducer.formResponseData,
   );
-  const MONTHLYSAFETYCHECKLIST = totalForms.filter(
-    (form) => form.formId === 1,
-  ).length;
-  const VEHICLESAFETYINSPECTION = totalForms.filter(
-    (form) => form.formId === 2,
-  ).length;
-  const FORKLIFTSAFETYINSPECTION = totalForms.filter(
-    (form) => form.formId === 3,
-  ).length;
-  const HSEOBSERVATION = totalForms.filter((form) => form.formId === 4).length;
-  const TOOLBOXSAFETYMEETINGFORM = totalForms.filter(
-    (form) => form.formId === 5,
-  ).length;
 
-  const formsName = useSelector((state) => state.ReportReducer.formsName);
-  const labels = formsName.map((item) => item.name);
+  // названия форм и их количество каждого
+  // const labels = Object.keys(totalForms.allReportFormCount);
+  // const countDataFromDB = Object.values(totalForms?.allReportFormCount);
+  // const count = countDataFromDB || [1, 2, 3, 4, 5];
+  let count;
+  if (totalForms) {
+    const countDataFromDB = Object.values(totalForms.allReportFormCount);
+    count = countDataFromDB;
+  } else {
+    count = [1, 2, 3, 4, 5];
+  }
+  // const names = Object.keys(totalForms.allReportFormCount);
+  const labels = formNames;
+
   const dataForDoughnut = {
-    // labels: ['Rep1', 'Rep2', 'Rep3', 'Rep4', 'Rep5'],
     labels,
     datasets: [
       {
         label: ['Count'],
-        data: [
-          MONTHLYSAFETYCHECKLIST,
-          VEHICLESAFETYINSPECTION,
-          FORKLIFTSAFETYINSPECTION,
-          HSEOBSERVATION,
-          TOOLBOXSAFETYMEETINGFORM,
-        ],
+        data: count,
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',

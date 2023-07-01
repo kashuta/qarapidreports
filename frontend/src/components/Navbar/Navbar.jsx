@@ -1,16 +1,20 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import * as React from 'react';
+import React from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import { Avatar, Button, Typography } from '@mui/material';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
+import LoginIcon from '@mui/icons-material/Login';
+import { Avatar, IconButton, Typography } from '@mui/material';
 import { setUserAction } from '../../Redux/user.action';
 import InspectorNav from './InspectorNav';
 import ManagerNav from './ManagerNav';
 import AdminNav from './AdminNav';
+import styles from './Navbar.module.css';
 
 export default function Navbar() {
   const user = useSelector((state) => state.UserReducer.user);
@@ -29,15 +33,12 @@ export default function Navbar() {
     });
     localStorage.removeItem('accessToken');
     dispatch(setUserAction(null));
-    navigate('/login');
+    navigate('/');
   };
 
   return (
-    <Box
-      sx={{
-        maxWidth: '100%',
-      }}>
-      <AppBar position="static" color="primary">
+    <Box sx={{ maxWidth: '100%', padding: 4 }}>
+      <AppBar color="primary">
         <Toolbar
           sx={{
             display: 'flex',
@@ -52,10 +53,38 @@ export default function Navbar() {
           {user?.role === 'manager' && <ManagerNav />}
           {user?.role === 'admin' && <AdminNav />}
           {user && (
-            <Button onClick={handleSignout} color="inherit">
-              <Typography>LOGOUT</Typography>
-            </Button>
+            <IconButton
+              color="inherit"
+              aria-label="add an alarm"
+              onClick={handleSignout}>
+              <LogoutOutlinedIcon sx={{ mr: 1 }} />
+              <Typography sx={{ color: 'white', fontSize: 17 }}>
+                LOGOUT
+              </Typography>
+            </IconButton>
           )}
+          {!user && (
+
+            <Box>
+              <NavLink className={styles.link} to="/reg">
+                <IconButton color="inherit" aria-label="add an alarm">
+                  <HowToRegOutlinedIcon sx={{ mr: 1 }} />
+                  <Typography sx={{ color: 'white', fontSize: 17 }}>
+                    REGISTRATION
+                  </Typography>
+                </IconButton>
+              </NavLink>
+              <NavLink className={styles.link} to="/login">
+                <IconButton color="inherit" aria-label="add an alarm">
+                  <LoginIcon sx={{ mr: 1 }} />
+                  <Typography sx={{ color: 'white', fontSize: 17 }}>
+                    LOGIN
+                  </Typography>
+                </IconButton>
+              </NavLink>
+            </Box>
+          )}
+
           {avatar && <Avatar alt="ava" src={`${avatar?.path}`} />}
         </Toolbar>
       </AppBar>
